@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 #include "Character_PGN.generated.h"
 
 class UArrowComponent;
 class UCameraComponent;
-
-
+class UInputMappingContext;
+class UInputAction;
 
 UCLASS()
 class WAVEBARRAGE_PROJECT_API ACharacter_PGN : public ACharacter
@@ -37,4 +38,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCameraComponent> Camera;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> IMC;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> IA_Move;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> IA_Look;
+
+	void Move(const FInputActionValue &Action);
+
+	void Look(const FInputActionValue &Action);
 };

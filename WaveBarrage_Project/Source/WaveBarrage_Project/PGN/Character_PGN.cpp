@@ -4,6 +4,12 @@
 #include "Character_PGN.h"
 #include "Components/ArrowComponent.h"
 #include "Camera/CameraComponent.h"
+#include "InputMappingContext.h"
+#include "GameFramework/PlayerController.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+#include "InputAction.h"
+
 
 // Sets default values
 ACharacter_PGN::ACharacter_PGN()
@@ -17,6 +23,11 @@ ACharacter_PGN::ACharacter_PGN()
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(CameraBoom);
 
+	IMC = CreateDefaultSubobject<UInputMappingContext>("IMC");
+
+	
+
+	IA_Move = CreateDefaultSubobject<UInputAction>("IA_Move");
 
 	
 
@@ -28,6 +39,22 @@ void ACharacter_PGN::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (IsValid(PC))
+	{
+		ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PC->GetLocalPlayer());
+
+		if (IsValid(LocalPlayer))
+		{
+			UEnhancedInputLocalPlayerSubsystem* Subsystem = Cast<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>());
+			if (IsValid(Subsystem))
+			{
+				Subsystem->AddMappingContext(IMC, 0);
+				UE_LOG(LogTemp, Warning, TEXT("InputAction"));
+			}
+		}
+	}
+
 }
 
 // Called every frame
@@ -41,6 +68,16 @@ void ACharacter_PGN::Tick(float DeltaTime)
 void ACharacter_PGN::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	Input->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ACharacter_PGN::Move);
+}
 
+void ACharacter_PGN::Move(const FInputActionValue &Action)
+{
+	UE_LOG(LogTemp, Warning, TEXT("InputAction"));
+}
+
+void ACharacter_PGN::Look(const FInputActionValue &Action)
+{
 }
 
