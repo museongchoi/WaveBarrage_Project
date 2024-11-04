@@ -50,7 +50,7 @@ void ACharacter_PGN::BeginPlay()
 			if (IsValid(Subsystem))
 			{
 				Subsystem->AddMappingContext(IMC, 0);
-				UE_LOG(LogTemp, Warning, TEXT("InputAction"));
+				
 			}
 		}
 	}
@@ -70,14 +70,24 @@ void ACharacter_PGN::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ACharacter_PGN::Move);
+	Input->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ACharacter_PGN::Look);
 }
 
 void ACharacter_PGN::Move(const FInputActionValue &Action)
 {
-	UE_LOG(LogTemp, Warning, TEXT("InputAction"));
+	FVector2D Value = Action.Get<FVector2D>();
+	
+	const FRotator MyRotation = GetControlRotation();
+	const FRotator YawRotation(0, MyRotation.Yaw, 0);
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	AddMovementInput(ForwardDirection, Value.Y);
+	AddMovementInput(RightDirection, Value.X);
 }
 
 void ACharacter_PGN::Look(const FInputActionValue &Action)
 {
+
 }
 
