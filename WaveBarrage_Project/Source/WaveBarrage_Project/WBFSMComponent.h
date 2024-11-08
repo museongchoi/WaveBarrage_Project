@@ -30,11 +30,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void IdleState();
-	void MoveState();
-	void AttackState();
-	void SkillState();
-	void DieState();
+	void IdleState(float DeltaTime);
+	void MoveState(float DeltaTime);
+	void AttackState(float DeltaTime);
+	void SkillState(float DeltaTime);
+	void DieState(float DeltaTime);
 
 public:	
 	// Called every frame
@@ -46,4 +46,6 @@ public:
 	EMonsterState MState;
 	bool CanAttack = false;
 	bool CanSkill = false;
+
+	float StateTime;
 };

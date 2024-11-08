@@ -43,5 +43,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	AActor* TargetPlayer;
 
+	UPROPERTY(VisibleAnywhere)
+	int HP;
+
 
 };
