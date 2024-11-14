@@ -28,7 +28,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void ChangeState();
+	//void Destroy();
 
 public:
 	UPROPERTY(VisibleAnywhere)
@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	int HP;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AItemBase> DropItem;
 
 
 };

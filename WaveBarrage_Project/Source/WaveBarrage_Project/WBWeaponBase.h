@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WBWeaponBase.generated.h"
 
+class USceneComponent;
+
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBWeaponBase : public AActor
 {
@@ -24,35 +26,38 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void Fire();
+	virtual void Fire();
 
 	UFUNCTION()
-	void dFire();
+	virtual void SpawnProjectile();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int32 WeaponLevel;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Damage;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 SkillAcceleration;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CriticalChance;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ProjectileCount;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AActor* OwnerCharacter;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AActor> ProjectileClass;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurProjectileCnt;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxProjectileCnt;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
 };

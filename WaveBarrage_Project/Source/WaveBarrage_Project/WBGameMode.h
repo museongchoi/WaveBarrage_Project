@@ -14,4 +14,10 @@ class WAVEBARRAGE_PROJECT_API AWBGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	void AddExp(int Value);
+	void LevelUp();
+
+protected:
+	int Exp;
 };

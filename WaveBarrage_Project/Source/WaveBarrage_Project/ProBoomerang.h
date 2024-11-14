@@ -41,4 +41,6 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float ProjectileSpeed = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Acceleration = 0.0f;
 };

@@ -15,9 +15,9 @@ AProBoomerang::AProBoomerang()
 void AProBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
-	LifeTime = 3.0f;
+	LifeTime = 4.0f;
 	SetLifeSpan(LifeTime);
-
+	Acceleration = -0.25f;
 
 	
 }
@@ -41,13 +41,10 @@ void AProBoomerang::Tick(float DeltaTime)
 	Time += DeltaTime;
 		
 	AttackDirection = GetActorForwardVector();
-		
-	if (Time <= 1.0f)
-	{
-		MoveForward(AttackDirection);
-	}
-	else if(Time >1.0f)
-	{
-		MoveBackWard(AttackDirection);
-	}
+	
+	ProjectileSpeed += Acceleration;
+
+	MoveForward(AttackDirection);
+	
+
 }
