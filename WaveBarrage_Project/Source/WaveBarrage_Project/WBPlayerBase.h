@@ -63,9 +63,6 @@ public:
 	TObjectPtr<UInputAction> IA_Move;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> IA_Look;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> IA_Skill_E;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
