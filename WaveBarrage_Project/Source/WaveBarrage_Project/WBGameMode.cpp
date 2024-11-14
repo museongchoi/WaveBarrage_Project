@@ -3,3 +3,12 @@
 
 #include "WBGameMode.h"
 
+void AWBGameMode::AddExp(int Value)
+{
+	Exp += Value;
+}
+
+void AWBGameMode::LevelUp()
+{
+
+}
