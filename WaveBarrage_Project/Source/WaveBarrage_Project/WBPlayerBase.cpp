@@ -35,14 +35,15 @@ AWBPlayerBase::AWBPlayerBase()
 	SpringArm->bInheritYaw = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
-	SpringArm->TargetArmLength = 2500.0f;
-	SpringArm->SetWorldRotation(FRotator(-50.0f, 0.0f, 0.0f));
+	SpringArm->TargetArmLength = 4000.0f;
+	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
 
 	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-	Camera->FieldOfView = 55.0f;
 	Camera->bUsePawnControlRotation = false;
+	Camera->FieldOfView = 55.0f;
+
 
 	Box1 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box1"));
 	Box1->SetupAttachment(RootComponent);
@@ -126,9 +127,14 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// Move the character
-		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), MovementVector.X);
-		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), MovementVector.Y);
+		const FRotator MyRotation = GetControlRotation();
+		const FRotator YawRotation(0, MyRotation.Yaw, 0);
+
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
 

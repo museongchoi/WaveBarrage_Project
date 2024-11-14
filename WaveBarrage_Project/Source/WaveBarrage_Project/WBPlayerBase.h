@@ -12,6 +12,7 @@ class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 class UBoxComponent;
+class AWBMonsterBase;
 
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBPlayerBase : public ACharacter
@@ -35,11 +36,17 @@ public:
 
 	void ConfigureInputMapping();
 
+	void AutomaticAiming();
+	void CheckAttack();
+	void AttackFire();
+	void CursorHitAiming();
+	void DefaultAttackSettings();
+
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USpringArmComponent> SpringArm;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> Camera;
 
 	UPROPERTY()
@@ -80,4 +87,27 @@ public:
 	void SkillR();
 
 	void ToggleAutoMode();
+
+	UPROPERTY()
+	TObjectPtr<APlayerController> MyPlayerConroller;
+
+	UPROPERTY()
+	TObjectPtr<UBoxComponent> ChampionOnlyWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bAutoMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float ClosetDistance;
+
+	UPROPERTY()
+	TObjectPtr<AActor> ClosestEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bIsAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FRotator CursorRotation;
+
+
 };

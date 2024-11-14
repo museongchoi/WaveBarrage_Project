@@ -20,6 +20,4 @@ public:
 	UPROPERTY()
 	TSubclassOf<UUserWidget> widgetClass;
 
-	
-	
 };
