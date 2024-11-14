@@ -2,12 +2,16 @@
 
 
 #include "WBWeaponBase.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 AWBWeaponBase::AWBWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
+	RootComponent = ProjectileSpawnPoint;
 
 }
 
@@ -29,7 +33,7 @@ void AWBWeaponBase::Fire()
 {
 }
 
-void AWBWeaponBase::dFire()
+void AWBWeaponBase::SpawnProjectile()
 {
 }
 
