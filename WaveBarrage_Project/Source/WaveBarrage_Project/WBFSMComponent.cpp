@@ -2,6 +2,7 @@
 
 
 #include "WBFSMComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values for this component's properties
 UWBFSMComponent::UWBFSMComponent()
@@ -10,6 +11,7 @@ UWBFSMComponent::UWBFSMComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	MoveDistance = 200.0f;
 	// ...
 }
 
@@ -27,94 +29,99 @@ void UWBFSMComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	switch (MState)
-	{
-	case EMonsterState::Idle:
-		IdleState(DeltaTime);
-		break;
-	case EMonsterState::Move:
-		MoveState(DeltaTime);
-		break;
-	case EMonsterState::Attack:
-		AttackState(DeltaTime);
-		break;
-	case EMonsterState::Skill:
-		SkillState(DeltaTime);
-		break;
-	case EMonsterState::Die:
-		DieState(DeltaTime);
-		break;
-	default:
-		break;
-	}
+	StateTick(DeltaTime);
 }
 
-void UWBFSMComponent::IdleState(float DeltaTime)
+void UWBFSMComponent::IdleState()
 {
-	// 잠시 대기
-	StateTime += DeltaTime;
-
-	if (StateTime > 0.25f)
+	// 방향 조정
+	if (IsValid(TargetPlayer))
 	{
-		MState = EMonsterState::Move;
-		StateTime = 0;
+		FRotator TargetRot = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), TargetPlayer->GetActorLocation());
+		GetOwner()->SetActorRotation(TargetRot);
+	}
+	if (StateTime > 0.1f)
+	{
+		ChangeState(EMonsterState::Move);
 	}
 }
 
 void UWBFSMComponent::MoveState(float DeltaTime)
 {
-	StateTime += DeltaTime;
 	//타겟 플레이어 방향으로 이동
-	
+	FVector Dist = GetOwner()->GetActorForwardVector() * MoveDistance * DeltaTime;
+	GetOwner()->AddActorWorldOffset(Dist);
+
 	//아니면서 지속 시간이 끝나면 IdleState
 	if (CanAttack)
 	{
 		//이동 후 CanAttack 이 true 이고 거리가 사거리 안이라면 AttackState
-
+		ChangeState(EMonsterState::Attack);
 	}
 	else
 	{
 		if (StateTime > 1.0f)
 		{
-			MState = EMonsterState::Idle;
-			StateTime = 0;
+			ChangeState(EMonsterState::Idle);
 		}
 	}
 }
 
-void UWBFSMComponent::AttackState(float DeltaTime)
+void UWBFSMComponent::AttackState()
 {
 	//원거리 , 보스 몬스터 전용
 	//투사체 발사 후 일정 시간 지나면 IdleState
 	if (StateTime > 1.0f)
 	{
-		MState = EMonsterState::Idle;
-		StateTime = 0;
+		ChangeState(EMonsterState::Idle);
 	}
 }
 
-void UWBFSMComponent::SkillState(float DeltaTime)
+void UWBFSMComponent::SkillState()
 {
 	// 보스 전용
 	// 워닝 사인 이후 콜리전 검사해서 범위 내의 플레이어에게 데미지
 	// 일정 시간 지나면 IdleState
 	if (StateTime > 1.0f)
 	{
-		MState = EMonsterState::Idle;
-		StateTime = 0;
+		ChangeState(EMonsterState::Idle);
 	}
 }
 
-void UWBFSMComponent::DieState(float DeltaTime)
+void UWBFSMComponent::DieState()
 {
 	// Destroy Actor 진행하는 동안 움직이지 않도록 하기 위함
 }
 
 
-// Called every frame
-
-
-void UWBFSMComponent::ChangeState()
+void UWBFSMComponent::StateTick(float DeltaTime)
 {
+	StateTime += DeltaTime;
+	switch (MState)
+	{
+	case EMonsterState::Idle:
+		IdleState();
+		break;
+	case EMonsterState::Move:
+		MoveState(DeltaTime);
+		break;
+	case EMonsterState::Attack:
+		AttackState();
+		break;
+	case EMonsterState::Skill:
+		SkillState();
+		break;
+	case EMonsterState::Die:
+		DieState();
+		break;
+	default:
+		break;
+	}
+}
+
+void UWBFSMComponent::ChangeState(EMonsterState State)
+{
+	MState = State;
+	StateTime = 0;
 }
 

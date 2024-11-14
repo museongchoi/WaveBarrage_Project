@@ -30,22 +30,26 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void IdleState(float DeltaTime);
+	void IdleState();
 	void MoveState(float DeltaTime);
-	void AttackState(float DeltaTime);
-	void SkillState(float DeltaTime);
-	void DieState(float DeltaTime);
+	void AttackState();
+	void SkillState();
+	void DieState();
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void ChangeState();
+	void StateTick(float DeltaTime);
+	void ChangeState(EMonsterState State);
 
 public:
 	EMonsterState MState;
 	bool CanAttack = false;
 	bool CanSkill = false;
 
+	AActor* TargetPlayer;
+
 	float StateTime;
+	float MoveDistance;
 };
