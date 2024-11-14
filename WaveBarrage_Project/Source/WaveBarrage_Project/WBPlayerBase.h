@@ -33,6 +33,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void ConfigureInputMapping();
+
 public:
 	UPROPERTY()
 	TObjectPtr<USpringArmComponent> SpringArm;
@@ -70,4 +72,12 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> IA_AutoMode;
+
+	void Move(const FInputActionValue& Value);
+
+	void SkillE();
+
+	void SkillR();
+
+	void ToggleAutoMode();
 };
