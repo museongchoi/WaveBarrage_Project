@@ -6,6 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "WBProjectileBase.generated.h"
 
+
+class USphereComponent;
+class UStaticMeshComponent;
+class UProjectileMovementComponent;
+
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBProjectileBase : public AActor
 {
@@ -22,5 +27,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<USphereComponent> SphereCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
 
 };
