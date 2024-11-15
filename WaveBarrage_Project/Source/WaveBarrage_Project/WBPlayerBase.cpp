@@ -2,6 +2,7 @@
 
 
 #include "WBPlayerBase.h"
+#include "WBGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -65,6 +66,23 @@ AWBPlayerBase::AWBPlayerBase()
 	Box5 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box5"));
 	Box5->SetupAttachment(RootComponent);
 
+	MonsterSpawnPosition1 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos1"));
+	MonsterSpawnPosition1->SetRelativeLocation(FVector(0, 1000, 0));
+	MonsterSpawnPosition1->SetupAttachment(RootComponent);
+	MonsterSpawnPositions.Emplace(MonsterSpawnPosition1);
+
+	MonsterSpawnPosition2 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos2"));
+	MonsterSpawnPosition2->SetupAttachment(RootComponent);
+	MonsterSpawnPositions.Emplace(MonsterSpawnPosition2);
+
+	MonsterSpawnPosition3 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos3"));
+	MonsterSpawnPosition3->SetupAttachment(RootComponent);
+	MonsterSpawnPositions.Emplace(MonsterSpawnPosition3);
+
+	MonsterSpawnPosition4 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos4"));
+	MonsterSpawnPosition4->SetupAttachment(RootComponent);
+	MonsterSpawnPositions.Emplace(MonsterSpawnPosition4);
+
 	bAutoMode = false;
 	ClosestDistance = FLT_MAX;
 	bIsAttacking = false;
@@ -96,6 +114,11 @@ void AWBPlayerBase::BeginPlay()
 
 	DefaultAttackSettings();
 
+	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (IsValid(GM))
+	{
+		GM->Players.Emplace(this);
+	}
 }
 
 // Called every frame

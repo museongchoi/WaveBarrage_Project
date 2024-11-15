@@ -4,6 +4,8 @@
 #include "WBMonsterBase.h"
 #include "Components/SphereComponent.h"
 #include "WBFSMComponent.h"
+#include "WBItemBase.h"
+#include "WBMonsterGroup.h"
 
 // Sets default values
 AWBMonsterBase::AWBMonsterBase()
@@ -32,5 +34,10 @@ void AWBMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWBMonsterBase::Attack()
+{
+	
 }
 
