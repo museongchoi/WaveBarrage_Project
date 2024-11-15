@@ -13,6 +13,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -193,4 +194,36 @@ void AWBPlayerBase::AutomaticAiming()
 	}
 	ClosestDistance = FLT_MAX;
 	ClosestEnemy = nullptr;
+
+	FVector Start = GetActorLocation();
+	FVector End = Start;
+	float Radius = 500.0f;
+
+	FHitResult OutHit;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_GameTraceChannel1, FCollisionShape::MakeSphere(Radius), CollisionParams);
+
+	if (bHit && OutHit.GetActor())
+	{
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), OutHit.GetActor()->GetClass(), FoundActors);
+
+		for (AActor* Actor : FoundActors)
+		{
+			float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
+			if (Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				ClosestEnemy = Actor;
+			}
+		}
+
+		if (ClosestEnemy)
+		{
+			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorForwardVectorLocation());
+			SetActorRotation(TargetRotation);
+		}
+	}
 }
