@@ -15,6 +15,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "WBWeaponBase.h"
 
 
 // Sets default values
@@ -99,6 +100,18 @@ void AWBPlayerBase::BeginPlay()
 		MyPlayerController->bShowMouseCursor = true;
 	}
 
+	if (Box1)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		ChampionOnlyWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(AWBWeaponBase::StaticClass(), GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+		if (ChampionOnlyWeapon)
+		{
+			ChampionOnlyWeapon->AttachToComponent(Box1, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			ChampionOnlyWeapon->OwnerCharacter = this;
+		}
+	}
+
 	DefaultAttackSettings();
 
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -181,32 +194,18 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 
 void AWBPlayerBase::SkillE()
 {
+	// Skill E logic here
 }
 
 void AWBPlayerBase::SkillR()
 {
+	// Skill R logic here
 }
 
 void AWBPlayerBase::ToggleAutoMode()
 {
 	bAutoMode = !bAutoMode;
 	DefaultAttackSettings();
-}
-
-void AWBPlayerBase::DefaultAttackSettings()
-{
-	if (bAutoMode)
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		UKismetSystemLibrary::K2_SetTimer(this, "AutomaticAiming", 0.01f, true);
-
-	}
-	else
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
-
-	}
 }
 
 void AWBPlayerBase::AutomaticAiming()
@@ -248,5 +247,55 @@ void AWBPlayerBase::AutomaticAiming()
 			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
 			SetActorRotation(TargetRotation);
 		}
+	}
+}
+
+void AWBPlayerBase::CheckAttack()
+{
+	if (!bIsAttacking)
+	{
+		bIsAttacking = true;
+		AttackFire();
+	}
+}
+
+void AWBPlayerBase::AttackFire()
+{
+	if (bIsAttacking)
+	{
+		UKismetSystemLibrary::K2_SetTimer(this, "CursorHitAiming", 0.01f, true);
+		ChampionOnlyWeapon->Fire();
+	}
+	else
+	{
+		CursorHitAiming();
+
+	}
+	bIsAttacking = false;
+}
+
+void AWBPlayerBase::CursorHitAiming()
+{
+	if (MyPlayerController)
+	{
+		FVector WorldLocation, WorldDirection;
+		MyPlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
+		CursorRotation = WorldDirection.Rotation();
+	}
+}
+
+void AWBPlayerBase::DefaultAttackSettings()
+{
+	if (bAutoMode)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		UKismetSystemLibrary::K2_SetTimer(this, "AutomaticAiming", 0.01f, true);
+
+	}
+	else
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
+
 	}
 }

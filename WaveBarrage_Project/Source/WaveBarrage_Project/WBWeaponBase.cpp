@@ -13,6 +13,10 @@ AWBWeaponBase::AWBWeaponBase()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
 	RootComponent = ProjectileSpawnPoint;
 
+
+	// √ ±‚»≠
+	OwnerCharacter = nullptr;
+
 }
 
 // Called when the game starts or when spawned
