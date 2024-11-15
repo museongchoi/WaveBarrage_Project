@@ -17,13 +17,3 @@ void UWBMonsterSpawnerComponent::BeginPlay()
 	
 	
 }
-
-
-// Called every frame
-void UWBMonsterSpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	
-}
-

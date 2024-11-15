@@ -64,6 +64,20 @@ public:
 	UPROPERTY()
 	TObjectPtr<UBoxComponent> Box5;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MonsterSpawnPosition1;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MonsterSpawnPosition2;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MonsterSpawnPosition3;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MonsterSpawnPosition4;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<USceneComponent*> MonsterSpawnPositions;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> InputMapping;

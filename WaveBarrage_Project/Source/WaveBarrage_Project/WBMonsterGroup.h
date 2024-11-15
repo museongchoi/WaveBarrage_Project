@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WBMonsterBase.generated.h"
+#include "WBMonsterGroup.generated.h"
 
-class USphereComponent;
-class UWBFSMComponent;
-
-
+class AWBMonsterBase;
 
 UCLASS()
-class WAVEBARRAGE_PROJECT_API AWBMonsterBase : public AActor
+class WAVEBARRAGE_PROJECT_API AWBMonsterGroup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AWBMonsterBase();
+	AWBMonsterGroup();
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,29 +24,22 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void Attack();
-	void Skill();
-
-	//void Destroy();
-
-public:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> SphereComp;
 
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComp;
+	TObjectPtr<USceneComponent> Root;
 
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UWBFSMComponent> FSMComp;
+	TArray<AWBMonsterBase*> Monsters;
 
 	UPROPERTY(VisibleAnywhere)
 	AActor* TargetPlayer;
 
 	UPROPERTY(VisibleAnywhere)
-	int HP;
+	UClass* MosterClass;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AWBItemBase> DropItem;
+	UPROPERTY(VisibleAnywhere)
+	int SpawnCount;
 
-
+	bool SpawnEnd = false;
+	
 };
