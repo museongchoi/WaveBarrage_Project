@@ -47,7 +47,7 @@ public:
 	int HP;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AItemBase> DropItem;
+	TSubclassOf<class AWBItemBase> DropItem;
 
 
 };

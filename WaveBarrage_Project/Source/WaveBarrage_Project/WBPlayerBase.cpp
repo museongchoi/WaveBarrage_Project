@@ -10,6 +10,9 @@
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -59,6 +62,10 @@ AWBPlayerBase::AWBPlayerBase()
 
 	Box5 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box5"));
 	Box5->SetupAttachment(RootComponent);
+
+	bAutoMode = false;
+	ClosestDistance = FLT_MAX;
+	bIsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -66,6 +73,15 @@ void AWBPlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 	ConfigureInputMapping();
+	MyPlayerController = Cast<APlayerController>(GetController());
+	
+	if (MyPlayerController)
+	{
+		MyPlayerController->bShowMouseCursor = true;
+	}
+
+	DefaultAttackSettings();
+
 }
 
 // Called every frame
@@ -121,6 +137,7 @@ void AWBPlayerBase::ConfigureInputMapping()
 	}
 }
 
+
 void AWBPlayerBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -148,5 +165,32 @@ void AWBPlayerBase::SkillR()
 
 void AWBPlayerBase::ToggleAutoMode()
 {
+	bAutoMode = !bAutoMode;
+	DefaultAttackSettings();
 }
 
+void AWBPlayerBase::DefaultAttackSettings()
+{
+	if (bAutoMode)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		UKismetSystemLibrary::K2_SetTimer(this, "AutomaticAiming", 0.01f, true);
+
+	}
+	else
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
+
+	}
+}
+
+void AWBPlayerBase::AutomaticAiming()
+{
+	if (!bAutoMode)
+	{
+		return;
+	}
+	ClosestDistance = FLT_MAX;
+	ClosestEnemy = nullptr;
+}

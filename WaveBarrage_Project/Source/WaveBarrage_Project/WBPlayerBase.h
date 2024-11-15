@@ -89,7 +89,7 @@ public:
 	void ToggleAutoMode();
 
 	UPROPERTY()
-	TObjectPtr<APlayerController> MyPlayerConroller;
+	TObjectPtr<APlayerController> MyPlayerController;
 
 	UPROPERTY()
 	TObjectPtr<UBoxComponent> ChampionOnlyWeapon;
@@ -98,7 +98,7 @@ public:
 	bool bAutoMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float ClosetDistance;
+	float ClosestDistance;
 
 	UPROPERTY()
 	TObjectPtr<AActor> ClosestEnemy;
