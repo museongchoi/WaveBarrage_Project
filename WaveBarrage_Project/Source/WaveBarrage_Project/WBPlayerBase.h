@@ -13,6 +13,8 @@ class USpringArmComponent;
 class UCameraComponent;
 class UBoxComponent;
 class AWBMonsterBase;
+class AActor;
+class AWBWeaponBase;
 
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBPlayerBase : public ACharacter
@@ -36,6 +38,7 @@ public:
 
 	void ConfigureInputMapping();
 
+	// 공격 사용 함수
 	void AutomaticAiming();
 	void CheckAttack();
 	void AttackFire();
@@ -91,8 +94,9 @@ public:
 	UPROPERTY()
 	TObjectPtr<APlayerController> MyPlayerController;
 
+	// 캐릭터 각 전용 무기
 	UPROPERTY()
-	TObjectPtr<UBoxComponent> ChampionOnlyWeapon;
+	TObjectPtr<AWBWeaponBase> ChampionOnlyWeapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bAutoMode;
