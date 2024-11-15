@@ -23,8 +23,10 @@ void AProWhirlwindBlade::BeginPlay()
 void AProWhirlwindBlade::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	CurAngle += OrbitSpeed * DeltaSeconds;
-	float RadianAngle = UKismetMathLibrary::DegreesToRadians(CurAngle);
+	
+	CurAngle +=  OrbitSpeed * DeltaSeconds;
+	//CurAngle += SpawnLocationByRadians;
+	float RadianAngle = UKismetMathLibrary::DegreesToRadians(CurAngle+SpawnLocationByRadians);
 
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
 	if (MyCharacter)
