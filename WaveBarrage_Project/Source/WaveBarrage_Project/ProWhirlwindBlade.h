@@ -37,5 +37,6 @@ protected:
 public:
 	virtual void Tick(float DeltaSeconds) override;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"));
+	float SpawnLocationByRadians=0.0f;
 };
