@@ -48,7 +48,7 @@ void AWBMonsterGroup::SpawnMonster()
 {
 	FActorSpawnParameters SpawnPara;
 	SpawnPara.Owner = this;
-	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	if (MonsterClass)
 	{
 		for (int i = 0; i < SpawnCount; i++)
