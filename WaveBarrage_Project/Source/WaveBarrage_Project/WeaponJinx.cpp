@@ -8,6 +8,8 @@
 
 void AWeaponJinx::Fire()
 {
+	//UE_LOG(LogTemp, Error, TEXT("AWeaponJinx Fire Check!!!!!!!"));
+
 	// Get projectile count from player state and update max projectile count
 	if (OwnerCharacter)
 	{
@@ -56,6 +58,8 @@ void AWeaponJinx::SpawnProjectile()
 		AWBPlayerBase* PlayerCharacter = Cast<AWBPlayerBase>(OwnerCharacter);
 		if (PlayerCharacter)
 		{
+			UE_LOG(LogTemp, Error, TEXT("bIsAttacking false Check!!!!!!!"));
+
 			PlayerCharacter->bIsAttacking = false;
 			PlayerCharacter->AttackFire();
 		}

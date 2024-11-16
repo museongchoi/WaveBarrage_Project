@@ -2,20 +2,21 @@
 
 
 #include "WBPlayerBase.h"
-#include "WBGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "Components/BoxComponent.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PlayerController.h"
-#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "WBWeaponBase.h"
+#include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "WBGameMode.h"
+#include "Kismet/GameplayStatics.h"
+#include "EnhancedInputComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Engine/EngineTypes.h"
 
 
 // Sets default values
@@ -92,6 +93,7 @@ AWBPlayerBase::AWBPlayerBase()
 void AWBPlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
+
 	ConfigureInputMapping();
 	MyPlayerController = Cast<APlayerController>(GetController());
 	
@@ -100,15 +102,15 @@ void AWBPlayerBase::BeginPlay()
 		MyPlayerController->bShowMouseCursor = true;
 	}
 
-	if (Box1)
+	if (Box1 && ChampionOnlyWeapon)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
-		ChampionOnlyWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(AWBWeaponBase::StaticClass(), GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-		if (ChampionOnlyWeapon)
+		SpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+		if (SpawnedWeapon)
 		{
-			ChampionOnlyWeapon->AttachToComponent(Box1, FAttachmentTransformRules::SnapToTargetIncludingScale);
-			ChampionOnlyWeapon->OwnerCharacter = this;
+			SpawnedWeapon->AttachToComponent(Box1, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			SpawnedWeapon->OwnerCharacter = this;
 		}
 	}
 
@@ -119,6 +121,8 @@ void AWBPlayerBase::BeginPlay()
 	{
 		GM->Players.Emplace(this);
 	}
+
+
 }
 
 // Called every frame
@@ -204,6 +208,7 @@ void AWBPlayerBase::SkillR()
 
 void AWBPlayerBase::ToggleAutoMode()
 {
+
 	bAutoMode = !bAutoMode;
 	DefaultAttackSettings();
 }
@@ -252,50 +257,87 @@ void AWBPlayerBase::AutomaticAiming()
 
 void AWBPlayerBase::CheckAttack()
 {
+	UE_LOG(LogTemp, Error, TEXT("4. CheckAttack Check!!!!!!!"));
+
 	if (!bIsAttacking)
 	{
 		bIsAttacking = true;
 		AttackFire();
 	}
+
 }
 
 void AWBPlayerBase::AttackFire()
 {
+	UE_LOG(LogTemp, Error, TEXT("3. AttackFire Check!!!!!!!"));
+
 	if (bIsAttacking)
 	{
 		UKismetSystemLibrary::K2_SetTimer(this, "CursorHitAiming", 0.01f, true);
-		ChampionOnlyWeapon->Fire();
+		if (ChampionOnlyWeapon)
+		{
+			SpawnedWeapon->Fire();
+		}
 	}
 	else
 	{
-		CursorHitAiming();
+		//CursorHitAiming();
+		UKismetSystemLibrary::K2_ClearTimer(this, TEXT("CursorHitAiming"));
 
 	}
-	bIsAttacking = false;
 }
 
 void AWBPlayerBase::CursorHitAiming()
 {
+	UE_LOG(LogTemp, Error, TEXT("2. CursorHitAiming Check!!!!!!!"));
+
 	if (MyPlayerController)
 	{
-		FVector WorldLocation, WorldDirection;
-		MyPlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-		CursorRotation = WorldDirection.Rotation();
+		FHitResult HitResult;
+		if (MyPlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Camera), false, HitResult))
+		{
+			FVector TargetLocation = HitResult.Location;
+			FVector ActorLocation = GetActorLocation();
+
+			FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
+			SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f));
+		}
 	}
+
 }
 
 void AWBPlayerBase::DefaultAttackSettings()
 {
+	UE_LOG(LogTemp, Error, TEXT("1. DefaultAttackSettings Check!!!!!!!"));
+
 	if (bAutoMode)
 	{
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		UKismetSystemLibrary::K2_SetTimer(this, "AutomaticAiming", 0.01f, true);
+		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CheckAttack))
+		{
+			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CheckAttack);
+		}
 
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+
+		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
+		{
+			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AutomaticAiming, this, &AWBPlayerBase::AutomaticAiming, 0.01f, true);
+		}
 	}
 	else
 	{
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
+		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
+		{
+			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_AutomaticAiming);
+		}
 
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::CheckAttack, 2.0f, true);
+
+		//UKismetSystemLibrary::K2_ClearTimer(this, TEXT("AutomaticAiming"));
+
+		//GetCharacterMovement()->bOrientRotationToMovement = true;
+		//UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
 	}
 }
