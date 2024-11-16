@@ -41,3 +41,11 @@ void AWBMonsterBase::Attack()
 	
 }
 
+void AWBMonsterBase::SetTargetPlayer(AActor* Target)
+{
+	if (IsValid(FSMComp))
+	{
+		FSMComp->TargetPlayer = Target;
+	}
+}
+

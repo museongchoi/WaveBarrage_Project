@@ -33,7 +33,6 @@ void AWBGameMode::SetTargetPlayer()
 
 void AWBGameMode::SpawnMonsterGroup()
 {
-	UClass* MC = MonsterClass1->GetClass();
 	FActorSpawnParameters SpawnPara;
 	SpawnPara.Owner = this;
 	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -45,19 +44,14 @@ void AWBGameMode::SpawnMonsterGroup()
 		{
 			for (USceneComponent* Comp : Player->MonsterSpawnPositions)
 			{
-				if (MC)
+				AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), Comp->GetComponentRotation(), SpawnPara);
+				if (Spawned)
 				{
-					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), Comp->GetComponentRotation(), SpawnPara);
-					if (Spawned)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Spawn End"));
-						Spawned->TargetPlayer = Player;
-						Spawned->MosterClass = MC;
-						Spawned->SpawnCount = 3;
-						MonsterGroups.Emplace(Spawned);
-					}
-
-					UE_LOG(LogTemp, Warning, TEXT("Group Spawned"));
+					Spawned->TargetPlayer = Player;
+					Spawned->MonsterClass = MonsterClass1;
+					Spawned->SpawnCount = 3;
+					MonsterGroups.Emplace(Spawned);
+					Spawned->SpawnMonster();
 				}
 			}
 		}

@@ -30,6 +30,8 @@ public:
 	void Attack();
 	void Skill();
 
+	void SetTargetPlayer(AActor* Target);
+
 	//void Destroy();
 
 public:
@@ -41,9 +43,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UWBFSMComponent> FSMComp;
-
-	UPROPERTY(VisibleAnywhere)
-	AActor* TargetPlayer;
 
 	UPROPERTY(VisibleAnywhere)
 	int HP;

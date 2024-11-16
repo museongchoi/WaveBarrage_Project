@@ -24,6 +24,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void SpawnMonster();
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Root;
@@ -35,7 +36,7 @@ public:
 	AActor* TargetPlayer;
 
 	UPROPERTY(VisibleAnywhere)
-	UClass* MosterClass;
+	TSubclassOf<AWBMonsterBase> MonsterClass;
 
 	UPROPERTY(VisibleAnywhere)
 	int SpawnCount;

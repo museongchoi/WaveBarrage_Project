@@ -41,6 +41,7 @@ void UWBFSMComponent::IdleState()
 		FRotator TargetRot = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), TargetPlayer->GetActorLocation());
 		GetOwner()->SetActorRotation(TargetRot);
 	}
+
 	if (StateTime > 0.1f)
 	{
 		ChangeState(EMonsterState::Move);
@@ -49,6 +50,8 @@ void UWBFSMComponent::IdleState()
 
 void UWBFSMComponent::MoveState(float DeltaTime)
 {
+	// 레이 캐스트 해서 앞에 몬스터로 막혀 있으면 멈추도록 변경
+	// 
 	//타겟 플레이어 방향으로 이동
 	FVector Dist = GetOwner()->GetActorForwardVector() * MoveDistance * DeltaTime;
 	GetOwner()->AddActorWorldOffset(Dist);

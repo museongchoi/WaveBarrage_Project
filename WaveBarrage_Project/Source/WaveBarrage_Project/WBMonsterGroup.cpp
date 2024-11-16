@@ -21,20 +21,6 @@ void AWBMonsterGroup::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UE_LOG(LogTemp, Warning, TEXT("BeginPlay called"));
-	FActorSpawnParameters SpawnPara;
-	SpawnPara.Owner = this;
-	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	if (MosterClass)
-	{
-		for (int i = 0; i < SpawnCount; i++)
-		{
-			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MosterClass, GetActorLocation(), GetActorRotation(), SpawnPara);
-			Spawned->TargetPlayer = TargetPlayer;
-			Monsters.Emplace(Spawned);
-		}
-		SpawnEnd = true;
-	}
 }
 
 // Called every frame
@@ -55,6 +41,23 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 			GM->MonsterGroups.Remove(this);
 		}
 		//Destroy();
+	}
+}
+
+void AWBMonsterGroup::SpawnMonster()
+{
+	FActorSpawnParameters SpawnPara;
+	SpawnPara.Owner = this;
+	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	if (MonsterClass)
+	{
+		for (int i = 0; i < SpawnCount; i++)
+		{
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation(), GetActorRotation(), SpawnPara);
+			Spawned->SetTargetPlayer(TargetPlayer);
+			Monsters.Emplace(Spawned);
+		}
+		SpawnEnd = true;
 	}
 }
 
