@@ -52,19 +52,19 @@ AWBPlayerBase::AWBPlayerBase()
 	Camera->FieldOfView = 55.0f;
 
 
-	Box1 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box1"));
+	Box1 = CreateDefaultSubobject<USceneComponent>(TEXT("Box1"));
 	Box1->SetupAttachment(RootComponent);
 
-	Box2 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box2"));
+	Box2 = CreateDefaultSubobject<USceneComponent>(TEXT("Box2"));
 	Box2->SetupAttachment(RootComponent);
 
-	Box3 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box3"));
+	Box3 = CreateDefaultSubobject<USceneComponent>(TEXT("Box3"));
 	Box3->SetupAttachment(RootComponent);
 
-	Box4 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box4"));
+	Box4 = CreateDefaultSubobject<USceneComponent>(TEXT("Box4"));
 	Box4->SetupAttachment(RootComponent);
 
-	Box5 = CreateDefaultSubobject<UBoxComponent>(TEXT("Box5"));
+	Box5 = CreateDefaultSubobject<USceneComponent>(TEXT("Box5"));
 	Box5->SetupAttachment(RootComponent);
 
 	MonsterSpawnPosition1 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos1"));
@@ -73,14 +73,17 @@ AWBPlayerBase::AWBPlayerBase()
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition1);
 
 	MonsterSpawnPosition2 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos2"));
+	MonsterSpawnPosition2->SetRelativeLocation(FVector(0, -1000, 0));
 	MonsterSpawnPosition2->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition2);
 
 	MonsterSpawnPosition3 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos3"));
+	MonsterSpawnPosition3->SetRelativeLocation(FVector(1000, 0, 0));
 	MonsterSpawnPosition3->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition3);
 
 	MonsterSpawnPosition4 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos4"));
+	MonsterSpawnPosition4->SetRelativeLocation(FVector(-1000, 0, 0));
 	MonsterSpawnPosition4->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition4);
 
@@ -104,6 +107,8 @@ void AWBPlayerBase::BeginPlay()
 
 	if (Box1 && ChampionOnlyWeapon)
 	{
+		UE_LOG(LogTemp, Error, TEXT("ChampionOnlyWeapon!!!!!!!!!!!!!!!!"));
+
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		SpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
@@ -273,8 +278,8 @@ void AWBPlayerBase::AttackFire()
 	if (bIsAttacking)
 	{
 		UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
-		
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 0.01f, true);
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		CursorHitAiming();
 		if (SpawnedWeapon)
 		{
 			SpawnedWeapon->Fire();
@@ -282,7 +287,8 @@ void AWBPlayerBase::AttackFire()
 	}
 	else
 	{
-		bIsAttacking = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		//bIsAttacking = false;
 		UE_LOG(LogTemp, Error, TEXT("7 AttackFire Clear!!!"));
 		
 		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
@@ -312,10 +318,7 @@ void AWBPlayerBase::CursorHitAiming()
 			}
 		}
 	}
-	else
-	{
-		return;
-	}
+
 
 }
 

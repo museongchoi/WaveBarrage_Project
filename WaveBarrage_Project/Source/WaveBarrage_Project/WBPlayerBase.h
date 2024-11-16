@@ -61,20 +61,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> Camera;
 
-	UPROPERTY()
-	TObjectPtr<UBoxComponent> Box1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USceneComponent> Box1;
 
 	UPROPERTY()
-	TObjectPtr<UBoxComponent> Box2;
+	TObjectPtr<USceneComponent> Box2;
 
 	UPROPERTY()
-	TObjectPtr<UBoxComponent> Box3;
+	TObjectPtr<USceneComponent> Box3;
 
 	UPROPERTY()
-	TObjectPtr<UBoxComponent> Box4;
+	TObjectPtr<USceneComponent> Box4;
 
 	UPROPERTY()
-	TObjectPtr<UBoxComponent> Box5;
+	TObjectPtr<USceneComponent> Box5;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> MonsterSpawnPosition1;
