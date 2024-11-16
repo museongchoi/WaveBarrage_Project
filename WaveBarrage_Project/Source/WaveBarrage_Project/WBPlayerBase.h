@@ -43,9 +43,6 @@ public:
 	void AutomaticAiming();
 
 	UFUNCTION()
-	void CheckAttack();
-
-	UFUNCTION()
 	void AttackFire();
 
 	UFUNCTION()

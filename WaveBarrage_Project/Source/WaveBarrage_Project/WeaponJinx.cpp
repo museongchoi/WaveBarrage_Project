@@ -5,6 +5,8 @@
 #include "WBPlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBPlayerBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 void AWeaponJinx::BeginPlay()
 {
@@ -72,7 +74,8 @@ void AWeaponJinx::SpawnProjectile()
 			UE_LOG(LogTemp, Error, TEXT("6 bIsAttacking false Check!!!!!!!"));
 
 			OwnerCharacter->bIsAttacking = false;
-			OwnerCharacter->AttackFire();
+			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 		}
 	}
 }
