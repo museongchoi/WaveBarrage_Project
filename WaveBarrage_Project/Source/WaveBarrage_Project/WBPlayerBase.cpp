@@ -30,7 +30,7 @@ AWBPlayerBase::AWBPlayerBase()
 	bUseControllerRotationRoll = false;
 
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	//GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->MaxAcceleration = 1000.0f;
@@ -257,7 +257,7 @@ void AWBPlayerBase::AutomaticAiming()
 
 void AWBPlayerBase::CheckAttack()
 {
-	UE_LOG(LogTemp, Error, TEXT("CheckAttack!!!"));
+	UE_LOG(LogTemp, Error, TEXT("2 CheckAttack!!!"));
 
 	if (!bIsAttacking)
 	{
@@ -272,9 +272,9 @@ void AWBPlayerBase::AttackFire()
 
 	if (bIsAttacking)
 	{
-		UE_LOG(LogTemp, Error, TEXT("AttackFire!!!"));
-
-		UKismetSystemLibrary::K2_SetTimer(this, "CursorHitAiming", 0.01f, true);
+		UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
+		
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 0.01f, true);
 		if (SpawnedWeapon)
 		{
 			SpawnedWeapon->Fire();
@@ -282,10 +282,10 @@ void AWBPlayerBase::AttackFire()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("AttackFire Clear!!!"));
-
-		//CursorHitAiming();
-		UKismetSystemLibrary::K2_ClearTimer(this, TEXT("CursorHitAiming"));
+		bIsAttacking = false;
+		UE_LOG(LogTemp, Error, TEXT("7 AttackFire Clear!!!"));
+		
+		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
 
 	}
 }
@@ -294,22 +294,27 @@ void AWBPlayerBase::CursorHitAiming()
 {
 	if (!bAutoMode)
 	{
-		UE_LOG(LogTemp, Error, TEXT("2. CursorHitAiming Check!!!!!!!"));
+		UE_LOG(LogTemp, Error, TEXT("4. CursorHitAiming Check!!!!!!!"));
 
 		if (MyPlayerController)
 		{
 			FHitResult HitResult;
-			if (MyPlayerController->GetHitResultUnderCursorByChannel(ECC_Visibility, false, HitResult))
+			
+			if (MyPlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
 			{
 				FVector TargetLocation = HitResult.Location;
 				FVector ActorLocation = GetActorLocation();
-
+	
 
 				UE_LOG(LogTemp, Warning, TEXT("TargetLocation X: %f, Y: %f"), TargetLocation.X, TargetLocation.Y);
-				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(const FVector(ActorLocation.X, ActorLocation.Y, 0.0f), const FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
+				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
 				SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f));
 			}
 		}
+	}
+	else
+	{
+		return;
 	}
 
 }

@@ -138,4 +138,5 @@ public:
 
 	FTimerHandle FTimerHandle_CheckAttack;
 	FTimerHandle FTimerHandle_AutomaticAiming;
+	FTimerHandle FTimerHandle_CursorAiming;
 };
