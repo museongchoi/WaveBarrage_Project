@@ -42,10 +42,12 @@ void UWBFSMComponent::IdleState()
 		GetOwner()->SetActorRotation(TargetRot);
 	}
 
-	if (StateTime > 0.1f)
-	{
-		ChangeState(EMonsterState::Move);
-	}
+	ChangeState(EMonsterState::Move);
+	
+	//if (StateTime > 0.1f)
+	//{
+	//	ChangeState(EMonsterState::Move);
+	//}
 }
 
 void UWBFSMComponent::MoveState(float DeltaTime)

@@ -6,14 +6,23 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBPlayerBase.h"
 
+void AWeaponJinx::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AWeaponJinx::Fire()
 {
+
 	// Get projectile count from player state and update max projectile count
 	if (OwnerCharacter)
 	{
+
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
 		if (PlayerState)
 		{
+			UE_LOG(LogTemp, Error, TEXT("AWeaponJinx Fire Check!!!!!!!"));
+
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
 		}
 	}
@@ -24,6 +33,7 @@ void AWeaponJinx::Fire()
 
 void AWeaponJinx::SpawnProjectile()
 {
+
 	if (ProjectileClass && OwnerCharacter && ProjectileSpawnPoint)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -40,24 +50,29 @@ void AWeaponJinx::SpawnProjectile()
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
+			UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
+
 		}
 	}
 
 	// Check if the current projectile count has reached the max
 	if (CurProjectileCnt >= MaxProjectileCnt)
 	{
+		UE_LOG(LogTemp, Error, TEXT("%d"), MaxProjectileCnt);
+
 		// Clear the timer to stop spawning projectiles
 		UKismetSystemLibrary::K2_ClearTimer(this, TEXT("SpawnProjectile"));
 
 		// Reset current projectile count
 		CurProjectileCnt = 0;
 
-		// Set owner character's IsAttacking to false and call AttackFire function
-		AWBPlayerBase* PlayerCharacter = Cast<AWBPlayerBase>(OwnerCharacter);
-		if (PlayerCharacter)
+
+		if (OwnerCharacter)
 		{
-			PlayerCharacter->bIsAttacking = false;
-			PlayerCharacter->AttackFire();
+			UE_LOG(LogTemp, Error, TEXT("bIsAttacking false Check!!!!!!!"));
+
+			OwnerCharacter->bIsAttacking = false;
+			OwnerCharacter->AttackFire();
 		}
 	}
 }

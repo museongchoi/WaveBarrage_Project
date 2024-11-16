@@ -39,10 +39,19 @@ public:
 	void ConfigureInputMapping();
 
 	// 공격 사용 함수
+	UFUNCTION()
 	void AutomaticAiming();
+
+	UFUNCTION()
 	void CheckAttack();
+
+	UFUNCTION()
 	void AttackFire();
+
+	UFUNCTION()
 	void CursorHitAiming();
+
+	UFUNCTION()
 	void DefaultAttackSettings();
 
 public:
@@ -109,8 +118,8 @@ public:
 	TObjectPtr<APlayerController> MyPlayerController;
 
 	// 캐릭터 각 전용 무기
-	UPROPERTY()
-	TObjectPtr<AWBWeaponBase> ChampionOnlyWeapon;
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<AWBWeaponBase> ChampionOnlyWeapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bAutoMode;
@@ -124,8 +133,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsAttacking;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FRotator CursorRotation;
+	UPROPERTY()
+	AWBWeaponBase* SpawnedWeapon;
 
-
+	FTimerHandle FTimerHandle_CheckAttack;
+	FTimerHandle FTimerHandle_AutomaticAiming;
 };
