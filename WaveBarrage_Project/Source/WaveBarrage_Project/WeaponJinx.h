@@ -14,4 +14,8 @@ class WAVEBARRAGE_PROJECT_API AWeaponJinx : public AWBWeaponBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void Fire() override;
+
+	virtual void SpawnProjectile() override;
 };
