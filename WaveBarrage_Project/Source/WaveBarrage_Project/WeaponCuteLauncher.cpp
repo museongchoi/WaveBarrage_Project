@@ -18,12 +18,12 @@ void AWeaponCuteLauncher::BeginPlay()
 void AWeaponCuteLauncher::Fire()
 {
 }
-
 void AWeaponCuteLauncher::SpawnProjectile()
 {
 }
 
 void AWeaponCuteLauncher::CheckAttack()
+
 {
 }
 

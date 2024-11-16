@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class AProCuteLauncher : public AWBProjectileBase
+class WAVEBARRAGE_PROJECT_API AProCuteLauncher : public AWBProjectileBase
 {
 	GENERATED_BODY()
 	
