@@ -53,19 +53,19 @@ AWBPlayerBase::AWBPlayerBase()
 
 
 	Box1 = CreateDefaultSubobject<USceneComponent>(TEXT("Box1"));
-	Box1->SetupAttachment(RootComponent);
+	Box1->SetupAttachment(GetMesh());
 
 	Box2 = CreateDefaultSubobject<USceneComponent>(TEXT("Box2"));
-	Box2->SetupAttachment(RootComponent);
+	Box2->SetupAttachment(GetMesh());
 
 	Box3 = CreateDefaultSubobject<USceneComponent>(TEXT("Box3"));
-	Box3->SetupAttachment(RootComponent);
+	Box3->SetupAttachment(GetMesh());
 
 	Box4 = CreateDefaultSubobject<USceneComponent>(TEXT("Box4"));
-	Box4->SetupAttachment(RootComponent);
+	Box4->SetupAttachment(GetMesh());
 
 	Box5 = CreateDefaultSubobject<USceneComponent>(TEXT("Box5"));
-	Box5->SetupAttachment(RootComponent);
+	Box5->SetupAttachment(GetMesh());
 
 	MonsterSpawnPosition1 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos1"));
 	MonsterSpawnPosition1->SetRelativeLocation(FVector(0, 1000, 0));
@@ -114,7 +114,7 @@ void AWBPlayerBase::BeginPlay()
 		SpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedWeapon)
 		{
-			SpawnedWeapon->AttachToComponent(Box1, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			SpawnedWeapon->AttachToComponent(Box1, FAttachmentTransformRules::KeepWorldTransform);
 			SpawnedWeapon->OwnerCharacter = this;
 		}
 	}
@@ -255,44 +255,22 @@ void AWBPlayerBase::AutomaticAiming()
 		if (ClosestEnemy)
 		{
 			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
-			SetActorRotation(TargetRotation);
+			GetMesh()->SetWorldRotation(FRotator(0.0f, TargetRotation.Yaw - 90.f, 0.0f));
 		}
 	}
 }
 
-void AWBPlayerBase::CheckAttack()
-{
-	UE_LOG(LogTemp, Error, TEXT("2 CheckAttack!!!"));
 
-	if (!bIsAttacking)
-	{
-		bIsAttacking = true;
-		AttackFire();
-	}
-
-}
 
 void AWBPlayerBase::AttackFire()
 {
 
-	if (bIsAttacking)
+	UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	CursorHitAiming();
+	if (SpawnedWeapon)
 	{
-		UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		CursorHitAiming();
-		if (SpawnedWeapon)
-		{
-			SpawnedWeapon->Fire();
-		}
-	}
-	else
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		//bIsAttacking = false;
-		UE_LOG(LogTemp, Error, TEXT("7 AttackFire Clear!!!"));
-		
-		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
-
+		SpawnedWeapon->Fire();
 	}
 }
 
@@ -314,7 +292,8 @@ void AWBPlayerBase::CursorHitAiming()
 
 				UE_LOG(LogTemp, Warning, TEXT("TargetLocation X: %f, Y: %f"), TargetLocation.X, TargetLocation.Y);
 				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
-				SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f));
+				GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation.Yaw - 90.f, 0.0f));
+
 			}
 		}
 	}
@@ -351,7 +330,7 @@ void AWBPlayerBase::DefaultAttackSettings()
 
 		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CheckAttack))
 		{
-			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::CheckAttack, 2.0f, true);
+			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::AttackFire, 2.0f, true);
 
 		}
 
