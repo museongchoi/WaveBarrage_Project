@@ -257,7 +257,7 @@ void AWBPlayerBase::AutomaticAiming()
 
 void AWBPlayerBase::CheckAttack()
 {
-	UE_LOG(LogTemp, Error, TEXT("4. CheckAttack Check!!!!!!!"));
+	UE_LOG(LogTemp, Error, TEXT("CheckAttack!!!"));
 
 	if (!bIsAttacking)
 	{
@@ -269,18 +269,21 @@ void AWBPlayerBase::CheckAttack()
 
 void AWBPlayerBase::AttackFire()
 {
-	UE_LOG(LogTemp, Error, TEXT("3. AttackFire Check!!!!!!!"));
 
 	if (bIsAttacking)
 	{
+		UE_LOG(LogTemp, Error, TEXT("AttackFire!!!"));
+
 		UKismetSystemLibrary::K2_SetTimer(this, "CursorHitAiming", 0.01f, true);
-		if (ChampionOnlyWeapon)
+		if (SpawnedWeapon)
 		{
 			SpawnedWeapon->Fire();
 		}
 	}
 	else
 	{
+		UE_LOG(LogTemp, Error, TEXT("AttackFire Clear!!!"));
+
 		//CursorHitAiming();
 		UKismetSystemLibrary::K2_ClearTimer(this, TEXT("CursorHitAiming"));
 
@@ -289,18 +292,23 @@ void AWBPlayerBase::AttackFire()
 
 void AWBPlayerBase::CursorHitAiming()
 {
-	UE_LOG(LogTemp, Error, TEXT("2. CursorHitAiming Check!!!!!!!"));
-
-	if (MyPlayerController)
+	if (!bAutoMode)
 	{
-		FHitResult HitResult;
-		if (MyPlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Camera), false, HitResult))
-		{
-			FVector TargetLocation = HitResult.Location;
-			FVector ActorLocation = GetActorLocation();
+		UE_LOG(LogTemp, Error, TEXT("2. CursorHitAiming Check!!!!!!!"));
 
-			FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
-			SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f));
+		if (MyPlayerController)
+		{
+			FHitResult HitResult;
+			if (MyPlayerController->GetHitResultUnderCursorByChannel(ECC_Visibility, false, HitResult))
+			{
+				FVector TargetLocation = HitResult.Location;
+				FVector ActorLocation = GetActorLocation();
+
+
+				UE_LOG(LogTemp, Warning, TEXT("TargetLocation X: %f, Y: %f"), TargetLocation.X, TargetLocation.Y);
+				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(const FVector(ActorLocation.X, ActorLocation.Y, 0.0f), const FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
+				SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f));
+			}
 		}
 	}
 
@@ -333,7 +341,11 @@ void AWBPlayerBase::DefaultAttackSettings()
 
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::CheckAttack, 2.0f, true);
+		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CheckAttack))
+		{
+			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::CheckAttack, 2.0f, true);
+
+		}
 
 		//UKismetSystemLibrary::K2_ClearTimer(this, TEXT("AutomaticAiming"));
 

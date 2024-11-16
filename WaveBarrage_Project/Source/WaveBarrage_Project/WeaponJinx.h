@@ -13,7 +13,10 @@ UCLASS()
 class WAVEBARRAGE_PROJECT_API AWeaponJinx : public AWBWeaponBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void Fire() override;
 
