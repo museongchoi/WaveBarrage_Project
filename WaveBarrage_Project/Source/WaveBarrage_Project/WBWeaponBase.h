@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "WBPlayerBase.h"
 #include "WBWeaponBase.generated.h"
 
 class USceneComponent;
@@ -25,13 +26,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	UFUNCTION()
 	virtual void Fire();
 
 	UFUNCTION()
 	virtual void SpawnProjectile();
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 WeaponLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -47,7 +49,7 @@ public:
 	int32 ProjectileCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	AActor* OwnerCharacter;
+	AWBPlayerBase* OwnerCharacter;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AActor> ProjectileClass;
@@ -60,4 +62,5 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
+
 };
