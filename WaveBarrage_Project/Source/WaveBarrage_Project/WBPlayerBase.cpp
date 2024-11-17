@@ -17,6 +17,7 @@
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
+#include "WBMonsterBase.h"
 
 
 // Sets default values
@@ -89,7 +90,6 @@ AWBPlayerBase::AWBPlayerBase()
 
 	bAutoMode = false;
 	ClosestDistance = FLT_MAX;
-	bIsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -228,14 +228,28 @@ void AWBPlayerBase::AutomaticAiming()
 	ClosestEnemy = nullptr;
 
 	FVector Start = GetActorLocation();
-	FVector End = Start;
+	FVector End = Start + GetActorForwardVector() * 1000.0f;
 	float Radius = 500.0f;
 
 	FHitResult OutHit;
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_GameTraceChannel1, FCollisionShape::MakeSphere(Radius), CollisionParams);
+	bool bHit = GetWorld()->SweepSingleByChannel(
+		OutHit, 
+		Start, 
+		End, 
+		FQuat::Identity, 
+		ECC_GameTraceChannel2, 
+		FCollisionShape::MakeSphere(Radius), 
+		CollisionParams
+	);
+
+	// 디버그용 구체 표시
+	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
+	// 디버그용 구체 표시 (한 프레임 동안 표시)
+	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
+
 
 	if (bHit && OutHit.GetActor())
 	{
@@ -244,11 +258,16 @@ void AWBPlayerBase::AutomaticAiming()
 
 		for (AActor* Actor : FoundActors)
 		{
-			float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
-			if (Distance < ClosestDistance)
+			if (Actor->IsA(AWBMonsterBase::StaticClass()))
 			{
-				ClosestDistance = Distance;
-				ClosestEnemy = Actor;
+				UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *Actor->GetName());
+
+				float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
+				if (Distance < ClosestDistance)
+				{
+					ClosestDistance = Distance;
+					ClosestEnemy = Actor;
+				}
 			}
 		}
 
@@ -264,10 +283,13 @@ void AWBPlayerBase::AutomaticAiming()
 
 void AWBPlayerBase::AttackFire()
 {
+	if (!bAutoMode)
+	{
+		//UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		CursorHitAiming();
+	}
 
-	UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	CursorHitAiming();
 	if (SpawnedWeapon)
 	{
 		SpawnedWeapon->Fire();
@@ -305,11 +327,14 @@ void AWBPlayerBase::DefaultAttackSettings()
 {
 	UE_LOG(LogTemp, Error, TEXT("1. DefaultAttackSettings Check!!!!!!!"));
 
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
+
+
 	if (bAutoMode)
 	{
-		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CheckAttack))
+		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
 		{
-			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CheckAttack);
+			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
 		}
 
 		GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -323,20 +348,17 @@ void AWBPlayerBase::DefaultAttackSettings()
 	{
 		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
 		{
+			GetMesh()->SetWorldRotation(FRotator(0.0f, GetActorRotation().Yaw - 90.0f, 0.0f));
 			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_AutomaticAiming);
 		}
 
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 
-		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CheckAttack))
+		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
 		{
-			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CheckAttack, this, &AWBPlayerBase::AttackFire, 2.0f, true);
-
+			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 2.0f, true);
 		}
 
-		//UKismetSystemLibrary::K2_ClearTimer(this, TEXT("AutomaticAiming"));
 
-		//GetCharacterMovement()->bOrientRotationToMovement = true;
-		//UKismetSystemLibrary::K2_SetTimer(this, "CheckAttack", 2.0f, true);
 	}
 }
