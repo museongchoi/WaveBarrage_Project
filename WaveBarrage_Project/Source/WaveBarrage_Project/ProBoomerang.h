@@ -32,9 +32,6 @@ public:
 	UPROPERTY()
 	float Time =0.0f;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float LifeTime = 0.0f;
-
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	FVector AttackDirection;
 

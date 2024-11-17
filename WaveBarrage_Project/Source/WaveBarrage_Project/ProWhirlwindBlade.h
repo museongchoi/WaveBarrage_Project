@@ -20,9 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float LifeTime = 0.0f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float OrbitSpeed = 0.0f;
 	
