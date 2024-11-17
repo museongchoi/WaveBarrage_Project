@@ -72,10 +72,12 @@ void AWeaponJinx::SpawnProjectile()
 		if (OwnerCharacter)
 		{
 			UE_LOG(LogTemp, Error, TEXT("6 bIsAttacking false Check!!!!!!!"));
+			if (!OwnerCharacter->bAutoMode)
+			{
+				OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+				OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 
-			OwnerCharacter->bIsAttacking = false;
-			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
+			}
 		}
 	}
 }

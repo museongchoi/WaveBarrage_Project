@@ -58,19 +58,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> Camera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Box1;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Box2;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Box3;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Box4;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Box5;
 
 	UPROPERTY(VisibleAnywhere)
@@ -127,13 +127,10 @@ public:
 	UPROPERTY()
 	TObjectPtr<AActor> ClosestEnemy;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bIsAttacking;
-
 	UPROPERTY()
 	AWBWeaponBase* SpawnedWeapon;
 
-	FTimerHandle FTimerHandle_CheckAttack;
+	FTimerHandle FTimerHandle_AttackFire;
 	FTimerHandle FTimerHandle_AutomaticAiming;
 	FTimerHandle FTimerHandle_CursorAiming;
 };
