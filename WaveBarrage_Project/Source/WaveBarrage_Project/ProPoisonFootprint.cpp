@@ -4,16 +4,20 @@
 #include "ProPoisonFootprint.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+
 
 
 AProPoisonFootprint::AProPoisonFootprint()
 {
-
+	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
+	LifeTime = 4.0f;
 }
 
 void AProPoisonFootprint::BeginPlay()
 {
-	SetLifeSpan(5.0f);
+	Super::BeginPlay();
+	SetLifeSpan(LifeTime);
 
 	if (StaticMesh)
 	{

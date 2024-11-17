@@ -23,7 +23,7 @@ void AWeaponJinx::Fire()
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
 		if (PlayerState)
 		{
-			UE_LOG(LogTemp, Error, TEXT("5. AWeaponJinx Fire Check!!!!!!!"));
+			//UE_LOG(LogTemp, Error, TEXT("5. AWeaponJinx Fire Check!!!!!!!"));
 
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
 		}
@@ -69,15 +69,11 @@ void AWeaponJinx::SpawnProjectile()
 		CurProjectileCnt = 0;
 
 
-		if (OwnerCharacter)
+		if (OwnerCharacter && !OwnerCharacter->bAutoMode)
 		{
 			UE_LOG(LogTemp, Error, TEXT("6 bIsAttacking false Check!!!!!!!"));
-			if (!OwnerCharacter->bAutoMode)
-			{
-				OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-				OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
-
-			}
+			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 		}
 	}
 }

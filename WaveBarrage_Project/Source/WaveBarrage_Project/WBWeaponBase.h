@@ -33,30 +33,42 @@ public:
 	UFUNCTION()
 	virtual void SpawnProjectile();
 
+	// 무기 레벨
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 WeaponLevel;
 
+	// 데미지
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Damage;
 
+	// 스킬 가속
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 SkillAcceleration;
 
+	// 스킬 기본 속도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CoolDown;
+
+	// 크리티컬 확율
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CriticalChance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ProjectileCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	AWBPlayerBase* OwnerCharacter;
 
+	// 발사체
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AActor> ProjectileClass;
 
+	// 발사체 개수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ProjectileCount;
+
+	// 현재 발사체 개수 (Default : 0)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurProjectileCnt;
 
+	// 최대 발사체 개수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxProjectileCnt;
 

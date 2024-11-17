@@ -10,21 +10,20 @@ AProBoomerang::AProBoomerang()
 	ProjectileMovementComponent->MaxSpeed = 0.0f;
 	ProjectileMovementComponent->ProjectileGravityScale=0.0f;
 	ProjectileSpeed = 10.0f;
+	LifeTime = 4.0f;
+	Acceleration = -0.25f;
 }
 
 void AProBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
-	LifeTime = 4.0f;
 	SetLifeSpan(LifeTime);
-	Acceleration = -0.25f;
-
 	
 }
 
 void AProBoomerang::MoveForward(FVector Direction)
 {
-	Direction = AttackDirection * ProjectileSpeed;
+	Direction = Direction * ProjectileSpeed;
 	AddActorWorldOffset(Direction);
 }
 
