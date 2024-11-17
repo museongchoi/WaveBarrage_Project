@@ -119,6 +119,23 @@ void AWBPlayerBase::BeginPlay()
 		}
 	}
 
+	TArray<TObjectPtr<USceneComponent>> Boxes = { Box2, Box3, Box4, Box5 };
+	// 일반 무기들 스폰 및 Attach
+	for (int32 i = 0; i < WeaponAttachBoxes.Num(); i++)
+	{
+		if (Boxes[i] && WeaponAttachBoxes.IsValidIndex(i) && WeaponAttachBoxes[i])
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			GeneralSpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(WeaponAttachBoxes[i], GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+			if (GeneralSpawnedWeapon)
+			{
+				GeneralSpawnedWeapon->AttachToComponent(Boxes[i], FAttachmentTransformRules::KeepWorldTransform);
+				GeneralSpawnedWeapon->OwnerCharacter = this;
+			}
+		}
+	}
+
 	DefaultAttackSettings();
 
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -218,6 +235,7 @@ void AWBPlayerBase::ToggleAutoMode()
 	DefaultAttackSettings();
 }
 
+// 가장 가까운 몬스터 자동 타겟팅
 void AWBPlayerBase::AutomaticAiming()
 {
 	if (!bAutoMode)
@@ -296,6 +314,7 @@ void AWBPlayerBase::AttackFire()
 	}
 }
 
+// 마우스 커서 위치
 void AWBPlayerBase::CursorHitAiming()
 {
 	if (!bAutoMode)

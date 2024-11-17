@@ -25,7 +25,15 @@ protected:
 
 	virtual void SpawnProjectile() override;
 
-	void CheckAttack();
-
 	void CuteLauncherAutomaticAiming();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float ClosestDistance;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<AActor> ClosestEnemy;
+
+	FTimerHandle FTimerHandle_AutomaticAiming;
+	FTimerHandle FTimerHandle_AttackFire;
+
 };

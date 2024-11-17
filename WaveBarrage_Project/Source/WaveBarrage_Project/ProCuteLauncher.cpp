@@ -6,16 +6,18 @@
 
 AProCuteLauncher::AProCuteLauncher()
 {
-	ProjectileMovementComponent->InitialSpeed = 1500.0f;
-	ProjectileMovementComponent->MaxSpeed = 3000.f;
+	//ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+	ProjectileMovementComponent->InitialSpeed = 2000.0f;
+	ProjectileMovementComponent->MaxSpeed = 3000.0f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 
 
-	LifeTime = 3.0f;
+	LifeTime = 2.0f;
 }
 
 void AProCuteLauncher::BeginPlay()
 {
+	Super::BeginPlay();
 	SetLifeSpan(LifeTime);
 
 }

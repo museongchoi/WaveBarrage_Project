@@ -8,7 +8,7 @@
 
 AProPoisonFootprint::AProPoisonFootprint()
 {
-
+	LifeTime = 4.0f;
 }
 
 void AProPoisonFootprint::BeginPlay()

@@ -118,6 +118,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	TSubclassOf<AWBWeaponBase> ChampionOnlyWeapon;
 
+	// 일반 무기들을 부착할 Box 배열 (Blueprint에서 설정 가능)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TArray<TSubclassOf<AWBWeaponBase>> WeaponAttachBoxes;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bAutoMode;
 
@@ -129,6 +133,9 @@ public:
 
 	UPROPERTY()
 	AWBWeaponBase* SpawnedWeapon;
+
+	UPROPERTY()
+	AWBWeaponBase* GeneralSpawnedWeapon;
 
 	FTimerHandle FTimerHandle_AttackFire;
 	FTimerHandle FTimerHandle_AutomaticAiming;
