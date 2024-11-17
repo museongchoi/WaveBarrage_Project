@@ -14,4 +14,8 @@ class WAVEBARRAGE_PROJECT_API AProCuteLauncher : public AWBProjectileBase
 {
 	GENERATED_BODY()
 	
+public:
+	AProCuteLauncher();
+
+	virtual void BeginPlay() override;
 };

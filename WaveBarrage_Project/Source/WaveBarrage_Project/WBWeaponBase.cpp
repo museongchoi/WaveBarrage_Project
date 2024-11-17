@@ -28,7 +28,6 @@ AWBWeaponBase::AWBWeaponBase()
 	ProjectileCount = 1;
 	CurProjectileCnt = 0;
 	MaxProjectileCnt = 10; // Default maximum projectile count
-
 }
 
 // Called when the game starts or when spawned

@@ -63,4 +63,6 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
 
+
+
 };

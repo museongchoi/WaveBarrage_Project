@@ -38,5 +38,8 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float LifeTime;
+
 
 };
