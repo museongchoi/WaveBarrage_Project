@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "WBSapwnDataTable.h"
 #include "WBGameMode.generated.h"
 
 
@@ -18,21 +19,24 @@ class WAVEBARRAGE_PROJECT_API AWBGameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
+
+	AWBGameMode();
 	virtual void BeginPlay() override;
 	void AddExp(int Value);
 	void LevelUp();
 	void SetTargetPlayer();
-	void SpawnMonsterGroup();
+	UFUNCTION()
+	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
 
 public:
 	int Exp;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AWBMonsterBase> MonsterClass1;
-
-	UPROPERTY()
 	TArray<AWBPlayerBase*> Players;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TArray<AWBMonsterGroup*> MonsterGroups;
+
+	UPROPERTY(EditAnywhere)
+	UDataTable* SpawnDataTable;
 };

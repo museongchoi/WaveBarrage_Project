@@ -56,7 +56,7 @@ void UWBFSMComponent::MoveState(float DeltaTime)
 	// 
 	//타겟 플레이어 방향으로 이동
 	FVector Dist = GetOwner()->GetActorForwardVector() * MoveDistance * DeltaTime;
-	GetOwner()->AddActorWorldOffset(Dist);
+	GetOwner()->AddActorWorldOffset(Dist, true);
 
 	//아니면서 지속 시간이 끝나면 IdleState
 	if (CanAttack)
