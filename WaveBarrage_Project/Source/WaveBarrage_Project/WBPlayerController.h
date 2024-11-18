@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "WBPlayerController.generated.h"
 
+class UUserWidget;
 /**
  * 
  */
@@ -16,8 +17,11 @@ class WAVEBARRAGE_PROJECT_API AWBPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowCardSelectionWidget();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> widgetClass;
 
+	UUserWidget* CardSelectionWidgetInstance;
 };

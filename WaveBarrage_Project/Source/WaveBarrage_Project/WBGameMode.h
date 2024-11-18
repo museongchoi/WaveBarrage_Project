@@ -7,7 +7,7 @@
 #include "WBSapwnDataTable.h"
 #include "WBGameMode.generated.h"
 
-
+class AWBPlayerState;
 class AWBPlayerBase;
 class AWBMonsterBase;
 class AWBMonsterGroup;
@@ -21,12 +21,20 @@ class WAVEBARRAGE_PROJECT_API AWBGameMode : public AGameModeBase
 public:
 
 	AWBGameMode();
+
 	virtual void BeginPlay() override;
+
 	void AddExp(int Value);
+
 	void LevelUp();
+
 	void SetTargetPlayer();
+
 	UFUNCTION()
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
+
+	UFUNCTION(BlueprintCallable, Category = "Card Selection")
+	void ApplyCardEffect(AWBPlayerBase* Player, int32 CardIndex);
 
 public:
 	int Exp;
@@ -42,4 +50,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* WeaponDataTable;
+
+
 };

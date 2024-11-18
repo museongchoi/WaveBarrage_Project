@@ -39,6 +39,19 @@ void AWBGameMode::AddExp(int Value)
 void AWBGameMode::LevelUp()
 {
 
+	for (AActor* PlayerActor : Players)
+	{
+		AWBPlayerBase* Player = Cast<AWBPlayerBase>(PlayerActor);
+		if (Player)
+		{
+			APlayerController* PlayerController = Cast<APlayerController>(Player->GetController());
+			if (PlayerController)
+			{
+				//
+			}
+		}
+	}
+
 }
 
 void AWBGameMode::SetTargetPlayer()
@@ -132,4 +145,8 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 
 
 
+}
+
+void AWBGameMode::ApplyCardEffect(AWBPlayerBase* Player, int32 CardIndex)
+{
 }
