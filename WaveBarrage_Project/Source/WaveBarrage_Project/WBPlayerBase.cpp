@@ -107,7 +107,7 @@ void AWBPlayerBase::BeginPlay()
 
 	if (Box1 && ChampionOnlyWeapon)
 	{
-		UE_LOG(LogTemp, Error, TEXT("ChampionOnlyWeapon!!!!!!!!!!!!!!!!"));
+		//UE_LOG(LogTemp, Error, TEXT("ChampionOnlyWeapon!!!!!!!!!!!!!!!!"));
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
@@ -136,7 +136,7 @@ void AWBPlayerBase::BeginPlay()
 		}
 	}
 
-	DefaultAttackSettings();
+	//DefaultAttackSettings();
 
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(GM))
@@ -144,7 +144,7 @@ void AWBPlayerBase::BeginPlay()
 		GM->Players.Emplace(this);
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
+	//UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
 	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
@@ -254,19 +254,20 @@ void AWBPlayerBase::AutomaticAiming()
 	{
 		return;
 	}
+
 	ClosestDistance = FLT_MAX;
 	ClosestEnemy = nullptr;
 
 	FVector Start = GetActorLocation();
-	FVector End = Start;
-	float Radius = 500.0f;
+	FVector End = Start + GetActorForwardVector() * 1500.0f;
+	float Radius = 1500.0f;
 
-	FHitResult OutHit;
+	TArray<FHitResult> OutHits;
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->SweepSingleByChannel(
-		OutHit, 
+	bool bHit = GetWorld()->SweepMultiByChannel(
+		OutHits,
 		Start, 
 		End, 
 		FQuat::Identity, 
@@ -278,30 +279,30 @@ void AWBPlayerBase::AutomaticAiming()
 	UE_LOG(LogTemp, Error, TEXT("DrawDebugSphere"));
 
 	// 디버그용 구체 표시
-	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
+	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
 	// 디버그용 구체 표시 (한 프레임 동안 표시)
-	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
+	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
 
 
-	if (bHit && OutHit.GetActor())
+	if (bHit)
 	{
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), OutHit.GetActor()->GetClass(), FoundActors);
-
-		for (AActor* Actor : FoundActors)
+		for (const FHitResult& Hit : OutHits)
 		{
-			if (Actor->IsA(AWBMonsterBase::StaticClass()))
-			{
-				//UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *Actor->GetName());
+			AActor* HitActor = Hit.GetActor();
 
-				float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
+			if (AWBMonsterBase* TargetMonster = Cast<AWBMonsterBase>(HitActor))
+			{
+				//UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *TargetMonster->GetName());
+
+				float Distance = FVector::Dist(TargetMonster->GetActorLocation(), GetActorLocation());
 				if (Distance < ClosestDistance)
 				{
 					ClosestDistance = Distance;
-					ClosestEnemy = Actor;
+					ClosestEnemy = TargetMonster;
 				}
 			}
 		}
+
 
 		if (ClosestEnemy)
 		{
@@ -317,13 +318,13 @@ void AWBPlayerBase::AttackFire()
 {
 	if (!bAutoMode)
 	{
-		UE_LOG(LogTemp, Error, TEXT("false bAutoMode"));
+		//UE_LOG(LogTemp, Error, TEXT("false bAutoMode"));
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		CursorHitAiming();
 	}
 	else if(bAutoMode)
 	{
-		UE_LOG(LogTemp, Error, TEXT("true bAutoMode"));
+		//UE_LOG(LogTemp, Error, TEXT("true bAutoMode"));
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		AutomaticAiming();
 	}
@@ -339,7 +340,7 @@ void AWBPlayerBase::CursorHitAiming()
 {
 	if (!bAutoMode)
 	{
-		UE_LOG(LogTemp, Error, TEXT("4. CursorHitAiming Check!!!!!!!"));
+		//UE_LOG(LogTemp, Error, TEXT("4. CursorHitAiming Check!!!!!!!"));
 
 		if (MyPlayerController)
 		{
@@ -356,7 +357,6 @@ void AWBPlayerBase::CursorHitAiming()
 			}
 		}
 	}
-
 
 }
 
