@@ -49,7 +49,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UDataTable* SpawnDataTable;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* WeaponDataTable;
 
 

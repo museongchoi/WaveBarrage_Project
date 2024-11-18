@@ -150,7 +150,6 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 
 }
 
-
 void AWBGameMode::ApplyCardEffect(AWBPlayerBase * Player, int32 CardIndex)
 {
 
