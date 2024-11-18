@@ -48,8 +48,6 @@ public:
 	UFUNCTION()
 	void CursorHitAiming();
 
-	UFUNCTION()
-	void DefaultAttackSettings();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

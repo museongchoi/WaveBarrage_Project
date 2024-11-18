@@ -359,39 +359,3 @@ void AWBPlayerBase::CursorHitAiming()
 	}
 
 }
-
-void AWBPlayerBase::DefaultAttackSettings()
-{
-
-
-	//if (bAutoMode)
-	//{
-	//	if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
-	//	{
-	//		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
-	//	}
-
-	//	GetCharacterMovement()->bOrientRotationToMovement = false;
-
-	//	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
-	//	{
-	//		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AutomaticAiming, this, &AWBPlayerBase::AutomaticAiming, 0.01f, true);
-	//	}
-	//}
-	//else
-	//{
-	//	if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
-	//	{
-	//		GetMesh()->SetWorldRotation(FRotator(0.0f, GetActorRotation().Yaw - 90.0f, 0.0f));
-	//		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_AutomaticAiming);
-	//	}
-
-	//	GetCharacterMovement()->bOrientRotationToMovement = true;
-
-	//	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
-	//	{
-	//		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 2.0f, true);
-	//	}
-
-	//}
-}
