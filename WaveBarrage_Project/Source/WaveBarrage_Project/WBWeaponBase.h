@@ -9,6 +9,18 @@
 
 class USceneComponent;
 
+// 각 무기의 타입을 식별
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	WeaponJinx UMETA(DisplayName = "Jinx"),
+	WeaponWhirlwind UMETA(DisplayName = "Whirlwind"),
+	WeaponPoisonFootprint UMETA(DisplayName = "PoisonFootprint"),
+	WeaponBoomerang UMETA(DisplayName = "Boomerang"),
+	WeaponCuteLauncher UMETA(DisplayName = "CuteLauncher")
+};
+
+
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBWeaponBase : public AActor
 {
@@ -32,6 +44,15 @@ public:
 
 	UFUNCTION()
 	virtual void SpawnProjectile();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	EWeaponType GetWeaponType() const;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	EWeaponType WeaponType; // 무기 타입을 나타내는 변수
+
+public:
 
 	// 무기 레벨
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

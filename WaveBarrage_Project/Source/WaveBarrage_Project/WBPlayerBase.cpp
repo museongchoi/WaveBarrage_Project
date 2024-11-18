@@ -116,6 +116,7 @@ void AWBPlayerBase::BeginPlay()
 		{
 			SpawnedWeapon->AttachToComponent(Box1, FAttachmentTransformRules::KeepWorldTransform);
 			SpawnedWeapon->OwnerCharacter = this;
+			EquippedWeapons.Add(SpawnedWeapon);
 		}
 	}
 
@@ -132,6 +133,7 @@ void AWBPlayerBase::BeginPlay()
 			{
 				GeneralSpawnedWeapon->AttachToComponent(Boxes[i], FAttachmentTransformRules::KeepWorldTransform);
 				GeneralSpawnedWeapon->OwnerCharacter = this;
+				EquippedWeapons.Add(GeneralSpawnedWeapon);
 			}
 		}
 	}

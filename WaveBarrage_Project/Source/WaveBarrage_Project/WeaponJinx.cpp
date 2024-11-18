@@ -8,6 +8,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 
+AWeaponJinx::AWeaponJinx()
+{
+	WeaponType = EWeaponType::WeaponJinx;
+
+}
+
 void AWeaponJinx::BeginPlay()
 {
 	Super::BeginPlay();

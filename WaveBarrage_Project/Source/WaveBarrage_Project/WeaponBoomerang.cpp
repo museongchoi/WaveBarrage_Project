@@ -11,6 +11,7 @@
 AWeaponBoomerang::AWeaponBoomerang()
 {
 	SpawnDelay = UKismetMathLibrary::RandomFloatInRange(0.033f, 0.528f);
+	WeaponType = EWeaponType::WeaponBoomerang;
 }
 
 void AWeaponBoomerang::BeginPlay()

@@ -14,6 +14,8 @@
 // Damage : 45/50/55/60/65
 AWeaponCuteLauncher::AWeaponCuteLauncher()
 {
+	WeaponType = EWeaponType::WeaponCuteLauncher;
+
 	ClosestDistance = FLT_MAX;
 	CoolDown = 1.0f;
 	Damage = 45;

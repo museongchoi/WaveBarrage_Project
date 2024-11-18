@@ -3,6 +3,7 @@
 
 #include "WBGameMode.h"
 #include "WBPlayerController.h"
+#include "WBPlayerState.h"
 #include "WBMonsterBase.h"
 #include "WBPlayerBase.h"
 #include "WBMonsterGroup.h"
@@ -62,16 +63,98 @@ void AWBGameMode::LevelUp()
 
 void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex)
 {
-	AWBPlayerState* PlayerState = PlayerController->GetPlayerState<AWBPlayerState>();
-	if (!PlayerState)
+	AWBPlayerBase* Player = Cast<AWBPlayerBase>(PlayerController->GetCharacter());
+	if (Player)
 	{
-		return;
-	}
+		AWBPlayerState* PlayerState = Player->GetPlayerState<AWBPlayerState>();
+		if (!PlayerState)
+		{
+			return;
+		}
 
-	if (CardIndex >= 0 && CardIndex <= 4)
-	{
-		FName RowName = FName(*FString::FromInt(CardIndex + 1));
-		//FWeaponData* Wea
+		// 무기 카드 처리 (0-4)
+		if (CardIndex >= 0 && CardIndex <= 4)
+		{
+			FString WeaponTypeString;
+			switch (static_cast<EWeaponType>(CardIndex))
+			{
+			case EWeaponType::WeaponBoomerang:
+				WeaponTypeString = "Boomerang";
+				break;
+			case EWeaponType::WeaponWhirlwind:
+				WeaponTypeString = "Whirlwind";
+				break;
+			case EWeaponType::WeaponPoisonFootprint:
+				WeaponTypeString = "PoisonFootprint";
+				break;
+			case EWeaponType::WeaponJinx:
+				WeaponTypeString = "Jinx";
+				break;
+			case EWeaponType::WeaponCuteLauncher:
+				WeaponTypeString = "CuteLauncher";
+				break;
+			default:
+				return; // 유효하지 않은 무기 타입인 경우 리턴
+			}
+
+			// 무기 레벨 가져오기
+			int16* CurrentLevelPtr = PlayerState->ItemLevel.Find(WeaponTypeString);
+			int WeaponLevel = (CurrentLevelPtr) ? FMath::Min((*CurrentLevelPtr) + 1, 5) : 1;
+
+			// 데이터 테이블에서 해당 무기와 레벨의 능력치를 가져오기
+			FName RowName = FName(*FString::Printf(TEXT("%s_%d"), *WeaponTypeString, WeaponLevel));
+			FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
+			if (WeaponData)
+			{
+				// 무기 업데이트
+				for (AWBWeaponBase* Weapon : Player->EquippedWeapons)
+				{
+					if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
+					{
+						Weapon->Damage = WeaponData->Damage;
+						Weapon->SkillAcceleration = WeaponData->SkillAcceleration;
+						Weapon->CoolDown = WeaponData->CoolDown;
+						Weapon->CriticalChance = WeaponData->CriticalChance;
+						Weapon->ProjectileCount = WeaponData->ProjectileCount;
+					}
+				}
+
+				// 무기 레벨 업데이트
+				PlayerState->ItemLevel.Add(WeaponTypeString, WeaponLevel);
+			}
+		}
+		// 패시브 카드 처리 (5-9)
+		else if (CardIndex >= 5 && CardIndex <= 9)
+		{
+			// 패시브 처리 로직은 이전과 동일합니다.
+			FString PassiveKey = FString::FromInt(CardIndex);
+			int16* CurrentLevelPtr = PlayerState->ItemLevel.Find(PassiveKey);
+			int PassiveLevel = (CurrentLevelPtr) ? (*CurrentLevelPtr) + 1 : 1;
+
+			switch (CardIndex)
+			{
+			case 5:
+				PlayerState->Damage += 10;
+				break;
+			case 6:
+				PlayerState->CriticalHitChance += 5;
+				break;
+			case 7:
+				PlayerState->SkillAcceleration += 5;
+				break;
+			case 8:
+				PlayerState->MovementSpeed += 10;
+				break;
+			case 9:
+				PlayerState->MaxHealth += 20;
+				break;
+			default:
+				break;
+			}
+
+			// 패시브 레벨 업데이트
+			PlayerState->ItemLevel.Add(FString::FromInt(CardIndex), 1); // 패시브 레벨 추가 (기본 레벨 1)
+		}
 	}
 }
 

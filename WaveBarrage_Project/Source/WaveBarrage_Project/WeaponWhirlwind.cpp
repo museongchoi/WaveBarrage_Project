@@ -8,6 +8,7 @@
 
 AWeaponWhirlwind::AWeaponWhirlwind()
 {
+	WeaponType = EWeaponType::WeaponWhirlwind;
 
 }
 

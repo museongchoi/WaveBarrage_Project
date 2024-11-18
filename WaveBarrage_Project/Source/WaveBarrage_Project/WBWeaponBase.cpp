@@ -18,6 +18,8 @@ AWBWeaponBase::AWBWeaponBase()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
 	RootComponent = ProjectileSpawnPoint;
 
+	// 기본 무기 타입 설정 (필요에 따라 수정 가능)
+	WeaponType = EWeaponType::WeaponJinx;
 
 	// Initialize default values
 	OwnerCharacter = nullptr;
@@ -28,6 +30,7 @@ AWBWeaponBase::AWBWeaponBase()
 	ProjectileCount = 1;
 	CurProjectileCnt = 0;
 	MaxProjectileCnt = 10; // Default maximum projectile count
+
 }
 
 // Called when the game starts or when spawned
@@ -74,5 +77,10 @@ void AWBWeaponBase::SpawnProjectile()
 			CurProjectileCnt++;
 		}
 	}
+}
+
+EWeaponType AWBWeaponBase::GetWeaponType() const
+{
+	return WeaponType;
 }
 

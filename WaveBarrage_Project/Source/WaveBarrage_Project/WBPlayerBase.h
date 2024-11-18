@@ -135,6 +135,9 @@ public:
 	UPROPERTY()
 	AWBWeaponBase* GeneralSpawnedWeapon;
 
+	UPROPERTY()
+	TArray<AWBWeaponBase*> EquippedWeapons;
+
 	FTimerHandle FTimerHandle_AttackFire;
 	FTimerHandle FTimerHandle_AutomaticAiming;
 	FTimerHandle FTimerHandle_CursorAiming;
