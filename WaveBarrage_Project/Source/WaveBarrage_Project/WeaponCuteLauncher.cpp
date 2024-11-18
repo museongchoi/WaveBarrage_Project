@@ -61,7 +61,7 @@ void AWeaponCuteLauncher::Fire()
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
-			UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
+			//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
 
 		}
 	}
@@ -110,7 +110,7 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 
 			if (AWBMonsterBase* TargetMonster = Cast<AWBMonsterBase>(HitActor))
 			{
-				UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *TargetMonster->GetName());
+				//UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *TargetMonster->GetName());
 
 				float Distance = FVector::Dist(TargetMonster->GetActorLocation(), GetActorLocation());
 				if (Distance < ClosestDistance)

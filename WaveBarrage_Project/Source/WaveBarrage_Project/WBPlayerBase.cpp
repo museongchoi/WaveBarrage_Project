@@ -236,7 +236,7 @@ void AWBPlayerBase::SkillR()
 
 void AWBPlayerBase::ToggleAutoMode()
 {
-	UE_LOG(LogTemp, Error, TEXT("ToggleAutoMode!!!!!!!!!!!!!!!"));
+	//UE_LOG(LogTemp, Error, TEXT("ToggleAutoMode!!!!!!!!!!!!!!!"));
 
 	if (bAutoMode)
 	{
