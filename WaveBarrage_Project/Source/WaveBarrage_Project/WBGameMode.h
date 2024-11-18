@@ -32,6 +32,7 @@ public:
 
 	UFUNCTION()
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
+	AActor* GetNearPlayer(AActor* Monster);
 
 	UFUNCTION(BlueprintCallable, Category = "Card Selection")
 	void ApplyCardEffect(AWBPlayerBase* Player, int32 CardIndex);

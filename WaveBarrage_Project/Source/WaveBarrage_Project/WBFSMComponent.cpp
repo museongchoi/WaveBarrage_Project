@@ -4,6 +4,8 @@
 #include "WBFSMComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "WBMonsterBase.h"
+#include "WBMonsterProjectile.h"
 
 // Sets default values for this component's properties
 UWBFSMComponent::UWBFSMComponent()
@@ -43,11 +45,6 @@ void UWBFSMComponent::IdleState()
 	}
 
 	ChangeState(EMonsterState::Move);
-	
-	//if (StateTime > 0.1f)
-	//{
-	//	ChangeState(EMonsterState::Move);
-	//}
 }
 
 void UWBFSMComponent::MoveState(float DeltaTime)
@@ -59,10 +56,14 @@ void UWBFSMComponent::MoveState(float DeltaTime)
 	GetOwner()->AddActorWorldOffset(Dist, true);
 
 	//아니면서 지속 시간이 끝나면 IdleState
-	if (CanAttack)
+	if (CanAttack && !bIsAttackDelay)
 	{
 		//이동 후 CanAttack 이 true 이고 거리가 사거리 안이라면 AttackState
 		ChangeState(EMonsterState::Attack);
+	}
+	else if (CanSkill && !bIsSkillDelay)
+	{
+		ChangeState(EMonsterState::Skill);
 	}
 	else
 	{
@@ -75,9 +76,15 @@ void UWBFSMComponent::MoveState(float DeltaTime)
 
 void UWBFSMComponent::AttackState()
 {
-	//원거리 , 보스 몬스터 전용
+	//원거리 전용
 	//투사체 발사 후 일정 시간 지나면 IdleState
-	if (StateTime > 1.0f)
+	if (!bIsAttackDelay)
+	{
+		bIsAttackDelay = true;
+		Cast<AWBMonsterBase>(GetOwner())->Attack();
+	}
+
+	if (StateTime > 0.5f)
 	{
 		ChangeState(EMonsterState::Idle);
 	}
@@ -85,24 +92,44 @@ void UWBFSMComponent::AttackState()
 
 void UWBFSMComponent::SkillState()
 {
-	// 보스 전용
+	// 엘리트 전용
 	// 워닝 사인 이후 콜리전 검사해서 범위 내의 플레이어에게 데미지
 	// 일정 시간 지나면 IdleState
+	if (!bIsSkillDelay)
+	{
+		bIsSkillDelay = true;
+		//장판 생성
+	}
+
 	if (StateTime > 1.0f)
 	{
 		ChangeState(EMonsterState::Idle);
 	}
 }
 
-void UWBFSMComponent::DieState()
-{
-	// Destroy Actor 진행하는 동안 움직이지 않도록 하기 위함
-}
-
 
 void UWBFSMComponent::StateTick(float DeltaTime)
 {
 	StateTime += DeltaTime;
+	if (bIsAttackDelay)
+	{
+		AttackTime += DeltaTime;
+		if (AttackTime > 5.0f)
+		{
+			bIsAttackDelay = false;
+			AttackTime = 0;
+		}
+	}
+	if (bIsSkillDelay)
+	{
+		SkillTime += DeltaTime;
+		if (SkillTime > 5.0f)
+		{
+			bIsSkillDelay = false;
+			SkillTime = 0;
+		}
+	}
+
 	switch (MState)
 	{
 	case EMonsterState::Idle:
@@ -116,9 +143,6 @@ void UWBFSMComponent::StateTick(float DeltaTime)
 		break;
 	case EMonsterState::Skill:
 		SkillState();
-		break;
-	case EMonsterState::Die:
-		DieState();
 		break;
 	default:
 		break;

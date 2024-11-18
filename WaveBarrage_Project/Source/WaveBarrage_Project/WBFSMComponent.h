@@ -12,8 +12,7 @@ enum class EMonsterState : uint8
 	Idle = 0,
 	Move,
 	Attack,
-	Skill,
-	Die
+	Skill
 };
 
 
@@ -34,7 +33,6 @@ protected:
 	void MoveState(float DeltaTime);
 	void AttackState();
 	void SkillState();
-	void DieState();
 
 public:	
 	// Called every frame
@@ -45,11 +43,17 @@ public:
 
 public:
 	EMonsterState MState;
+	UPROPERTY(EditAnywhere)
 	bool CanAttack = false;
+	UPROPERTY(EditAnywhere)
 	bool CanSkill = false;
 
 	AActor* TargetPlayer;
 
 	float StateTime;
 	float MoveDistance;
+	float AttackTime;
+	float SkillTime;
+	bool bIsAttackDelay;
+	bool bIsSkillDelay;
 };
