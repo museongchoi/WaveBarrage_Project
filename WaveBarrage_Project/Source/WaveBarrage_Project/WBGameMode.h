@@ -39,4 +39,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* SpawnDataTable;
+
+	UPROPERTY(EditAnywhere)
+	UDataTable* WeaponDataTable;
 };

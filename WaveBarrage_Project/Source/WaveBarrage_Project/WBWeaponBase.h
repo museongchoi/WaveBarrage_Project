@@ -72,7 +72,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxProjectileCnt;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
 
 

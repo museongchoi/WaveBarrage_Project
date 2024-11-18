@@ -51,6 +51,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ExperienceBonus;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TMap<FString, int16> ItemLevel;
 };
