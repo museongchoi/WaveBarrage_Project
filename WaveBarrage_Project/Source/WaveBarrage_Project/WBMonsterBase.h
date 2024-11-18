@@ -50,5 +50,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AWBItemBase> DropItem;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AWBMonsterProjectile> MonsterProjectile;
 
 };

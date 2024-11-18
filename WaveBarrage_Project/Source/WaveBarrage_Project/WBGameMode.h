@@ -27,6 +27,7 @@ public:
 	void SetTargetPlayer();
 	UFUNCTION()
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
+	AActor* GetNearPlayer(AActor* Monster);
 
 public:
 	int Exp;

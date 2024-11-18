@@ -6,6 +6,7 @@
 #include "WBFSMComponent.h"
 #include "WBItemBase.h"
 #include "WBMonsterGroup.h"
+#include "WBMonsterProjectile.h"
 
 // Sets default values
 AWBMonsterBase::AWBMonsterBase()
@@ -38,7 +39,13 @@ void AWBMonsterBase::Tick(float DeltaTime)
 
 void AWBMonsterBase::Attack()
 {
-	
+	GetWorld()->SpawnActor<AActor>(MonsterProjectile, GetActorLocation(), GetActorRotation());
+	//attack 애니메이션 실행
+}
+
+void AWBMonsterBase::Skill()
+{
+
 }
 
 void AWBMonsterBase::SetTargetPlayer(AActor* Target)

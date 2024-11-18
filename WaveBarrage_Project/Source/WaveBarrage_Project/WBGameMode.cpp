@@ -119,11 +119,14 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 	case ESpawnType::Elite:
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+			Spawned->SetTargetPlayer(GetNearPlayer(Spawned));
+			
 		}
 		break;
 	case ESpawnType::Boss:
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+			Spawned->SetTargetPlayer(GetNearPlayer(Spawned));
 		}
 		break;
 	default:
@@ -132,4 +135,21 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 
 
 
+}
+
+AActor* AWBGameMode::GetNearPlayer(AActor* Monster)
+{
+	float Near = 9999.9999f;
+	AActor* NearPlayer = nullptr;
+	for (AActor* Player : Players)
+	{
+		float Dist = FVector::Dist(Monster->GetActorLocation(), Player->GetActorLocation());
+		if (Near > Dist)
+		{
+			Near = Dist;
+			NearPlayer = Player;
+		}
+	}
+
+	return NearPlayer;
 }
