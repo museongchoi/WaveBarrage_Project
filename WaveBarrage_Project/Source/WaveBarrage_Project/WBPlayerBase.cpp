@@ -144,7 +144,11 @@ void AWBPlayerBase::BeginPlay()
 		GM->Players.Emplace(this);
 	}
 
-
+	UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
+	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
+	{
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
+	}
 }
 
 // Called every frame
@@ -230,9 +234,17 @@ void AWBPlayerBase::SkillR()
 
 void AWBPlayerBase::ToggleAutoMode()
 {
+	UE_LOG(LogTemp, Error, TEXT("ToggleAutoMode!!!!!!!!!!!!!!!"));
 
-	bAutoMode = !bAutoMode;
-	DefaultAttackSettings();
+	if (bAutoMode)
+	{
+		bAutoMode = false;
+	} 
+	else
+	{
+		bAutoMode = true;
+	}
+	//DefaultAttackSettings();
 }
 
 // 가장 가까운 몬스터 자동 타겟팅
@@ -246,7 +258,7 @@ void AWBPlayerBase::AutomaticAiming()
 	ClosestEnemy = nullptr;
 
 	FVector Start = GetActorLocation();
-	FVector End = Start + GetActorForwardVector() * 1000.0f;
+	FVector End = Start;
 	float Radius = 500.0f;
 
 	FHitResult OutHit;
@@ -258,10 +270,12 @@ void AWBPlayerBase::AutomaticAiming()
 		Start, 
 		End, 
 		FQuat::Identity, 
-		ECC_GameTraceChannel2, 
+		ECC_GameTraceChannel1, 
 		FCollisionShape::MakeSphere(Radius), 
 		CollisionParams
 	);
+
+	UE_LOG(LogTemp, Error, TEXT("DrawDebugSphere"));
 
 	// 디버그용 구체 표시
 	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
@@ -278,7 +292,7 @@ void AWBPlayerBase::AutomaticAiming()
 		{
 			if (Actor->IsA(AWBMonsterBase::StaticClass()))
 			{
-				UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *Actor->GetName());
+				//UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *Actor->GetName());
 
 				float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
 				if (Distance < ClosestDistance)
@@ -303,9 +317,15 @@ void AWBPlayerBase::AttackFire()
 {
 	if (!bAutoMode)
 	{
-		//UE_LOG(LogTemp, Error, TEXT("3 AttackFire!!!"));
+		UE_LOG(LogTemp, Error, TEXT("false bAutoMode"));
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		CursorHitAiming();
+	}
+	else if(bAutoMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("true bAutoMode"));
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		AutomaticAiming();
 	}
 
 	if (SpawnedWeapon)
@@ -330,8 +350,6 @@ void AWBPlayerBase::CursorHitAiming()
 				FVector TargetLocation = HitResult.Location;
 				FVector ActorLocation = GetActorLocation();
 	
-
-				UE_LOG(LogTemp, Warning, TEXT("TargetLocation X: %f, Y: %f"), TargetLocation.X, TargetLocation.Y);
 				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
 				GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation.Yaw - 90.f, 0.0f));
 
@@ -344,40 +362,36 @@ void AWBPlayerBase::CursorHitAiming()
 
 void AWBPlayerBase::DefaultAttackSettings()
 {
-	UE_LOG(LogTemp, Error, TEXT("1. DefaultAttackSettings Check!!!!!!!"));
-
-	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
 
 
-	if (bAutoMode)
-	{
-		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
-		{
-			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
-		}
+	//if (bAutoMode)
+	//{
+	//	if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
+	//	{
+	//		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_CursorAiming);
+	//	}
 
-		GetCharacterMovement()->bOrientRotationToMovement = false;
+	//	GetCharacterMovement()->bOrientRotationToMovement = false;
 
-		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
-		{
-			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AutomaticAiming, this, &AWBPlayerBase::AutomaticAiming, 0.01f, true);
-		}
-	}
-	else
-	{
-		if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
-		{
-			GetMesh()->SetWorldRotation(FRotator(0.0f, GetActorRotation().Yaw - 90.0f, 0.0f));
-			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_AutomaticAiming);
-		}
+	//	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
+	//	{
+	//		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AutomaticAiming, this, &AWBPlayerBase::AutomaticAiming, 0.01f, true);
+	//	}
+	//}
+	//else
+	//{
+	//	if (GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
+	//	{
+	//		GetMesh()->SetWorldRotation(FRotator(0.0f, GetActorRotation().Yaw - 90.0f, 0.0f));
+	//		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_AutomaticAiming);
+	//	}
 
-		GetCharacterMovement()->bOrientRotationToMovement = true;
+	//	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-		if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
-		{
-			GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 2.0f, true);
-		}
+	//	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_CursorAiming))
+	//	{
+	//		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_CursorAiming, this, &AWBPlayerBase::CursorHitAiming, 2.0f, true);
+	//	}
 
-
-	}
+	//}
 }

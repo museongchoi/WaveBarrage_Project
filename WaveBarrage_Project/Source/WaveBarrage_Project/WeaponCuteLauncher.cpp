@@ -61,6 +61,7 @@ void AWeaponCuteLauncher::Fire()
 			// Increment current projectile count
 			CurProjectileCnt++;
 			UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
+
 		}
 	}
 	if (CurProjectileCnt >= MaxProjectileCnt)
