@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "WBSapwnDataTable.h"
+#include "WBWeaponDataTable.h"
 #include "WBGameMode.generated.h"
 
 class AWBPlayerState;
@@ -35,7 +36,7 @@ public:
 	AActor* GetNearPlayer(AActor* Monster);
 
 	UFUNCTION(BlueprintCallable, Category = "Card Selection")
-	void ApplyCardEffect(AWBPlayerBase* Player, int32 CardIndex);
+	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
 
 public:
 	int Exp;

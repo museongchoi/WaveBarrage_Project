@@ -2,6 +2,7 @@
 
 
 #include "WBGameMode.h"
+#include "WBPlayerController.h"
 #include "WBMonsterBase.h"
 #include "WBPlayerBase.h"
 #include "WBMonsterGroup.h"
@@ -47,11 +48,31 @@ void AWBGameMode::LevelUp()
 			APlayerController* PlayerController = Cast<APlayerController>(Player->GetController());
 			if (PlayerController)
 			{
-				//
+				AWBPlayerController* WBPlayerController = Cast<AWBPlayerController>(PlayerController);
+				if(WBPlayerController)
+				{
+					WBPlayerController->ShowCardSelectionWidget();
+				}
 			}
 		}
 	}
 
+}
+
+
+void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex)
+{
+	AWBPlayerState* PlayerState = PlayerController->GetPlayerState<AWBPlayerState>();
+	if (!PlayerState)
+	{
+		return;
+	}
+
+	if (CardIndex >= 0 && CardIndex <= 4)
+	{
+		FName RowName = FName(*FString::FromInt(CardIndex + 1));
+		//FWeaponData* Wea
+	}
 }
 
 void AWBGameMode::SetTargetPlayer()
@@ -147,11 +168,6 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 	}
 
 
-
-}
-
-void AWBGameMode::ApplyCardEffect(AWBPlayerBase * Player, int32 CardIndex)
-{
 
 }
 
