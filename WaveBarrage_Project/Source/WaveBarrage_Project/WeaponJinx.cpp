@@ -52,7 +52,7 @@ void AWeaponJinx::SpawnProjectile()
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
-			UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
+			//UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
 
 		}
 	}
@@ -68,12 +68,9 @@ void AWeaponJinx::SpawnProjectile()
 		// Reset current projectile count
 		CurProjectileCnt = 0;
 
+		UE_LOG(LogTemp, Error, TEXT("6. bIsAttacking false Check!!!!!!!"));
+		OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+		OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 
-		if (OwnerCharacter && !OwnerCharacter->bAutoMode)
-		{
-			UE_LOG(LogTemp, Error, TEXT("6 bIsAttacking false Check!!!!!!!"));
-			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
-		}
 	}
 }

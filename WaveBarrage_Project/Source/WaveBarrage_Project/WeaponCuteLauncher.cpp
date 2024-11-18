@@ -7,6 +7,7 @@
 #include "WBMonsterBase.h"
 #include "Engine/World.h"
 #include "WBPlayerState.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts
 // ProjectileCount : 1/1/2/2/3
@@ -32,10 +33,6 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	//Super::BeginPlay();
 
-	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AutomaticAiming))
-	{
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AutomaticAiming, this, &AWeaponCuteLauncher::CuteLauncherAutomaticAiming, 0.01f, true);
-	}
 	if(!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
@@ -44,6 +41,8 @@ void AWeaponCuteLauncher::BeginPlay()
 
 void AWeaponCuteLauncher::Fire()
 {
+	CuteLauncherAutomaticAiming();
+
 	if (ProjectileClass && ProjectileSpawnPoint)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -61,6 +60,7 @@ void AWeaponCuteLauncher::Fire()
 			// Increment current projectile count
 			CurProjectileCnt++;
 			UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
+
 		}
 	}
 	if (CurProjectileCnt >= MaxProjectileCnt)
@@ -83,16 +83,16 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 	FVector End = Start + GetActorForwardVector() * 1000.0f;
 	float Radius = 1200.0f;
 
-	FHitResult OutHit;
+	TArray<FHitResult> OutHits;
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->SweepSingleByChannel(
-		OutHit,
+	bool bHit = GetWorld()->SweepMultiByChannel(
+		OutHits,
 		Start,
 		End,
 		FQuat::Identity,
-		ECC_GameTraceChannel2,
+		ECC_GameTraceChannel1,
 		FCollisionShape::MakeSphere(Radius),
 		CollisionParams
 	);
@@ -100,24 +100,28 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 	// 디버그용 구체 표시 (한 프레임 동안 표시)
 	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
 
-	if (bHit && OutHit.GetActor())
+	if (bHit)
 	{
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), OutHit.GetActor()->GetClass(), FoundActors);
-
-		for (AActor* Actor : FoundActors)
+		for (const FHitResult& Hit : OutHits)
 		{
-			if (Actor->IsA(AWBMonsterBase::StaticClass()))
-			{
-				UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *Actor->GetName());
+			AActor* HitActor = Hit.GetActor();
 
-				float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
+			if (AWBMonsterBase* TargetMonster = Cast<AWBMonsterBase>(HitActor))
+			{
+				UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *TargetMonster->GetName());
+
+				float Distance = FVector::Dist(TargetMonster->GetActorLocation(), GetActorLocation());
 				if (Distance < ClosestDistance)
 				{
 					ClosestDistance = Distance;
-					ClosestEnemy = Actor;
+					ClosestEnemy = TargetMonster;
 				}
 			}
 		}
+	}
+	if (ClosestEnemy)
+	{
+		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
+		SetActorRotation(FRotator(0.0f, TargetRotation.Yaw, 0.0f));
 	}
 }
