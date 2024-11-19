@@ -47,8 +47,6 @@ public:
 	bool CanAttack = false;
 	UPROPERTY(EditAnywhere)
 	bool CanSkill = false;
-	UPROPERTY(EditAnywhere)
-	bool CanMove = true;
 
 	AActor* TargetPlayer;
 
@@ -59,5 +57,6 @@ public:
 	float SkillTime;
 	bool bIsAttackDelay = false;
 	bool bIsSkillDelay = false;
+	UPROPERTY(EditAnywhere)
 	bool bIsMoveStraight = false;
 };
