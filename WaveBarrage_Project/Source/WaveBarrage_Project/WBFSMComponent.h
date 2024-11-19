@@ -54,6 +54,7 @@ public:
 	float MoveDistance;
 	float AttackTime;
 	float SkillTime;
-	bool bIsAttackDelay;
-	bool bIsSkillDelay;
+	bool bIsAttackDelay = false;
+	bool bIsSkillDelay = false;
+	bool bIsMoveStraight = false;
 };

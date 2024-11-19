@@ -24,7 +24,7 @@ struct FSpawnData : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float SpawnTime;
+	float SpawnTime = 0;
 
 	UPROPERTY(EditAnywhere)
 	ESpawnType SpawnType = ESpawnType::Normal;
