@@ -6,17 +6,18 @@
 #include "WBPlayerState.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "WBProjectileBase.h"
 
 
 // Sets default values
 AWBWeaponBase::AWBWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// 투사체 스폰 포인트 컴포넌트
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
-	RootComponent = ProjectileSpawnPoint;
+	//ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
+	//RootComponent = ProjectileSpawnPoint;
 
 	// 기본 무기 타입 설정 (필요에 따라 수정 가능)
 	WeaponType = EWeaponType::WeaponJinx;
@@ -54,33 +55,51 @@ void AWBWeaponBase::Tick(float DeltaTime)
 
 void AWBWeaponBase::Fire()
 {
-	UKismetSystemLibrary::K2_SetTimer(this, TEXT("SpawnProjectile"), 0.02f, true);
+	if (ProjectileClass && OwnerCharacter)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+
+		FVector SpawnLocation = GetActorLocation();
+		FRotator SpawnRotation = GetActorRotation();
+
+		// 투사체 생성
+		AWBProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+		if (SpawnedProjectile)
+		{
+			// 데미지 설정
+			int32 FinalDamage = CalculateFinalDamage();
+			SpawnedProjectile->SetDamage(FinalDamage);
+		}
+	}
 }
 
 void AWBWeaponBase::SpawnProjectile()
 {
-	if (ProjectileClass && OwnerCharacter && ProjectileSpawnPoint)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = Cast<APawn>(OwnerCharacter);
 
-		// Get spawn location and rotation from ProjectileSpawnPoint
-		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-
-		// Spawn the projectile actor
-		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
-		if (SpawnedProjectile)
-		{
-			// Handle any initialization or effects for the projectile here
-			CurProjectileCnt++;
-		}
-	}
 }
 
 EWeaponType AWBWeaponBase::GetWeaponType() const
 {
 	return WeaponType;
+}
+
+int32 AWBWeaponBase::CalculateFinalDamage()
+{
+	// 무기의 기본 데미지를 사용
+	int32 WeaponBaseDamage = Damage;
+
+	// OwnerCharacter의 PlayerState에서 패시브 데미지 증가율 가져오기
+	if (OwnerCharacter)
+	{
+		AWBPlayerState* PlayerState = OwnerCharacter->GetPlayerState<AWBPlayerState>();
+		if (PlayerState)
+		{
+			int32 DamageMultiplier = Damage + ((Damage*PlayerState->Damage)/100);
+			return DamageMultiplier;
+		}
+	}
+
+	return WeaponBaseDamage;
 }
 

@@ -150,19 +150,19 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 			switch (CardIndex)
 			{
 			case 5:
-				PlayerState->Damage += 10;
+				PlayerState->Damage += 10; // 레벨당 +10%, 최대 50%
 				break;
 			case 6:
-				PlayerState->CriticalHitChance += 5;
+				PlayerState->CriticalHitChance += 8; // 레벨당 치명타 확률 8% 증가, 최대 +40%
 				break;
 			case 7:
-				PlayerState->SkillAcceleration += 5;
+				PlayerState->SkillAcceleration += 10; // 레벨당 스킬 가속 10 증가, 최대 +50
 				break;
 			case 8:
-				PlayerState->MovementSpeed += 10;
+				PlayerState->MovementSpeed += 8; // 레벨당 이동 속도 8% 증가, 최대 +40%
 				break;
 			case 9:
-				PlayerState->MaxHealth += 20;
+				PlayerState->MaxHealth += 4; //레벨당 초당 체력 재생 4 증가, 최대 +20
 				break;
 			default:
 				break;

@@ -8,6 +8,10 @@
 #include "WBWeaponBase.generated.h"
 
 class USceneComponent;
+class AWBPlayerState;
+class AWBPlayerBase;
+class AWBProjectileBase;
+
 
 // 각 무기의 타입을 식별
 UENUM(BlueprintType)
@@ -47,6 +51,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	EWeaponType GetWeaponType() const;
+
+	virtual int32 CalculateFinalDamage();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -95,7 +101,5 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
-
-
 
 };

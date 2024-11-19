@@ -3,3 +3,17 @@
 
 #include "WBPlayerState.h"
 
+int32 AWBPlayerState::GetDamageMultiplier() const
+{
+    // 기본 데미지 배율은 1.0 (즉, 데미지 증가 없음)
+    int32 DamageMultiplier = 1;
+
+    // 아이템 레벨 맵에서 "Damage" 키에 해당하는 레벨을 찾고, 없으면 기본값 0으로 설정
+    const int16* DamageLevelPtr = ItemLevel.Find("Damage");
+    int16 DamageLevel = (DamageLevelPtr) ? *DamageLevelPtr : 0;
+
+    // 각 레벨당 10%씩 데미지 증가
+    DamageMultiplier += 0.1f * DamageLevel;
+
+    return DamageMultiplier;
+}
