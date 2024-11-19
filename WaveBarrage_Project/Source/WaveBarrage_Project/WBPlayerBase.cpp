@@ -53,20 +53,8 @@ AWBPlayerBase::AWBPlayerBase()
 	Camera->FieldOfView = 55.0f;
 
 
-	Box1 = CreateDefaultSubobject<USceneComponent>(TEXT("Box1"));
-	Box1->SetupAttachment(GetMesh());
-
-	Box2 = CreateDefaultSubobject<USceneComponent>(TEXT("Box2"));
-	Box2->SetupAttachment(GetMesh());
-
-	Box3 = CreateDefaultSubobject<USceneComponent>(TEXT("Box3"));
-	Box3->SetupAttachment(GetMesh());
-
-	Box4 = CreateDefaultSubobject<USceneComponent>(TEXT("Box4"));
-	Box4->SetupAttachment(GetMesh());
-
-	Box5 = CreateDefaultSubobject<USceneComponent>(TEXT("Box5"));
-	Box5->SetupAttachment(GetMesh());
+	WeaponPotionComponent = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponPotion"));
+	WeaponPotionComponent->SetupAttachment(GetMesh());
 
 	MonsterSpawnPosition1 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos1"));
 	MonsterSpawnPosition1->SetRelativeLocation(FVector(0, 3000, 0));
@@ -105,7 +93,7 @@ void AWBPlayerBase::BeginPlay()
 		MyPlayerController->bShowMouseCursor = true;
 	}
 
-	if (Box1 && ChampionOnlyWeapon)
+	if (WeaponPotionComponent && ChampionOnlyWeapon)
 	{
 		//UE_LOG(LogTemp, Error, TEXT("ChampionOnlyWeapon!!!!!!!!!!!!!!!!"));
 
@@ -114,29 +102,29 @@ void AWBPlayerBase::BeginPlay()
 		SpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedWeapon)
 		{
-			SpawnedWeapon->AttachToComponent(Box1, FAttachmentTransformRules::KeepWorldTransform);
+			SpawnedWeapon->AttachToComponent(WeaponPotionComponent, FAttachmentTransformRules::KeepWorldTransform);
 			SpawnedWeapon->OwnerCharacter = this;
 			EquippedWeapons.Add(SpawnedWeapon);
 		}
 	}
 
-	TArray<TObjectPtr<USceneComponent>> Boxes = { Box2, Box3, Box4, Box5 };
-	// 일반 무기들 스폰 및 Attach
-	for (int32 i = 0; i < WeaponAttachBoxes.Num(); i++)
-	{
-		if (Boxes[i] && WeaponAttachBoxes.IsValidIndex(i) && WeaponAttachBoxes[i])
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			GeneralSpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(WeaponAttachBoxes[i], GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-			if (GeneralSpawnedWeapon)
-			{
-				GeneralSpawnedWeapon->AttachToComponent(Boxes[i], FAttachmentTransformRules::KeepWorldTransform);
-				GeneralSpawnedWeapon->OwnerCharacter = this;
-				EquippedWeapons.Add(GeneralSpawnedWeapon);
-			}
-		}
-	}
+	//TArray<TObjectPtr<USceneComponent>> Boxes = { Box2, Box3, Box4, Box5 };
+	//// 일반 무기들 스폰 및 Attach
+	//for (int32 i = 0; i < WeaponAttachBoxes.Num(); i++)
+	//{
+	//	if (Boxes[i] && WeaponAttachBoxes.IsValidIndex(i) && WeaponAttachBoxes[i])
+	//	{
+	//		FActorSpawnParameters SpawnParams;
+	//		SpawnParams.Owner = this;
+	//		GeneralSpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(WeaponAttachBoxes[i], GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+	//		if (GeneralSpawnedWeapon)
+	//		{
+	//			GeneralSpawnedWeapon->AttachToComponent(Boxes[i], FAttachmentTransformRules::KeepWorldTransform);
+	//			GeneralSpawnedWeapon->OwnerCharacter = this;
+	//			EquippedWeapons.Add(GeneralSpawnedWeapon);
+	//		}
+	//	}
+	//}
 
 	//DefaultAttackSettings();
 
