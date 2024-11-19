@@ -67,7 +67,7 @@ void UWBFSMComponent::MoveState(float DeltaTime)
 	}
 	else
 	{
-		if (StateTime > 1.0f)
+		if (CanMove && StateTime > 1.0f)
 		{
 			ChangeState(EMonsterState::Idle);
 		}

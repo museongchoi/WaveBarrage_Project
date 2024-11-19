@@ -47,10 +47,13 @@ public:
 	bool CanAttack = false;
 	UPROPERTY(EditAnywhere)
 	bool CanSkill = false;
+	UPROPERTY(EditAnywhere)
+	bool CanMove = true;
 
 	AActor* TargetPlayer;
 
 	float StateTime;
+	UPROPERTY(EditAnywhere)
 	float MoveDistance;
 	float AttackTime;
 	float SkillTime;
