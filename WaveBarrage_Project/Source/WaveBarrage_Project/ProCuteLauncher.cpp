@@ -37,6 +37,7 @@ void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp,
 		if (Monster)
 		{
 			UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+			Destroy();
 		}
 	}
 }
