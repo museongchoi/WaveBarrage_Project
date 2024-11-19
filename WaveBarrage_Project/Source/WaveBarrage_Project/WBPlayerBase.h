@@ -57,19 +57,7 @@ public:
 	TObjectPtr<UCameraComponent> Camera;
 
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USceneComponent> Box1;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USceneComponent> Box2;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USceneComponent> Box3;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USceneComponent> Box4;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USceneComponent> Box5;
+	TObjectPtr<USceneComponent> WeaponPotionComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> MonsterSpawnPosition1;

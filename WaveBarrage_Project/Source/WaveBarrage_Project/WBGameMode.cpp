@@ -114,6 +114,8 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 						UE_LOG(LogTemp, Warning, TEXT("Before Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
 					}
 				}
+				
+				bool bWeaponExists = false;
 
 				// 무기 업데이트
 				for (AWBWeaponBase* Weapon : Player->EquippedWeapons)
@@ -130,9 +132,25 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 
 						// 무기 업데이트 후 데미지 출력
 						UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
+
+						bWeaponExists = true;
+						break;
 					}
 				}
-				
+
+				if (!bWeaponExists)
+				{
+					// 새로운 무기 생성
+					FActorSpawnParameters SpawnParams;
+					SpawnParams.Owner = Player;
+					AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(Player->WeaponAttachBoxes[CardIndex], Player->GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+					if (NewWeapon)
+					{
+						NewWeapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
+						NewWeapon->OwnerCharacter = Player;
+						Player->EquippedWeapons.Add(NewWeapon);
+					}
+				}
 
 
 				// 무기 레벨 업데이트
