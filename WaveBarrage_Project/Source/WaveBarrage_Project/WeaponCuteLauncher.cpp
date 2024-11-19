@@ -14,11 +14,14 @@
 // Damage : 45/50/55/60/65
 AWeaponCuteLauncher::AWeaponCuteLauncher()
 {
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
+	RootComponent = ProjectileSpawnPoint;
+
 	WeaponType = EWeaponType::WeaponCuteLauncher;
 
 	ClosestDistance = FLT_MAX;
-	CoolDown = 1.0f;
 	Damage = 45;
+	CoolDown = 1.0f;
 	ProjectileCount = 1;
 
 	if (OwnerCharacter)
@@ -69,11 +72,6 @@ void AWeaponCuteLauncher::Fire()
 	{
 		return;
 	}
-}
-
-void AWeaponCuteLauncher::SpawnProjectile()
-{
-
 }
 
 void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()

@@ -3,10 +3,13 @@
 
 #include "ProCuteLauncher.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "WBMonsterBase.h"
+#include "Kismet/GameplayStatics.h"
+
 
 AProCuteLauncher::AProCuteLauncher()
 {
-	//ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->InitialSpeed = 2000.0f;
 	ProjectileMovementComponent->MaxSpeed = 3000.0f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
@@ -21,3 +24,21 @@ void AProCuteLauncher::BeginPlay()
 	SetLifeSpan(LifeTime);
 
 }
+
+void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnSphereOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	
+	if (OtherActor && OtherActor != this)
+	{
+		UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+
+		AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
+		if (Monster)
+		{
+			UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+			Destroy();
+		}
+	}
+}
+

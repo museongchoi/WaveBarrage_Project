@@ -6,17 +6,25 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBPlayerBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "WBProjectileBase.h"
 
 AWeaponJinx::AWeaponJinx()
 {
-	WeaponType = EWeaponType::WeaponJinx;
+	// 투사체 스폰 포인트 컴포넌트
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
+	RootComponent = ProjectileSpawnPoint;
 
+	WeaponType = EWeaponType::WeaponJinx;
+	WeaponLevel = 1;
+	Damage = 20;
+	ProjectileCount = 1;
+	MaxProjectileCnt = 10;
 }
 
 void AWeaponJinx::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void AWeaponJinx::Fire()
@@ -53,12 +61,14 @@ void AWeaponJinx::SpawnProjectile()
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
 		// Spawn the projectile actor
-		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+		AWBProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 		if (SpawnedProjectile)
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
 			//UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
+			int32 FinalDamage = CalculateFinalDamage();
+			SpawnedProjectile->SetDamage(FinalDamage);
 
 		}
 	}

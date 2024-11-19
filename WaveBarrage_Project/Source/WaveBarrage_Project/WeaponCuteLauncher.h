@@ -23,8 +23,6 @@ protected:
 
 	virtual void Fire() override;
 
-	virtual void SpawnProjectile() override;
-
 	void CuteLauncherAutomaticAiming();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

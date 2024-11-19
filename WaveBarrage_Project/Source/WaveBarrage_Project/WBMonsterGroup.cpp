@@ -41,6 +41,7 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 			GM->MonsterGroups.Remove(this);
 		}
 		//Destroy();
+		//FVector(FMath::RandRange(1, 500), FMath::RandRange(1, 500),0)
 	}
 }
 
@@ -54,6 +55,23 @@ void AWBMonsterGroup::SpawnMonster()
 		for (int i = 0; i < SpawnCount; i++)
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation(), GetActorRotation(), SpawnPara);
+			Spawned->SetTargetPlayer(TargetPlayer);
+			Monsters.Emplace(Spawned);
+		}
+		SpawnEnd = true;
+	}
+}
+
+void AWBMonsterGroup::SpawnRandomPositionMonster()
+{
+	FActorSpawnParameters SpawnPara;
+	SpawnPara.Owner = this;
+	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	if (MonsterClass)
+	{
+		for (int i = 0; i < SpawnCount; i++)
+		{
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(1, 1500), FMath::RandRange(1, 1500), 0), GetActorRotation(), SpawnPara);
 			Spawned->SetTargetPlayer(TargetPlayer);
 			Monsters.Emplace(Spawned);
 		}

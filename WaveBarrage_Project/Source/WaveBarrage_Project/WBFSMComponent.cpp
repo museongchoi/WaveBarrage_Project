@@ -67,7 +67,11 @@ void UWBFSMComponent::MoveState(float DeltaTime)
 	}
 	else
 	{
+<<<<<<< HEAD
 		if (CanMove && StateTime > 1.0f)
+=======
+		if (!bIsMoveStraight && StateTime > 1.0f)
+>>>>>>> 455010c39a4812bc329787c05357715d696d06fa
 		{
 			ChangeState(EMonsterState::Idle);
 		}

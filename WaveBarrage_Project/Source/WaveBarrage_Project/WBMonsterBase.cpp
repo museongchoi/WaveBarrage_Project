@@ -16,11 +16,20 @@ AWBMonsterBase::AWBMonsterBase()
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	RootComponent = SphereComp;
+	SphereComp->SetSimulatePhysics(true);
+	SphereComp->SetEnableGravity(false);
+	SphereComp->GetBodyInstance()->bLockZTranslation = true;
+	SphereComp->GetBodyInstance()->bLockXRotation = true;
+	SphereComp->GetBodyInstance()->bLockYRotation = true;
 
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComp"));
 	SkeletalMeshComp->SetupAttachment(RootComponent);
 
 	FSMComp = CreateDefaultSubobject<UWBFSMComponent>(TEXT("FSM Comp"));
+
+	bReplicates = true;
+
+	
 }
 
 // Called when the game starts or when spawned
