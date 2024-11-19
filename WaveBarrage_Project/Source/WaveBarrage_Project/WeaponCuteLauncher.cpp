@@ -71,11 +71,6 @@ void AWeaponCuteLauncher::Fire()
 	}
 }
 
-void AWeaponCuteLauncher::SpawnProjectile()
-{
-
-}
-
 void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 {
 	ClosestDistance = FLT_MAX;

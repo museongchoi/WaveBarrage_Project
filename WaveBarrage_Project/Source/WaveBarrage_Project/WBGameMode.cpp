@@ -78,8 +78,8 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 			FString WeaponTypeString;
 			switch (static_cast<EWeaponType>(CardIndex))
 			{
-			case EWeaponType::WeaponBoomerang:
-				WeaponTypeString = "Boomerang";
+			case EWeaponType::WeaponJinx:
+				WeaponTypeString = "Jinx";
 				break;
 			case EWeaponType::WeaponWhirlwind:
 				WeaponTypeString = "Whirlwind";
@@ -87,8 +87,8 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 			case EWeaponType::WeaponPoisonFootprint:
 				WeaponTypeString = "PoisonFootprint";
 				break;
-			case EWeaponType::WeaponJinx:
-				WeaponTypeString = "Jinx";
+			case EWeaponType::WeaponBoomerang:
+				WeaponTypeString = "Boomerang";
 				break;
 			case EWeaponType::WeaponCuteLauncher:
 				WeaponTypeString = "CuteLauncher";
@@ -106,6 +106,15 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 			FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
 			if (WeaponData)
 			{
+				// 무기 업데이트 전 데미지 출력
+				for (AWBWeaponBase* Weapon : Player->EquippedWeapons)
+				{
+					if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Before Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
+					}
+				}
+
 				// 무기 업데이트
 				for (AWBWeaponBase* Weapon : Player->EquippedWeapons)
 				{
@@ -116,8 +125,13 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 						Weapon->CoolDown = WeaponData->CoolDown;
 						Weapon->CriticalChance = WeaponData->CriticalChance;
 						Weapon->ProjectileCount = WeaponData->ProjectileCount;
+
+						// 무기 업데이트 후 데미지 출력
+						UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
 					}
 				}
+				
+
 
 				// 무기 레벨 업데이트
 				PlayerState->ItemLevel.Add(WeaponTypeString, WeaponLevel);
