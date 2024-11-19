@@ -98,7 +98,7 @@ void UWBFSMComponent::SkillState()
 	if (!bIsSkillDelay)
 	{
 		bIsSkillDelay = true;
-		//장판 생성
+		Cast<AWBMonsterBase>(GetOwner())->Skill();
 	}
 
 	if (StateTime > 1.0f)

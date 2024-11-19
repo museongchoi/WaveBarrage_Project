@@ -69,22 +69,22 @@ AWBPlayerBase::AWBPlayerBase()
 	Box5->SetupAttachment(GetMesh());
 
 	MonsterSpawnPosition1 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos1"));
-	MonsterSpawnPosition1->SetRelativeLocation(FVector(0, 1000, 0));
+	MonsterSpawnPosition1->SetRelativeLocation(FVector(0, 2500, 0));
 	MonsterSpawnPosition1->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition1);
 
 	MonsterSpawnPosition2 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos2"));
-	MonsterSpawnPosition2->SetRelativeLocation(FVector(0, -1000, 0));
+	MonsterSpawnPosition2->SetRelativeLocation(FVector(0, -2500, 0));
 	MonsterSpawnPosition2->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition2);
 
 	MonsterSpawnPosition3 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos3"));
-	MonsterSpawnPosition3->SetRelativeLocation(FVector(1000, 0, 0));
+	MonsterSpawnPosition3->SetRelativeLocation(FVector(2500, 0, 0));
 	MonsterSpawnPosition3->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition3);
 
 	MonsterSpawnPosition4 = CreateDefaultSubobject<USceneComponent>(TEXT("Pos4"));
-	MonsterSpawnPosition4->SetRelativeLocation(FVector(-1000, 0, 0));
+	MonsterSpawnPosition4->SetRelativeLocation(FVector(-2500, 0, 0));
 	MonsterSpawnPosition4->SetupAttachment(RootComponent);
 	MonsterSpawnPositions.Emplace(MonsterSpawnPosition4);
 
