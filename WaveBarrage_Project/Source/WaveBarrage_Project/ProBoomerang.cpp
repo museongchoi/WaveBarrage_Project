@@ -6,9 +6,6 @@
 
 AProBoomerang::AProBoomerang()
 {
-	ProjectileMovementComponent->InitialSpeed = 0.0f;
-	ProjectileMovementComponent->MaxSpeed = 0.0f;
-	ProjectileMovementComponent->ProjectileGravityScale=0.0f;
 	ProjectileSpeed = 10.0f;
 	LifeTime = 4.0f;
 	Acceleration = -0.25f;

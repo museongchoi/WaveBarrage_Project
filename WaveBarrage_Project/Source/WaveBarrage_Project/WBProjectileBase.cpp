@@ -5,7 +5,6 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-//#include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
 #include "WBMonsterBase.h"
 
@@ -23,9 +22,6 @@ AWBProjectileBase::AWBProjectileBase()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
 	StaticMesh->SetupAttachment(SphereCollision);
 
-	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
-
-	//UGameplayStatics::ApplyDamage();
 }
 
 // Called when the game starts or when spawned
@@ -39,14 +35,19 @@ void AWBProjectileBase::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp
 {
 	if (OtherActor && OtherActor != this)
 	{
+		UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+
 		AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
 		if (Monster)
 		{
 			UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
-
-			Destroy();
 		}
 	}
+}
+
+void AWBProjectileBase::SetDamage(int32 InDamage)
+{
+	Damage = InDamage;
 }
 
 // Called every frame

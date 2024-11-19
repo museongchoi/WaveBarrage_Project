@@ -53,4 +53,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TMap<FString, int16> ItemLevel;
+
+	int32 GetDamageMultiplier() const;
 };
