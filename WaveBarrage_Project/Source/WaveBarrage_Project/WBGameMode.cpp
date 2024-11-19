@@ -200,7 +200,7 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 							Spawned->MonsterClass = MonsterClass;
 							Spawned->SpawnCount = SpawnCount;
 							MonsterGroups.Emplace(Spawned);
-							Spawned->SpawnMonster();
+							Spawned->SpawnRandomPositionMonster();
 						}
 					}
 				}

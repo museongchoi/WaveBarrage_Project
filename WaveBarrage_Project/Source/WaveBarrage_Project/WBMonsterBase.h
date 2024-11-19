@@ -44,8 +44,14 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UWBFSMComponent> FSMComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	int HP;
+
+	UPROPERTY(EditAnywhere)
+	float AttackPoint;
+
+	UPROPERTY(EditAnywhere)
+	float Speed;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AWBItemBase> DropItem;
