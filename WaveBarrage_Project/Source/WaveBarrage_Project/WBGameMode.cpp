@@ -106,7 +106,7 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 			FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
 			if (WeaponData)
 			{
-				// 무기 업데이트 전 데미지 출력
+				// 로그 : 무기 업데이트 전 데미지 출력
 				for (AWBWeaponBase* Weapon : Player->EquippedWeapons)
 				{
 					if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
@@ -120,11 +120,13 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 				{
 					if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
 					{
+						Weapon->WeaponLevel = WeaponData->WeaponLevel;
 						Weapon->Damage = WeaponData->Damage;
 						Weapon->SkillAcceleration = WeaponData->SkillAcceleration;
 						Weapon->CoolDown = WeaponData->CoolDown;
 						Weapon->CriticalChance = WeaponData->CriticalChance;
 						Weapon->ProjectileCount = WeaponData->ProjectileCount;
+						Weapon->ProjectileClass = WeaponData->ProjectileClass;
 
 						// 무기 업데이트 후 데미지 출력
 						UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
