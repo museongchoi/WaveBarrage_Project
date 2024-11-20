@@ -25,4 +25,6 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	bool CanCollision = false;
 };

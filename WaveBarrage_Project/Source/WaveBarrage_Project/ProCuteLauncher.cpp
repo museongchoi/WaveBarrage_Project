@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
+
 AProCuteLauncher::AProCuteLauncher()
 {
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
@@ -31,9 +32,9 @@ void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp,
 	
 	if (OtherActor && OtherActor != this)
 	{
-		if (HasAuthority())
+		if (HasAuthority() && CanCollision == true)
 		{
-			UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+			UE_LOG(LogTemp, Warning, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
 
 			AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
 			if (Monster)

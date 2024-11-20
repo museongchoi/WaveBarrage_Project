@@ -24,14 +24,14 @@ AWBWeaponBase::AWBWeaponBase()
 	WeaponType = EWeaponType::WeaponJinx;
 
 	// Initialize default values
-	OwnerCharacter = nullptr;
-	WeaponLevel = 1;
-	Damage = 10;
-	SkillAcceleration = 0;
-	CriticalChance = 0; // Default critical chance is 5%
-	ProjectileCount = 1;
-	CurProjectileCnt = 0;
-	MaxProjectileCnt = 10; // Default maximum projectile count
+	//OwnerCharacter = nullptr;
+	//WeaponLevel = 1;
+	//Damage = 10;
+	//SkillAcceleration = 0;
+	//CriticalChance = 0; // Default critical chance is 5%
+	//ProjectileCount = 1;
+	//CurProjectileCnt = 0;
+	//MaxProjectileCnt = 10; // Default maximum projectile count
 
 }
 

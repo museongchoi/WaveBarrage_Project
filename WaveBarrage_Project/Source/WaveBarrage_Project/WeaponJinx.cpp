@@ -6,7 +6,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBPlayerBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "WBProjectileBase.h"
+#include "ProCuteLauncher.h"
 
 AWeaponJinx::AWeaponJinx()
 {
@@ -19,6 +19,7 @@ AWeaponJinx::AWeaponJinx()
 	Damage = 20;
 	ProjectileCount = 3;
 	MaxProjectileCnt = 0;
+	CurProjectileCnt = 0;
 }
 
 void AWeaponJinx::BeginPlay()
@@ -41,6 +42,7 @@ void AWeaponJinx::Fire()
 			//UE_LOG(LogTemp, Error, TEXT("5. AWeaponJinx Fire Check!!!!!!!"));
 
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
+			UE_LOG(LogTemp, Error, TEXT("%d, %d, %d"), MaxProjectileCnt, ProjectileCount, PlayerState->ProjectileCounts);
 		}
 	}
 
@@ -63,14 +65,15 @@ void AWeaponJinx::SpawnProjectile()
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
 		// Spawn the projectile actor
-		AWBProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+		AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 		if (SpawnedProjectile)
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
-			//UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
+			UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
 			int32 FinalDamage = CalculateFinalDamage();
 			SpawnedProjectile->SetDamage(FinalDamage);
+			SpawnedProjectile->CanCollision = true;
 
 		}
 	}
@@ -86,7 +89,6 @@ void AWeaponJinx::SpawnProjectile()
 		// Reset current projectile count
 		CurProjectileCnt = 0;
 
-		//UE_LOG(LogTemp, Error, TEXT("6. bIsAttacking false Check!!!!!!!"));
 		OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 		OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 
