@@ -8,8 +8,8 @@
 #include "WBWeaponDataTable.h"
 #include "WBGameMode.generated.h"
 
-class AWBPlayerState;
-class AWBPlayerBase;
+//class AWBPlayerState;
+//class AWBPlayerBase;
 class AWBMonsterBase;
 class AWBMonsterGroup;
 
