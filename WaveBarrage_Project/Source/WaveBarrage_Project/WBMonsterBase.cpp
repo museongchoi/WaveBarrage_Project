@@ -37,6 +37,7 @@ void AWBMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
 }
 
 // Called every frame
@@ -44,6 +45,20 @@ void AWBMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float AWBMonsterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	HP -= DamageAmount;
+
+	if (HP <= 0)
+	{
+		GetWorld()->SpawnActor<AActor>(DropItem, GetActorLocation(), GetActorRotation());
+		Destroy();
+	}
+
+	return Damage;
 }
 
 void AWBMonsterBase::Attack()
