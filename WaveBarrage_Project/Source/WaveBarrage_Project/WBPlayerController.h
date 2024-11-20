@@ -32,4 +32,6 @@ public:
 	UFUNCTION(Server,Reliable)
 	void C2S_SetPlayerReady();
 	void C2S_SetPlayerReady_Implementation();
+
+
 };

@@ -8,7 +8,10 @@
 #include "WBMonsterBase.h"
 #include "WBPlayerBase.h"
 #include "WBMonsterGroup.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 //#include "WBULobbyWidget.h"
+
 
 
 AWBGameMode::AWBGameMode()
@@ -91,6 +94,21 @@ void AWBGameMode::LevelUp()
 	}
 
 }
+
+//void AWBGameMode::MulticastLevelUp()
+//{
+//	for (auto It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+//	{
+//		APlayerController* PC = It->Get();
+//		if (PC && PC->IsLocalController())
+//		{
+//			if (AWBPlayerController* MyPlayer = Cast<AWBPlayerController>(PC))
+//			{
+//			
+//			}
+//		}
+//	}
+//}
 
 
 void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex)
