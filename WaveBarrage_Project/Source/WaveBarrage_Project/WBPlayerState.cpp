@@ -2,6 +2,7 @@
 
 
 #include "WBPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 int32 AWBPlayerState::GetDamageMultiplier() const
 {
@@ -16,4 +17,25 @@ int32 AWBPlayerState::GetDamageMultiplier() const
     DamageMultiplier += 0.1f * DamageLevel;
 
     return DamageMultiplier;
+}
+
+void AWBPlayerState::SetPlayerState(EPlayerState NewState)
+{
+    if (HasAuthority())
+    {
+        CurrentState = NewState;
+        OnRep_PlayerState();
+    }
+}
+
+void AWBPlayerState::OnRep_PlayerState()
+{
+
+}
+
+void AWBPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AWBPlayerState, CurrentState);
 }

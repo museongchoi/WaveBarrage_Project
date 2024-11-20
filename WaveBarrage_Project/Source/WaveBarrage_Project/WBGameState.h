@@ -25,4 +25,11 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void S2C_MBSetTargetPlayer(AWBMonsterBase* MB, AActor* TargetPlayer);
 	void S2C_MBSetTargetPlayer_Implementation(AWBMonsterBase* MB, AActor* TargetPlayer);
+
+
+	UFUNCTION()
+	void CheckAllPlayersReady();
+	
+
+
 };
