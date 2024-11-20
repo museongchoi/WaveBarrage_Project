@@ -31,7 +31,7 @@ void AWeaponJinx::Fire()
 {
 
 	// Get projectile count from player state and update max projectile count
-	if (OwnerCharacter)
+	if (HasAuthority() && OwnerCharacter)
 	{
 
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
@@ -49,12 +49,13 @@ void AWeaponJinx::Fire()
 
 void AWeaponJinx::SpawnProjectile()
 {
-
+	
 	if (ProjectileClass && OwnerCharacter && ProjectileSpawnPoint)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = Cast<APawn>(OwnerCharacter);
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		// Get spawn location and rotation from ProjectileSpawnPoint
 		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();

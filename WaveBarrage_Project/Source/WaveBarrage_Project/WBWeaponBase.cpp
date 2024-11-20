@@ -3,6 +3,7 @@
 
 #include "WBWeaponBase.h"
 #include "Components/SceneComponent.h"
+#include "WBPlayerBase.h"
 #include "WBPlayerState.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"

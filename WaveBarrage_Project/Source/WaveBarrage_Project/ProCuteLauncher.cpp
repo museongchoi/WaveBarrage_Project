@@ -31,13 +31,16 @@ void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp,
 	
 	if (OtherActor && OtherActor != this)
 	{
-		UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
-
-		AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
-		if (Monster)
+		if (HasAuthority())
 		{
-			UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
-			Destroy();
+			UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+
+			AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
+			if (Monster)
+			{
+				UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+				Destroy();
+			}
 		}
 	}
 }

@@ -114,7 +114,7 @@ void AWBPlayerBase::BeginPlay()
 	}
 
 	//UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
-	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
+	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
 	}
@@ -205,12 +205,6 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 			ServerMoveCharacter(Direction); // 클라이언트에서 서버로 이동 요청
 		}
 	}
-}
-
-
-bool AWBPlayerBase::ServerMoveCharacter_Validate(const FVector& Direction)
-{
-	return false;
 }
 
 

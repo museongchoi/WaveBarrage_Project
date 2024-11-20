@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WBPlayerBase.h"
 #include "WBWeaponBase.generated.h"
 
 class USceneComponent;
