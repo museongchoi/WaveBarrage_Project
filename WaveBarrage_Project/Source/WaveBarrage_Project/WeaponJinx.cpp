@@ -29,6 +29,7 @@ void AWeaponJinx::BeginPlay()
 
 void AWeaponJinx::Fire()
 {
+	Super::Fire();
 
 	// Get projectile count from player state and update max projectile count
 	if (OwnerCharacter)
@@ -49,7 +50,7 @@ void AWeaponJinx::Fire()
 
 void AWeaponJinx::SpawnProjectile()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("SpawnCheck!!!"))
 	if (ProjectileClass && OwnerCharacter && ProjectileSpawnPoint)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -84,7 +85,7 @@ void AWeaponJinx::SpawnProjectile()
 		// Reset current projectile count
 		CurProjectileCnt = 0;
 
-		UE_LOG(LogTemp, Error, TEXT("6. bIsAttacking false Check!!!!!!!"));
+		//UE_LOG(LogTemp, Error, TEXT("6. bIsAttacking false Check!!!!!!!"));
 		OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 		OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
 

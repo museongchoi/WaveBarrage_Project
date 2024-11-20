@@ -15,6 +15,7 @@ class UBoxComponent;
 class AWBMonsterBase;
 class AActor;
 class AWBWeaponBase;
+class AWeaponJinx;
 
 UCLASS()
 class WAVEBARRAGE_PROJECT_API AWBPlayerBase : public ACharacter
@@ -46,6 +47,12 @@ public:
 
 	UFUNCTION()
 	void AttackFire();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerAttackFire();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastAttackFire();
 
 	UFUNCTION()
 	void CursorHitAiming();
@@ -127,7 +134,7 @@ public:
 	TObjectPtr<AActor> ClosestEnemy;
 
 	UPROPERTY()
-	AWBWeaponBase* SpawnedWeapon;
+	AWeaponJinx* SpawnedWeapon;
 
 	UPROPERTY()
 	AWBWeaponBase* GeneralSpawnedWeapon;

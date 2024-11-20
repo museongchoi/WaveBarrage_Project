@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBWeaponBase.h"
+#include "WeaponJinx.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WBGameMode.h"
@@ -98,7 +99,7 @@ void AWBPlayerBase::BeginPlay()
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
-		SpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+		SpawnedWeapon = GetWorld()->SpawnActor<AWeaponJinx>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedWeapon)
 		{
 			SpawnedWeapon->AttachToComponent(WeaponPotionComponent, FAttachmentTransformRules::KeepWorldTransform);
@@ -114,7 +115,7 @@ void AWBPlayerBase::BeginPlay()
 	}
 
 	//UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
-	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
+	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
 	}
@@ -337,6 +338,31 @@ void AWBPlayerBase::AttackFire()
 		AutomaticAiming();
 	}
 
+	if (HasAuthority())
+	{
+		ServerAttackFire(); // 서버에서 발사 요청
+	}
+	else
+	{
+		ServerAttackFire(); // 클라이언트에서 서버로 발사 요청
+	}
+}
+
+void AWBPlayerBase::ServerAttackFire_Implementation()
+{
+	if (SpawnedWeapon)
+	{
+		MulticastAttackFire(); // 모든 클라이언트에 발사 동기화
+	}
+}
+
+bool AWBPlayerBase::ServerAttackFire_Validate()
+{
+	return true; // 필요시 유효성 검사를 여기에 추가
+}
+
+void AWBPlayerBase::MulticastAttackFire_Implementation()
+{
 	if (SpawnedWeapon)
 	{
 		SpawnedWeapon->Fire();

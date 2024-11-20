@@ -53,25 +53,31 @@ void AWBWeaponBase::Tick(float DeltaTime)
 
 }
 
-void AWBWeaponBase::Fire()
+//void AWBWeaponBase::Fire()
+//{
+//	//if (ProjectileClass && OwnerCharacter)
+//	//{
+//	//	FActorSpawnParameters SpawnParams;
+//	//	SpawnParams.Owner = this;
+//
+//	//	FVector SpawnLocation = GetActorLocation();
+//	//	FRotator SpawnRotation = GetActorRotation();
+//
+//	//	// 투사체 생성
+//	//	AWBProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+//	//	if (SpawnedProjectile)
+//	//	{
+//	//		// 데미지 설정
+//	//		int32 FinalDamage = CalculateFinalDamage();
+//	//		SpawnedProjectile->SetDamage(FinalDamage);
+//	//	}
+//	//}
+//}
+
+void AWBWeaponBase::Fire_Implementation()
 {
-	if (ProjectileClass && OwnerCharacter)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-
-		FVector SpawnLocation = GetActorLocation();
-		FRotator SpawnRotation = GetActorRotation();
-
-		// 투사체 생성
-		AWBProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
-		if (SpawnedProjectile)
-		{
-			// 데미지 설정
-			int32 FinalDamage = CalculateFinalDamage();
-			SpawnedProjectile->SetDamage(FinalDamage);
-		}
-	}
+	// 투사체 스폰 로직이 여기 들어갑니다
+	// 예: GetWorld()->SpawnActor<AWBProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation);
 }
 
 void AWBWeaponBase::SpawnProjectile()

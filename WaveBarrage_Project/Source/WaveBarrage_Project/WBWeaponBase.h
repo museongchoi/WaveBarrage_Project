@@ -43,8 +43,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	UFUNCTION()
-	virtual void Fire();
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void Fire(); // Fire 함수를 멀티캐스트로 수정
 
 	UFUNCTION()
 	virtual void SpawnProjectile();
