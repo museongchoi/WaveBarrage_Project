@@ -39,5 +39,3 @@ void AWBPlayerController::C2S_SetPlayerReady_Implementation()
         MyGameState->CheckAllPlayersReady();
     }
 }
-
-
