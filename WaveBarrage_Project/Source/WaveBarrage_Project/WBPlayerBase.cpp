@@ -4,7 +4,6 @@
 #include "WBPlayerBase.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Components/BoxComponent.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
@@ -16,8 +15,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Engine/EngineTypes.h"
-#include "WBMonsterBase.h"
+//#include "Engine/EngineTypes.h"
+//#include "WBMonsterBase.h"
 
 
 // Sets default values
@@ -108,26 +107,6 @@ void AWBPlayerBase::BeginPlay()
 		}
 	}
 
-	//TArray<TObjectPtr<USceneComponent>> Boxes = { Box2, Box3, Box4, Box5 };
-	//// 일반 무기들 스폰 및 Attach
-	//for (int32 i = 0; i < WeaponAttachBoxes.Num(); i++)
-	//{
-	//	if (Boxes[i] && WeaponAttachBoxes.IsValidIndex(i) && WeaponAttachBoxes[i])
-	//	{
-	//		FActorSpawnParameters SpawnParams;
-	//		SpawnParams.Owner = this;
-	//		GeneralSpawnedWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(WeaponAttachBoxes[i], GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-	//		if (GeneralSpawnedWeapon)
-	//		{
-	//			GeneralSpawnedWeapon->AttachToComponent(Boxes[i], FAttachmentTransformRules::KeepWorldTransform);
-	//			GeneralSpawnedWeapon->OwnerCharacter = this;
-	//			EquippedWeapons.Add(GeneralSpawnedWeapon);
-	//		}
-	//	}
-	//}
-
-	//DefaultAttackSettings();
-
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(GM))
 	{
@@ -146,6 +125,11 @@ void AWBPlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWBPlayerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 // Called to bind functionality to input
@@ -207,8 +191,42 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		//AddMovementInput(ForwardDirection, MovementVector.Y);
+		//AddMovementInput(RightDirection, MovementVector.X);
+		FVector Direction = ForwardDirection * MovementVector.Y + RightDirection * MovementVector.X;
+
+		// 서버로 이동 요청
+		if (HasAuthority())
+		{
+			AddMovementInput(Direction); // 서버일 경우에는 직접 처리
+		}
+		else
+		{
+			ServerMoveCharacter(Direction); // 클라이언트에서 서버로 이동 요청
+		}
+	}
+}
+
+
+bool AWBPlayerBase::ServerMoveCharacter_Validate(const FVector& Direction)
+{
+	return false;
+}
+
+
+void AWBPlayerBase::ServerMoveCharacter_Implementation(const FVector& Direction)
+{
+	AddMovementInput(Direction);
+
+	MulticastMove(Direction);
+}
+
+
+void AWBPlayerBase::MulticastMove_Implementation(const FVector& Direction)
+{
+	if (!HasAuthority())
+	{
+		AddMovementInput(Direction);
 	}
 }
 

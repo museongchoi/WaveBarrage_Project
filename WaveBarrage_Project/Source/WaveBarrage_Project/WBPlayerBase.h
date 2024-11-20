@@ -33,6 +33,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -47,6 +49,21 @@ public:
 
 	UFUNCTION()
 	void CursorHitAiming();
+
+
+	void Move(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	void ServerMoveCharacter(const FVector& Direction);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastMove(const FVector& Direction);
+
+	void SkillE();
+
+	void SkillR();
+
+	void ToggleAutoMode();
 
 
 public:
@@ -88,14 +105,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> IA_AutoMode;
-
-	void Move(const FInputActionValue& Value);
-
-	void SkillE();
-
-	void SkillR();
-
-	void ToggleAutoMode();
 
 	UPROPERTY()
 	TObjectPtr<APlayerController> MyPlayerController;

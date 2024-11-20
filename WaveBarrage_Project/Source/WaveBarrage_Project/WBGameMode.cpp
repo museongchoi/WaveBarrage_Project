@@ -8,6 +8,8 @@
 #include "WBMonsterBase.h"
 #include "WBPlayerBase.h"
 #include "WBMonsterGroup.h"
+//#include "WBULobbyWidget.h"
+
 
 AWBGameMode::AWBGameMode()
 {
@@ -17,6 +19,16 @@ AWBGameMode::AWBGameMode()
 void AWBGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//if (LobbyWidgetClass)
+	//{
+	//	// 로비 위젯 생성 및 화면에 추가
+	//	UWBULobbyWidget* LobbyWidget = CreateWidget<UWBULobbyWidget>(GetWorld(), LobbyWidgetClass);
+	//	if (LobbyWidget)
+	//	{
+	//		LobbyWidget->AddToViewport();
+	//	}
+	//}
 
 	TArray<FSpawnData*> arr;
 	SpawnDataTable->GetAllRows<FSpawnData>(TEXT("GetAllRows"), arr);
