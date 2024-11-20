@@ -209,12 +209,6 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 }
 
 
-bool AWBPlayerBase::ServerMoveCharacter_Validate(const FVector& Direction)
-{
-	return false;
-}
-
-
 void AWBPlayerBase::ServerMoveCharacter_Implementation(const FVector& Direction)
 {
 	AddMovementInput(Direction);

@@ -12,6 +12,8 @@ AWBMonsterGroup::AWBMonsterGroup()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bReplicates = true;
+
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
 }
@@ -35,7 +37,7 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 			SetActorLocation(Monsters[0]->GetActorLocation());
 		}
 	}
-	else
+	else if(Monsters.Num() <= 0)
 	{
 		// 나중에 여유되면 델리게이트로 변경
 		AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -53,13 +55,16 @@ void AWBMonsterGroup::SpawnMonster()
 	FActorSpawnParameters SpawnPara;
 	SpawnPara.Owner = this;
 	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	if (MonsterClass)
+	if (MonsterClass && HasAuthority())
 	{
 		for (int i = 0; i < SpawnCount; i++)
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation(), GetActorRotation(), SpawnPara);
-			Spawned->SetTargetPlayer(TargetPlayer);
-			Monsters.Emplace(Spawned);
+			if (IsValid(Spawned))
+			{
+				Spawned->SetTargetPlayer(TargetPlayer);
+				Monsters.Emplace(Spawned);
+			}
 		}
 		SpawnEnd = true;
 	}
@@ -70,13 +75,16 @@ void AWBMonsterGroup::SpawnRandomPositionMonster()
 	FActorSpawnParameters SpawnPara;
 	SpawnPara.Owner = this;
 	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	if (MonsterClass)
+	if (MonsterClass && HasAuthority())
 	{
 		for (int i = 0; i < SpawnCount; i++)
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(1, 1500), FMath::RandRange(1, 1500), 0), GetActorRotation(), SpawnPara);
-			Spawned->SetTargetPlayer(TargetPlayer);
-			Monsters.Emplace(Spawned);
+			if (IsValid(Spawned))
+			{
+				Spawned->SetTargetPlayer(TargetPlayer);
+				Monsters.Emplace(Spawned);
+			}
 		}
 		SpawnEnd = true;
 	}

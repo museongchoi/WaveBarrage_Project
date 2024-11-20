@@ -20,6 +20,7 @@ AWBItemBase::AWBItemBase()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 // Called when the game starts or when spawned
 void AWBItemBase::BeginPlay()

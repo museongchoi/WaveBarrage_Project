@@ -8,8 +8,8 @@
 #include "WBWeaponDataTable.h"
 #include "WBGameMode.generated.h"
 
-//class AWBPlayerState;
-//class AWBPlayerBase;
+class AWBPlayerState;
+class AWBPlayerBase;
 class AWBMonsterBase;
 class AWBMonsterGroup;
 
@@ -53,6 +53,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* WeaponDataTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<class UWBULobbyWidget> LobbyWidgetClass;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	//TSubclassOf<class UWBULobbyWidget> LobbyWidgetClass;
 };

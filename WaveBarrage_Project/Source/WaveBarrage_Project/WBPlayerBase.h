@@ -60,7 +60,7 @@ public:
 
 	void Move(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void ServerMoveCharacter(const FVector& Direction);
 
 	UFUNCTION(NetMulticast, Reliable)
