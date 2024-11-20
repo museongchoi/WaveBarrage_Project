@@ -36,6 +36,25 @@ void AWBGameMode::BeginPlay()
 void AWBGameMode::AddExp(int Value)
 {
 	Exp += Value;
+	if (MaxExp <= Exp)
+	{
+		Exp = 0;
+		LevelUp();
+		Level += 1;
+		if (Level < 10)
+		{
+			MaxExp += 5;
+		}
+		else if (Level < 20)
+		{
+			MaxExp += 10;
+		}
+		else
+		{
+			MaxExp += 30;
+		}
+
+	}
 }
 
 void AWBGameMode::LevelUp()

@@ -38,24 +38,28 @@ void AWBItemBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GM)
 	{
-		switch (ItemType)
+		if (OtherActor->ActorHasTag(TEXT("Player")))
 		{
-		case EItemType::Exp1:
-			GM->AddExp(1);
-			break;
-		case EItemType::Exp2:
-			GM->AddExp(5);
-			break;
-		case EItemType::Exp3:
-			GM->AddExp(10);
-			break;
-		case EItemType::Card:
-			GM->LevelUp();
-			break;
-		case EItemType::Heal:
-			break;
-		default:
-			break;
+			switch (ItemType)
+			{
+			case EItemType::Exp1:
+				GM->AddExp(1);
+				break;
+			case EItemType::Exp2:
+				GM->AddExp(5);
+				break;
+			case EItemType::Exp3:
+				GM->AddExp(10);
+				break;
+			case EItemType::Card:
+				GM->LevelUp();
+				break;
+			case EItemType::Heal:
+				break;
+			default:
+				break;
+			}
+			Destroy();
 		}
 	}
 }

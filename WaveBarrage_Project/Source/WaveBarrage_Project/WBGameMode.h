@@ -39,6 +39,8 @@ public:
 	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
 
 public:
+	int Level;
+	int MaxExp;
 	int Exp;
 
 	UPROPERTY(EditAnywhere)
