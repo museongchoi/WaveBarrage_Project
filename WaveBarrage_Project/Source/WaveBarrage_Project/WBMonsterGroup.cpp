@@ -30,7 +30,10 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 
 	if (SpawnEnd && Monsters.Num() > 0)
 	{
-		SetActorLocation(Monsters[0]->GetActorLocation());
+		if (IsValid(Monsters[0]))
+		{
+			SetActorLocation(Monsters[0]->GetActorLocation());
+		}
 	}
 	else
 	{
@@ -40,7 +43,7 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 		{
 			GM->MonsterGroups.Remove(this);
 		}
-		//Destroy();
+		Destroy();
 		//FVector(FMath::RandRange(1, 500), FMath::RandRange(1, 500),0)
 	}
 }

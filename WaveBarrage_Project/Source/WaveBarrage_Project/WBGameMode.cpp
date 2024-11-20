@@ -2,6 +2,7 @@
 
 
 #include "WBGameMode.h"
+#include "WBGameState.h"
 #include "WBPlayerController.h"
 #include "WBPlayerState.h"
 #include "WBMonsterBase.h"
@@ -211,11 +212,6 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 	}
 }
 
-void AWBGameMode::SetTargetPlayer()
-{
-
-}
-
 void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass, int SpawnCount, float x, float y)
 {
 	FActorSpawnParameters SpawnPara;
@@ -235,6 +231,12 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 						AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), FRotator::ZeroRotator, SpawnPara);
 						if (Spawned)
 						{
+							AWBGameState* GS = Cast<AWBGameState>(GameState);
+							if (IsValid(GS))
+							{
+								GS->S2C_MGSetTargetPlayer(Spawned, Player);
+							}
+							Spawned->TargetPlayer = Player;
 							Spawned->TargetPlayer = Player;
 							Spawned->MonsterClass = MonsterClass;
 							Spawned->SpawnCount = SpawnCount;
@@ -256,6 +258,11 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Player->GetActorLocation() + FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
 					if (Spawned)
 					{
+						AWBGameState* GS = Cast<AWBGameState>(GameState);
+						if (IsValid(GS))
+						{
+							GS->S2C_MGSetTargetPlayer(Spawned, Player);
+						}
 						Spawned->TargetPlayer = Player;
 						Spawned->MonsterClass = MonsterClass;
 						Spawned->SpawnCount = SpawnCount;
@@ -276,6 +283,11 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Player->GetActorLocation(), FRotator::ZeroRotator, SpawnPara);
 					if (Spawned)
 					{
+						AWBGameState* GS = Cast<AWBGameState>(GameState);
+						if (IsValid(GS))
+						{
+							GS->S2C_MGSetTargetPlayer(Spawned, Player);
+						}
 						Spawned->TargetPlayer = Player;
 						Spawned->MonsterClass = MonsterClass;
 						Spawned->SpawnCount = SpawnCount;
@@ -289,6 +301,11 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 	case ESpawnType::Elite:
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+			AWBGameState* GS = Cast<AWBGameState>(GameState);
+			if (IsValid(GS))
+			{
+				GS->S2C_MBSetTargetPlayer(Spawned, GetNearPlayer(Spawned));
+			}
 			Spawned->SetTargetPlayer(GetNearPlayer(Spawned));
 			
 		}

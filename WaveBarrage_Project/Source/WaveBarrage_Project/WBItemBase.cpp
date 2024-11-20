@@ -12,6 +12,8 @@ AWBItemBase::AWBItemBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bReplicates = true;
+
 	Root = CreateDefaultSubobject<USphereComponent>(TEXT("Root"));
 	RootComponent = Root;
 	Root->OnComponentBeginOverlap.AddDynamic(this, &AWBItemBase::OnOverlapBegin);
@@ -35,31 +37,34 @@ void AWBItemBase::Tick(float DeltaTime)
 
 void AWBItemBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GM)
+	if (HasAuthority())
 	{
-		if (OtherActor->ActorHasTag(TEXT("Player")))
+		AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (GM)
 		{
-			switch (ItemType)
+			if (OtherActor->ActorHasTag(TEXT("Player")))
 			{
-			case EItemType::Exp1:
-				GM->AddExp(1);
-				break;
-			case EItemType::Exp2:
-				GM->AddExp(5);
-				break;
-			case EItemType::Exp3:
-				GM->AddExp(10);
-				break;
-			case EItemType::Card:
-				GM->LevelUp();
-				break;
-			case EItemType::Heal:
-				break;
-			default:
-				break;
+				switch (ItemType)
+				{
+				case EItemType::Exp1:
+					GM->AddExp(1);
+					break;
+				case EItemType::Exp2:
+					GM->AddExp(5);
+					break;
+				case EItemType::Exp3:
+					GM->AddExp(10);
+					break;
+				case EItemType::Card:
+					GM->LevelUp();
+					break;
+				case EItemType::Heal:
+					break;
+				default:
+					break;
+				}
+				Destroy();
 			}
-			Destroy();
 		}
 	}
 }
