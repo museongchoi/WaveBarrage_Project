@@ -17,8 +17,8 @@ AWeaponJinx::AWeaponJinx()
 	WeaponType = EWeaponType::WeaponJinx;
 	WeaponLevel = 1;
 	Damage = 20;
-	ProjectileCount = 1;
-	MaxProjectileCnt = 10;
+	ProjectileCount = 3;
+	MaxProjectileCnt = 0;
 }
 
 void AWeaponJinx::BeginPlay()
