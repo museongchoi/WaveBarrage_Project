@@ -42,9 +42,8 @@ void UWBFSMComponent::IdleState()
 	{
 		FRotator TargetRot = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), TargetPlayer->GetActorLocation());
 		GetOwner()->SetActorRotation(TargetRot);
+		ChangeState(EMonsterState::Move);
 	}
-
-	ChangeState(EMonsterState::Move);
 }
 
 void UWBFSMComponent::MoveState(float DeltaTime)
