@@ -29,4 +29,8 @@ public:
 
 	bool CanCollision = false;
 
+	FTimerHandle FTimerHandle_DamageTick;
+
+	UFUNCTION()
+	void DamageTick(AActor* OtherActor);
 };

@@ -15,7 +15,11 @@ AWeaponBoomerang::AWeaponBoomerang()
 	WeaponType = EWeaponType::WeaponBoomerang;
 
 	WeaponLevel = 1;
-	CoolDown = 2.5f;
+	CoolDown = 6.0f;
+	Damage = 40;
+	ProjectileCount = 1;
+
+
 }
 
 void AWeaponBoomerang::BeginPlay()

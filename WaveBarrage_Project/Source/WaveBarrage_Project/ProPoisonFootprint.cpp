@@ -7,6 +7,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "WBMonsterBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Actor.h"
+
 
 
 AProPoisonFootprint::AProPoisonFootprint()
@@ -31,14 +33,22 @@ void AProPoisonFootprint::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedCo
 	{
 		if (HasAuthority() && CanCollision == true)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
-
 			AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
 			if (Monster)
 			{
-				UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+				FTimerDelegate TimerDel;
+				TimerDel.BindUFunction(this, FName("DamageTick"), Monster);
 
+				GetWorld()->GetTimerManager().SetTimer(FTimerHandle_DamageTick, TimerDel, 0.25f, true);
 			}
 		}
+	}
+}
+
+void AProPoisonFootprint::DamageTick(AActor* OtherActor)
+{
+	if (OtherActor)
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
 }
