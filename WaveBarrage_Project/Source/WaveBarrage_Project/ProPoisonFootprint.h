@@ -23,9 +23,10 @@ protected:
 
 	void OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
-	bool CanCollision = false;
+	
 
 public:
 
+	bool CanCollision = false;
 
 };

@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "WBPlayerState.h"
 #include "GameFramework/Character.h"
+#include "ProCuteLauncher.h"
 
 // MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts
 // ProjectileCount : 1/1/2/2/3
@@ -60,11 +61,14 @@ void AWeaponCuteLauncher::Fire()
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
 		// Spawn the projectile actor
-		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation);
+		AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation);
 		if (SpawnedProjectile)
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
+			int32 FinalDamage = CalculateFinalDamage();
+			SpawnedProjectile->SetDamage(FinalDamage);
+			SpawnedProjectile->CanCollision = true;
 			//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
 
 		}

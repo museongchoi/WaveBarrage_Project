@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "WBPlayerState.h"
+#include "ProBoomerang.h"
 
 AWeaponBoomerang::AWeaponBoomerang()
 {
@@ -52,13 +53,18 @@ void AWeaponBoomerang::SpawnProjectile()
 	if (ProjectileClass)
 	{
 		FTransform SpawnTransform = FTransform (ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation());
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+		AProBoomerang* SpawnedProjectile = GetWorld()->SpawnActor<AProBoomerang>(ProjectileClass, SpawnTransform);
 
 		CurProjectileCnt++;
 		if (CurProjectileCnt >= MaxProjectileCnt)
 		{
-			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_SpawnProjectile);
+		 GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_SpawnProjectile);
 			CurProjectileCnt = 0;
+
+			int32 FinalDamage = CalculateFinalDamage();
+			SpawnedProjectile->SetDamage(FinalDamage);
+			SpawnedProjectile->CanCollision = true;
+
 		}
 		
 	}

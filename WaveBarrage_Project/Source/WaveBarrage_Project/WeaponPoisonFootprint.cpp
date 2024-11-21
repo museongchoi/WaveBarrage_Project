@@ -6,6 +6,7 @@
 #include "ProPoisonFootprint.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "ProPoisonFootprint.h"
 
 AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 {
@@ -29,6 +30,10 @@ void AWeaponPoisonFootprint::Fire()
 
 	if (ProjectileClass)
 	{
-		GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass,SpawnTransform);
+		AProPoisonFootprint* SpawnedProjectile = GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass,SpawnTransform);
+
+		int32 FinalDamage = CalculateFinalDamage();
+		SpawnedProjectile->SetDamage(FinalDamage);
+		SpawnedProjectile->CanCollision = true;
 	}
 }

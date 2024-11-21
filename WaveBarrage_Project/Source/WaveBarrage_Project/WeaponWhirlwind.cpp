@@ -5,7 +5,6 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProWhirlwindBlade.h"
 
-
 AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
@@ -32,11 +31,14 @@ void AWeaponWhirlwind::Fire()
 			{
 				AProWhirlwindBlade* WhirlwindBlade = GetWorld()->SpawnActor<AProWhirlwindBlade>(ProjectileClass);
 				{
-					WhirlwindBlade->SpawnLocationByRadians = 180 * i;
-					
+					WhirlwindBlade->SpawnLocationByRadians = 180 * i;	
 
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 				}
 			}
+
 			break;
 		case 3:
 		case 4:
@@ -45,7 +47,10 @@ void AWeaponWhirlwind::Fire()
 				AProWhirlwindBlade* WhirlwindBlade = GetWorld()->SpawnActor<AProWhirlwindBlade>(ProjectileClass);
 				{
 					WhirlwindBlade->SpawnLocationByRadians = 90 * i;
-				
+					
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 
 				}
 			}
@@ -57,6 +62,9 @@ void AWeaponWhirlwind::Fire()
 				{
 					WhirlwindBlade->SpawnLocationByRadians = 60 * i;
 					
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 					
 				}
 				
