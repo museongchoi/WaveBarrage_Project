@@ -36,14 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Card Selection")
 	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
-<<<<<<< HEAD
 
 	UFUNCTION()
 	void UpdateTargetPlayer();
 
-=======
-	
->>>>>>> 1cb23938451a5aa14b540c7faa411714fab2bcab
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int Level;
