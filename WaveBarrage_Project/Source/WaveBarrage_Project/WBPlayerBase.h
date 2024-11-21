@@ -51,11 +51,11 @@ public:
 	UFUNCTION()
 	void AttackFire();
 
-	//UFUNCTION(Server, Reliable)
-	//void ServerAttackFire();
+	UFUNCTION(Server, Reliable)
+	void ServerAttackFire();
 
-	//UFUNCTION(NetMulticast, Reliable)
-	//void MulticastAttackFire();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastAttackFire();
 
 	UFUNCTION(Server, Reliable)
 	void ServerSetOrientation(float NewRotation, bool bOrientRotationToMovement);
