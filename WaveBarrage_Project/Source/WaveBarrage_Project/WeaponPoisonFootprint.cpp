@@ -11,13 +11,14 @@ AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 {
 	WeaponType = EWeaponType::WeaponPoisonFootprint;
 	WeaponLevel = 1;
+	CoolDown = 3.0f;
 }
 
 void AWeaponPoisonFootprint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown, true);
 }
 
 void AWeaponPoisonFootprint::Fire()

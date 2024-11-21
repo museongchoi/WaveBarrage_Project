@@ -27,5 +27,7 @@ protected:
 	
 	FTimerHandle FTimerHandle_Fire;
 
+	
+	
 
 };

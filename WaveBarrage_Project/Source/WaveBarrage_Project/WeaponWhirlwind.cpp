@@ -16,8 +16,8 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 void AWeaponWhirlwind::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown);
-	
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown,true);
+	UE_LOG(LogTemp, Warning, TEXT("WhirlwindSpawn"));
 }
 
 void AWeaponWhirlwind::Fire()
