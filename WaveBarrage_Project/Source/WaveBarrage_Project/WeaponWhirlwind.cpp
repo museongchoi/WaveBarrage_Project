@@ -9,7 +9,8 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
 	WeaponLevel = 1;
-	CoolDown = 6.0f;
+	CoolDown = 7.0f;
+	Damage = 55;
 }
 
 void AWeaponWhirlwind::BeginPlay()

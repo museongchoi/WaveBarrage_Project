@@ -6,6 +6,7 @@
 #include "WBProjectileBase.h"
 #include "ProBoomerang.generated.h"
 
+class UProjectileMovementComponent;
 /**
  * 
  */
@@ -21,7 +22,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void MoveForward(FVector Direction);
+	void MoveForward(FVector Direction, float DeltaTime);
 
 	void MoveBackWard(FVector Direction);
 
@@ -29,19 +30,25 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	float Time =0.0f;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Replicated)
 	FVector AttackDirection;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Replicated)
 	float ProjectileSpeed = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	float Acceleration = 0.0f;
 
 	bool CanCollision = false;
 
 	void OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	
+	//TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
 };

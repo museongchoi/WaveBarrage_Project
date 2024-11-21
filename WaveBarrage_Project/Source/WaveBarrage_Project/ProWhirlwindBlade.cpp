@@ -10,7 +10,7 @@
 AProWhirlwindBlade::AProWhirlwindBlade()
 {
 	bReplicates = true;
-	LifeTime = 2.0f;
+	LifeTime = 8.0f;
 	OrbitSpeed = 180.0f;
 	OrbitRadius = 360.0f;
 	
@@ -52,7 +52,7 @@ void AProWhirlwindBlade::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedCom
 	{
 		if (HasAuthority() && CanCollision == true)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+
 
 			AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
 			if (Monster)
