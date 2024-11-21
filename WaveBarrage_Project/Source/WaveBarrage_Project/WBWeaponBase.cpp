@@ -39,11 +39,6 @@ AWBWeaponBase::AWBWeaponBase()
 void AWBWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//if (OwnerCharacter == nullptr && GetOwner())
-	//{
-	//	OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
-	//}
 	
 }
 

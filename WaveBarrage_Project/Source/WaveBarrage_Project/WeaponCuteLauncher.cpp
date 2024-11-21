@@ -24,6 +24,13 @@ AWeaponCuteLauncher::AWeaponCuteLauncher()
 	CoolDown = 1.0f;
 	ProjectileCount = 1;
 
+
+}
+
+void AWeaponCuteLauncher::BeginPlay()
+{
+	Super::BeginPlay();
+
 	if (OwnerCharacter)
 	{
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
@@ -32,11 +39,6 @@ AWeaponCuteLauncher::AWeaponCuteLauncher()
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
 		}
 	}
-}
-
-void AWeaponCuteLauncher::BeginPlay()
-{
-	//Super::BeginPlay();
 
 	if(!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{

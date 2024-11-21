@@ -79,8 +79,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CriticalChance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	AWBPlayerBase* OwnerCharacter;
+
 
 	// πﬂªÁ√º
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)

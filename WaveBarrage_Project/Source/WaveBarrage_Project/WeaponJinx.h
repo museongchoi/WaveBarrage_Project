@@ -23,4 +23,7 @@ public:
 	virtual void Fire() override;
 
 	virtual void SpawnProjectile() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	AWBPlayerBase* OwnerCharacter;
 };
