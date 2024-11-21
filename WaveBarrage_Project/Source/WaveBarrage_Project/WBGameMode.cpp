@@ -224,6 +224,8 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 	}
 }
 
+
+
 void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass, int SpawnCount, float x, float y)
 {
 	FActorSpawnParameters SpawnPara;

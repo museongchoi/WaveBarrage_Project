@@ -9,7 +9,7 @@
 AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
-
+	WeaponLevel = 1;
 }
 
 void AWeaponWhirlwind::BeginPlay()
