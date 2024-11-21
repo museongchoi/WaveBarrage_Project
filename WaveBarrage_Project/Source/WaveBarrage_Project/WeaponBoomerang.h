@@ -25,4 +25,7 @@ protected:
 	virtual void SpawnProjectile() override;
 
 	float SpawnDelay = 0.0f;
+
+	FTimerHandle FTimerHandle_Fire;
+	FTimerHandle FTimerHandle_SpawnProjectile;
 };

@@ -24,7 +24,7 @@ AWeaponCuteLauncher::AWeaponCuteLauncher()
 	Damage = 45;
 	CoolDown = 1.0f;
 	ProjectileCount = 1;
-
+	WeaponLevel = 1;
 
 }
 

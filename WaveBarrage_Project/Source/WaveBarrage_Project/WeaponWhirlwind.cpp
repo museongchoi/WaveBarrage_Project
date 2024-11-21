@@ -10,18 +10,20 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
 	WeaponLevel = 1;
+	CoolDown = 6.0f;
 }
 
 void AWeaponWhirlwind::BeginPlay()
 {
 	Super::BeginPlay();
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 4.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown);
+	
 }
 
 void AWeaponWhirlwind::Fire()
 {
 	FActorSpawnParameters SpawnPara;
-	
+	UE_LOG(LogTemp, Warning, TEXT("WhirlwindFire"));
 	switch (WeaponLevel)
 	{
 		case 1:
