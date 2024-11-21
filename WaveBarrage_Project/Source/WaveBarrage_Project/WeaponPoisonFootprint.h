@@ -21,4 +21,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Fire() override;
+
+	FTimerHandle FTimerHandle_Fire;
+
+
 };

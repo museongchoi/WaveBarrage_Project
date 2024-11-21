@@ -25,5 +25,9 @@ protected:
 
 	virtual void Fire() override;
 	
+	FTimerHandle FTimerHandle_Fire;
+
+	
+	
 
 };

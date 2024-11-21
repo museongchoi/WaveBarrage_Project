@@ -13,13 +13,16 @@
 
 AWBGameMode::AWBGameMode()
 {
-
+	Level = 1;
+	MaxExp = 10;
 }
 
 void AWBGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FTimerHandle THandle;
+	GetWorld()->GetTimerManager().SetTimer(THandle, this, &AWBGameMode::UpdateTargetPlayer, 2.0f, true);
 	//if (LobbyWidgetClass)
 	//{
 	//	// 로비 위젯 생성 및 화면에 추가
@@ -49,6 +52,7 @@ void AWBGameMode::BeginPlay()
 void AWBGameMode::AddExp(int Value)
 {
 	Exp += Value;
+	UE_LOG(LogTemp, Warning, TEXT("EXP : %i"), Exp);
 	if (MaxExp <= Exp)
 	{
 		Exp = 0;
@@ -224,7 +228,20 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 	}
 }
 
-
+void AWBGameMode::UpdateTargetPlayer()
+{
+	for (AWBMonsterGroup* MG : MonsterGroups)
+	{
+		AWBGameState* GS = Cast<AWBGameState>(GameState);
+		if (IsValid(GS) && IsValid(MG))
+		{
+			AActor* NearPlayer = GetNearPlayer(MG);
+			MG->TargetPlayer = NearPlayer;
+			MG->UpdateTargetPlayer();
+			GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
+		}
+	}
+}
 
 void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass, int SpawnCount, float x, float y)
 {
@@ -236,27 +253,23 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 	{
 	case ESpawnType::Normal:
 		{
-			for (AWBPlayerBase* Player : Players)
+			if (IsValid(Players[0]))
 			{
-				if (IsValid(Player))
+				for (USceneComponent* Comp : Players[0]->MonsterSpawnPositions)
 				{
-					for (USceneComponent* Comp : Player->MonsterSpawnPositions)
+					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), FRotator::ZeroRotator, SpawnPara);
+					if (Spawned)
 					{
-						AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), FRotator::ZeroRotator, SpawnPara);
-						if (Spawned)
+						AWBGameState* GS = Cast<AWBGameState>(GameState);
+						if (IsValid(GS))
 						{
-							AWBGameState* GS = Cast<AWBGameState>(GameState);
-							if (IsValid(GS))
-							{
-								GS->S2C_MGSetTargetPlayer(Spawned, Player);
-							}
-							Spawned->TargetPlayer = Player;
-							Spawned->TargetPlayer = Player;
-							Spawned->MonsterClass = MonsterClass;
-							Spawned->SpawnCount = SpawnCount;
-							MonsterGroups.Emplace(Spawned);
-							Spawned->SpawnRandomPositionMonster();
+							GS->S2C_MGSetTargetPlayer(Spawned, Players[0]);
 						}
+						Spawned->TargetPlayer = Players[0];
+						Spawned->MonsterClass = MonsterClass;
+						Spawned->SpawnCount = SpawnCount;
+						MonsterGroups.Emplace(Spawned);
+						Spawned->SpawnRandomPositionMonster();
 					}
 				}
 			}
@@ -264,25 +277,22 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 		break;
 	case ESpawnType::Minion:
 		{
-			for (AWBPlayerBase* Player : Players)
+			if (IsValid(Players[0]))
 			{
-				if (IsValid(Player))
-				{
 
-					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Player->GetActorLocation() + FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
-					if (Spawned)
+				AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Players[0]->GetActorLocation() + FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+				if (Spawned)
+				{
+					AWBGameState* GS = Cast<AWBGameState>(GameState);
+					if (IsValid(GS))
 					{
-						AWBGameState* GS = Cast<AWBGameState>(GameState);
-						if (IsValid(GS))
-						{
-							GS->S2C_MGSetTargetPlayer(Spawned, Player);
-						}
-						Spawned->TargetPlayer = Player;
-						Spawned->MonsterClass = MonsterClass;
-						Spawned->SpawnCount = SpawnCount;
-						MonsterGroups.Emplace(Spawned);
-						Spawned->SpawnMonster();
+						GS->S2C_MGSetTargetPlayer(Spawned, Players[0]);
 					}
+					Spawned->TargetPlayer = Players[0];
+					Spawned->MonsterClass = MonsterClass;
+					Spawned->SpawnCount = SpawnCount;
+					MonsterGroups.Emplace(Spawned);
+					Spawned->SpawnMonster();
 				}
 			}
 		}

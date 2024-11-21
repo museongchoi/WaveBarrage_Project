@@ -5,23 +5,24 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProWhirlwindBlade.h"
 
-
 AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
 	WeaponLevel = 1;
+	CoolDown = 6.0f;
 }
 
 void AWeaponWhirlwind::BeginPlay()
 {
 	Super::BeginPlay();
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 4.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown,true);
+	UE_LOG(LogTemp, Warning, TEXT("WhirlwindSpawn"));
 }
 
 void AWeaponWhirlwind::Fire()
 {
 	FActorSpawnParameters SpawnPara;
-	
+	UE_LOG(LogTemp, Warning, TEXT("WhirlwindFire"));
 	switch (WeaponLevel)
 	{
 		case 1:
@@ -30,11 +31,14 @@ void AWeaponWhirlwind::Fire()
 			{
 				AProWhirlwindBlade* WhirlwindBlade = GetWorld()->SpawnActor<AProWhirlwindBlade>(ProjectileClass);
 				{
-					WhirlwindBlade->SpawnLocationByRadians = 180 * i;
-					
+					WhirlwindBlade->SpawnLocationByRadians = 180 * i;	
 
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 				}
 			}
+
 			break;
 		case 3:
 		case 4:
@@ -43,7 +47,10 @@ void AWeaponWhirlwind::Fire()
 				AProWhirlwindBlade* WhirlwindBlade = GetWorld()->SpawnActor<AProWhirlwindBlade>(ProjectileClass);
 				{
 					WhirlwindBlade->SpawnLocationByRadians = 90 * i;
-				
+					
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 
 				}
 			}
@@ -55,6 +62,9 @@ void AWeaponWhirlwind::Fire()
 				{
 					WhirlwindBlade->SpawnLocationByRadians = 60 * i;
 					
+					int32 FinalDamage = CalculateFinalDamage();
+					WhirlwindBlade->SetDamage(FinalDamage);
+					WhirlwindBlade->CanCollision = true;
 					
 				}
 				

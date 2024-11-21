@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "WBPlayerState.h"
+#include "ProBoomerang.h"
 
 AWeaponBoomerang::AWeaponBoomerang()
 {
@@ -14,14 +15,14 @@ AWeaponBoomerang::AWeaponBoomerang()
 	WeaponType = EWeaponType::WeaponBoomerang;
 
 	WeaponLevel = 1;
-
+	CoolDown = 2.5f;
 }
 
 void AWeaponBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 4.0f, true);
-
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
+	
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (MyCharacter)
 	{
@@ -39,8 +40,11 @@ void AWeaponBoomerang::Fire()
 	Super::Fire();
 	if (CurProjectileCnt == 0)
 	{
-		UKismetSystemLibrary::K2_SetTimer(this, "SpawnProjectile", SpawnDelay, true);
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_SpawnProjectile, this, &AWeaponBoomerang::SpawnProjectile, SpawnDelay, true);
 	}
+
+	
+
 }
 
 void AWeaponBoomerang::SpawnProjectile()
@@ -49,13 +53,18 @@ void AWeaponBoomerang::SpawnProjectile()
 	if (ProjectileClass)
 	{
 		FTransform SpawnTransform = FTransform (ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation());
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+		AProBoomerang* SpawnedProjectile = GetWorld()->SpawnActor<AProBoomerang>(ProjectileClass, SpawnTransform);
 
 		CurProjectileCnt++;
 		if (CurProjectileCnt >= MaxProjectileCnt)
 		{
-			UKismetSystemLibrary::K2_ClearTimer(this, "SpawnProjectile");
+		 GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_SpawnProjectile);
 			CurProjectileCnt = 0;
+
+			int32 FinalDamage = CalculateFinalDamage();
+			SpawnedProjectile->SetDamage(FinalDamage);
+			SpawnedProjectile->CanCollision = true;
+
 		}
 		
 	}

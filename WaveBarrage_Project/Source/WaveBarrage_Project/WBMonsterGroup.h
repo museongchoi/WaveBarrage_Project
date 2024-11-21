@@ -28,6 +28,7 @@ public:
 	void SpawnRandomPositionMonster();
 	void SpawnCirclePositionMonster();
 	void RemoveMonster(AWBMonsterBase* Monster);
+	void UpdateTargetPlayer();
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Root;
@@ -45,5 +46,4 @@ public:
 	int SpawnCount;
 
 	bool SpawnEnd = false;
-	//bool 
 };

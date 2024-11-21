@@ -17,7 +17,7 @@ class WAVEBARRAGE_PROJECT_API AWBPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "UI")
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void ShowCardSelectionWidget();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")

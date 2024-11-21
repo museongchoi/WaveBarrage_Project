@@ -118,3 +118,17 @@ void AWBMonsterGroup::RemoveMonster(AWBMonsterBase* Monster)
 	}
 }
 
+void AWBMonsterGroup::UpdateTargetPlayer()
+{
+	if (HasAuthority())
+	{
+		for (AWBMonsterBase* Monster : Monsters)
+		{
+			if (IsValid(Monster))
+			{
+				Monster->SetTargetPlayer(TargetPlayer);
+			}
+		}
+	}
+}
+

@@ -6,18 +6,20 @@
 #include "ProPoisonFootprint.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "ProPoisonFootprint.h"
 
 AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 {
 	WeaponType = EWeaponType::WeaponPoisonFootprint;
 	WeaponLevel = 1;
+	CoolDown = 3.0f;
 }
 
 void AWeaponPoisonFootprint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown, true);
 }
 
 void AWeaponPoisonFootprint::Fire()
@@ -28,6 +30,10 @@ void AWeaponPoisonFootprint::Fire()
 
 	if (ProjectileClass)
 	{
-		GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass,SpawnTransform);
+		AProPoisonFootprint* SpawnedProjectile = GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass,SpawnTransform);
+
+		int32 FinalDamage = CalculateFinalDamage();
+		SpawnedProjectile->SetDamage(FinalDamage);
+		SpawnedProjectile->CanCollision = true;
 	}
 }
