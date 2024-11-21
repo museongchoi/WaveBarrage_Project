@@ -46,25 +46,24 @@ public:
 	void AutomaticAiming();
 
 	UFUNCTION()
-	void AttackFire();
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerAttackFire();
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastAttackFire();
-
-	UFUNCTION()
 	void CursorHitAiming();
 
+	UFUNCTION()
+	void AttackFire();
 
-	void Move(const FInputActionValue& Value);
+	//UFUNCTION(Server, Reliable)
+	//void ServerAttackFire();
 
-	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void ServerMoveCharacter(const FVector& Direction);
+	//UFUNCTION(NetMulticast, Reliable)
+	//void MulticastAttackFire();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetOrientation(float NewRotation, bool bOrientRotationToMovement);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastMove(const FVector& Direction);
+	void MulticastSetOrientation(float NewRotation, bool bOrientRotation);
+
+	void Move(const FInputActionValue& Value);
 
 	void SkillE();
 

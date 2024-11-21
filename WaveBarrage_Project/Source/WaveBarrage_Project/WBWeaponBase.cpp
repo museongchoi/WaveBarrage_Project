@@ -21,7 +21,7 @@ AWBWeaponBase::AWBWeaponBase()
 	//RootComponent = ProjectileSpawnPoint;
 
 	// 기본 무기 타입 설정 (필요에 따라 수정 가능)
-	WeaponType = EWeaponType::WeaponJinx;
+	// WeaponType = EWeaponType::WeaponJinx;
 
 	// Initialize default values
 	//OwnerCharacter = nullptr;
@@ -40,10 +40,10 @@ void AWBWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (OwnerCharacter == nullptr && GetOwner())
-	{
-		OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
-	}
+	//if (OwnerCharacter == nullptr && GetOwner())
+	//{
+	//	OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
+	//}
 	
 }
 
