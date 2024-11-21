@@ -17,21 +17,21 @@
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 //#include "Engine/EngineTypes.h"
-//#include "WBMonsterBase.h"
+#include "WBMonsterBase.h"
 
 
 // Sets default values
 AWBPlayerBase::AWBPlayerBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
 
-	//GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->MaxAcceleration = 1000.0f;
@@ -86,7 +86,7 @@ void AWBPlayerBase::BeginPlay()
 	Super::BeginPlay();
 
 	ConfigureInputMapping();
-	MyPlayerController = Cast<APlayerController>(GetController());
+	MyPlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	
 	if (MyPlayerController)
 	{
@@ -95,7 +95,7 @@ void AWBPlayerBase::BeginPlay()
 
 	if (WeaponPotionComponent && ChampionOnlyWeapon)
 	{
-		//UE_LOG(LogTemp, Error, TEXT("ChampionOnlyWeapon!!!!!!!!!!!!!!!!"));
+		
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
@@ -114,10 +114,15 @@ void AWBPlayerBase::BeginPlay()
 		GM->Players.Emplace(this);
 	}
 
-	//UE_LOG(LogTemp, Error, TEXT("1. Attack Check!!!!!!!"));
+	// 게임 시작 시 초기 방향을 마우스 커서 쪽으로 설정
+	if (!bAutoMode)
+	{
+		CursorHitAiming();
+	}
+
 	if (HasAuthority())
 	{
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 2.0f, true);
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 3.0f, true);
 	}
 }
 
@@ -159,7 +164,7 @@ void AWBPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		//UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 
@@ -179,7 +184,6 @@ void AWBPlayerBase::ConfigureInputMapping()
 	}
 }
 
-
 void AWBPlayerBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -192,36 +196,10 @@ void AWBPlayerBase::Move(const FInputActionValue& Value)
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		//AddMovementInput(ForwardDirection, MovementVector.Y);
-		//AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 		FVector Direction = ForwardDirection * MovementVector.Y + RightDirection * MovementVector.X;
 
-		// 서버로 이동 요청
-		if (HasAuthority())
-		{
-			AddMovementInput(Direction); // 서버일 경우에는 직접 처리
-		}
-		else
-		{
-			ServerMoveCharacter(Direction); // 클라이언트에서 서버로 이동 요청
-		}
-	}
-}
-
-
-void AWBPlayerBase::ServerMoveCharacter_Implementation(const FVector& Direction)
-{
-	AddMovementInput(Direction);
-
-	MulticastMove(Direction);
-}
-
-
-void AWBPlayerBase::MulticastMove_Implementation(const FVector& Direction)
-{
-	if (!HasAuthority())
-	{
-		AddMovementInput(Direction);
 	}
 }
 
@@ -237,8 +215,6 @@ void AWBPlayerBase::SkillR()
 
 void AWBPlayerBase::ToggleAutoMode()
 {
-	//UE_LOG(LogTemp, Error, TEXT("ToggleAutoMode!!!!!!!!!!!!!!!"));
-
 	if (bAutoMode)
 	{
 		bAutoMode = false;
@@ -247,7 +223,6 @@ void AWBPlayerBase::ToggleAutoMode()
 	{
 		bAutoMode = true;
 	}
-	//DefaultAttackSettings();
 }
 
 // 가장 가까운 몬스터 자동 타겟팅
@@ -279,13 +254,12 @@ void AWBPlayerBase::AutomaticAiming()
 		CollisionParams
 	);
 
-	UE_LOG(LogTemp, Error, TEXT("DrawDebugSphere"));
+	
 
 	// 디버그용 구체 표시
 	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
 	// 디버그용 구체 표시 (한 프레임 동안 표시)
 	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
-
 
 	if (bHit)
 	{
@@ -295,7 +269,7 @@ void AWBPlayerBase::AutomaticAiming()
 
 			if (AWBMonsterBase* TargetMonster = Cast<AWBMonsterBase>(HitActor))
 			{
-				//UE_LOG(LogTemp, Error, TEXT("Actor : %s"), *TargetMonster->GetName());
+				
 
 				float Distance = FVector::Dist(TargetMonster->GetActorLocation(), GetActorLocation());
 				if (Distance < ClosestDistance)
@@ -311,55 +285,9 @@ void AWBPlayerBase::AutomaticAiming()
 		{
 			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
 			GetMesh()->SetWorldRotation(FRotator(0.0f, TargetRotation.Yaw - 90.f, 0.0f));
+			// 멀티캐스트로 모든 클라이언트에 회전 정보를 동기화
+			ServerSetOrientation(TargetRotation.Yaw, false);
 		}
-	}
-}
-
-
-
-void AWBPlayerBase::AttackFire()
-{
-	if (!bAutoMode)
-	{
-		//UE_LOG(LogTemp, Error, TEXT("false bAutoMode"));
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		CursorHitAiming();
-	}
-	else if(bAutoMode)
-	{
-		//UE_LOG(LogTemp, Error, TEXT("true bAutoMode"));
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		AutomaticAiming();
-	}
-
-	if (HasAuthority())
-	{
-		ServerAttackFire(); // 서버에서 발사 요청
-	}
-	else
-	{
-		ServerAttackFire(); // 클라이언트에서 서버로 발사 요청
-	}
-}
-
-void AWBPlayerBase::ServerAttackFire_Implementation()
-{
-	if (SpawnedWeapon)
-	{
-		MulticastAttackFire(); // 모든 클라이언트에 발사 동기화
-	}
-}
-
-bool AWBPlayerBase::ServerAttackFire_Validate()
-{
-	return true; // 필요시 유효성 검사를 여기에 추가
-}
-
-void AWBPlayerBase::MulticastAttackFire_Implementation()
-{
-	if (SpawnedWeapon)
-	{
-		SpawnedWeapon->Fire();
 	}
 }
 
@@ -368,22 +296,86 @@ void AWBPlayerBase::CursorHitAiming()
 {
 	if (!bAutoMode)
 	{
-		//UE_LOG(LogTemp, Error, TEXT("4. CursorHitAiming Check!!!!!!!"));
-
 		if (MyPlayerController)
 		{
 			FHitResult HitResult;
-			
+
 			if (MyPlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
 			{
 				FVector TargetLocation = HitResult.Location;
 				FVector ActorLocation = GetActorLocation();
-	
-				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
-				GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation.Yaw - 90.f, 0.0f));
 
+				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
+				
+				if (!HasAuthority())
+				{
+					ServerSetOrientation(NewRotation.Yaw, false);
+				}
+				else
+				{
+					MulticastSetOrientation(NewRotation.Yaw, false);
+				}
 			}
 		}
 	}
+}
+
+void AWBPlayerBase::ServerSetOrientation_Implementation(float NewRotation, bool bOrientRotationToMovement)
+{
+	GetCharacterMovement()->bOrientRotationToMovement = bOrientRotationToMovement;
+	if (NewRotation != 999.99f)
+	{
+		GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
+	}
+
+	// 서버에서 회전 설정 후 모든 클라이언트에 동기화 요청
+	MulticastSetOrientation(NewRotation, bOrientRotationToMovement);
+}
+
+void AWBPlayerBase::MulticastSetOrientation_Implementation(float NewRotation, bool bOrientRotation)
+{
+	GetCharacterMovement()->bOrientRotationToMovement = bOrientRotation;
+	GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
+	UE_LOG(LogTemp, Warning, TEXT("NewRotation : %f"), NewRotation);
 
 }
+
+void AWBPlayerBase::AttackFire()
+{
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HasAuthority Call"));
+		ServerSetOrientation(999.99f, false);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("client Call"));
+
+	}
+
+	if (!bAutoMode)
+	{
+		if (!HasAuthority())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("client Call"));
+
+		}
+
+		CursorHitAiming();
+	}
+	else if (bAutoMode)
+	{
+		AutomaticAiming();
+	}
+
+	if (HasAuthority())
+	{
+		SpawnedWeapon->Fire();
+
+	}
+}
+
+
+
+
+
