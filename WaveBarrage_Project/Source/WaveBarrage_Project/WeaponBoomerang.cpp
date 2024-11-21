@@ -14,14 +14,14 @@ AWeaponBoomerang::AWeaponBoomerang()
 	WeaponType = EWeaponType::WeaponBoomerang;
 
 	WeaponLevel = 1;
-
+	CoolDown = 2.5f;
 }
 
 void AWeaponBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 4.0f, true);
-
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
+	UE_LOG(LogTemp, Warning, TEXT("BoomerangSpawn"));
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (MyCharacter)
 	{
@@ -39,8 +39,11 @@ void AWeaponBoomerang::Fire()
 	Super::Fire();
 	if (CurProjectileCnt == 0)
 	{
-		UKismetSystemLibrary::K2_SetTimer(this, "SpawnProjectile", SpawnDelay, true);
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_SpawnProjectile, this, &AWeaponBoomerang::SpawnProjectile, SpawnDelay, true);
 	}
+
+	
+
 }
 
 void AWeaponBoomerang::SpawnProjectile()
@@ -54,7 +57,7 @@ void AWeaponBoomerang::SpawnProjectile()
 		CurProjectileCnt++;
 		if (CurProjectileCnt >= MaxProjectileCnt)
 		{
-			UKismetSystemLibrary::K2_ClearTimer(this, "SpawnProjectile");
+			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_SpawnProjectile);
 			CurProjectileCnt = 0;
 		}
 		

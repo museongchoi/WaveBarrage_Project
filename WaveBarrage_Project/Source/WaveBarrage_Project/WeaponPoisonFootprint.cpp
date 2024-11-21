@@ -17,7 +17,7 @@ void AWeaponPoisonFootprint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown);
 }
 
 void AWeaponPoisonFootprint::Fire()

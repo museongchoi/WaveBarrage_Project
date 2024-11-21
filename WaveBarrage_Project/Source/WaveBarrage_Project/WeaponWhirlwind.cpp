@@ -15,7 +15,8 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 void AWeaponWhirlwind::BeginPlay()
 {
 	Super::BeginPlay();
-	UKismetSystemLibrary::K2_SetTimer(this, "Fire", 4.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown);
+	
 }
 
 void AWeaponWhirlwind::Fire()
