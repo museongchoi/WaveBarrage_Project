@@ -33,15 +33,25 @@ public:
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
 	AActor* GetNearPlayer(AActor* Monster);
 
+
 	UFUNCTION(BlueprintCallable, Category = "Card Selection")
 	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
+<<<<<<< HEAD
 
 	UFUNCTION()
 	void UpdateTargetPlayer();
 
+=======
+	
+>>>>>>> 1cb23938451a5aa14b540c7faa411714fab2bcab
 public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int Level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxExp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Exp;
 
 	UPROPERTY(EditAnywhere)

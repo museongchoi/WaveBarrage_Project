@@ -10,6 +10,7 @@
 AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 {
 	WeaponType = EWeaponType::WeaponPoisonFootprint;
+	WeaponLevel = 1;
 }
 
 void AWeaponPoisonFootprint::BeginPlay()

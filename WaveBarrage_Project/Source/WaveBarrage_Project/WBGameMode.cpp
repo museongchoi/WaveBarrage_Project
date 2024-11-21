@@ -227,6 +227,7 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 	}
 }
 
+<<<<<<< HEAD
 void AWBGameMode::UpdateTargetPlayer()
 {
 	for (AWBMonsterGroup* MG : MonsterGroups)
@@ -241,6 +242,9 @@ void AWBGameMode::UpdateTargetPlayer()
 		}
 	}
 }
+=======
+
+>>>>>>> 1cb23938451a5aa14b540c7faa411714fab2bcab
 
 void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass, int SpawnCount, float x, float y)
 {

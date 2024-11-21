@@ -5,16 +5,20 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "WBMonsterBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Actor.h"
 
 
 
 AProCuteLauncher::AProCuteLauncher()
 {
+	// 이 Actor가 네트워크 상에서 복제되도록 설정
+	bReplicates = true;
+
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->InitialSpeed = 2000.0f;
 	ProjectileMovementComponent->MaxSpeed = 3000.0f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
-
+	ProjectileMovementComponent->bAutoActivate = true;
 
 	LifeTime = 2.0f;
 }

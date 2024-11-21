@@ -19,7 +19,6 @@
 //#include "Engine/EngineTypes.h"
 #include "WBMonsterBase.h"
 
-
 // Sets default values
 AWBPlayerBase::AWBPlayerBase()
 {
@@ -371,11 +370,30 @@ void AWBPlayerBase::AttackFire()
 	if (HasAuthority())
 	{
 		SpawnedWeapon->Fire();
-
+		MulticastAttackFire();
+	}
+	else
+	{
+		// 클라이언트에서도 로컬에서 공격 시도 시, 메쉬 회전 즉시 반영
+		if (SpawnedWeapon)
+		{
+			ServerAttackFire();  // 서버에 공격 요청
+		}
 	}
 }
 
+void AWBPlayerBase::ServerAttackFire_Implementation()
+{
+	if (SpawnedWeapon)
+	{
+		MulticastAttackFire(); // 모든 클라이언트에 발사 동기화
+	}
+}
 
-
-
-
+void AWBPlayerBase::MulticastAttackFire_Implementation()
+{
+	if (SpawnedWeapon)
+	{
+		SpawnedWeapon->Fire();
+	}
+}
