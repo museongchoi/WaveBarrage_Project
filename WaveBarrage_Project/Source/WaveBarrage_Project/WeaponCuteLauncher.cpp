@@ -3,11 +3,12 @@
 
 #include "WeaponCuteLauncher.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "WBMonsterBase.h"
 #include "Engine/World.h"
 #include "WBPlayerState.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/Character.h"
 
 // MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts
 // ProjectileCount : 1/1/2/2/3
@@ -31,12 +32,13 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (OwnerCharacter)
+	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	if (MyCharacter)
 	{
-		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
-		if (PlayerState)
+		AWBPlayerState* MyPs = Cast<AWBPlayerState>(MyCharacter->GetPlayerState());
+		if (MyPs)
 		{
-			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
+			MaxProjectileCnt = ProjectileCount + MyPs->ProjectileCounts;
 		}
 	}
 
@@ -52,16 +54,13 @@ void AWeaponCuteLauncher::Fire()
 
 	if (ProjectileClass && ProjectileSpawnPoint)
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = Cast<APawn>(OwnerCharacter);
 
 		// Get spawn location and rotation from ProjectileSpawnPoint
 		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
 		// Spawn the projectile actor
-		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation);
 		if (SpawnedProjectile)
 		{
 			// Increment current projectile count

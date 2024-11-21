@@ -100,4 +100,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	AWBPlayerBase* OwnerCharacter;
+
 };
