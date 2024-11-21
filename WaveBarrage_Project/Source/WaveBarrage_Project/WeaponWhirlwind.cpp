@@ -10,6 +10,7 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 {
 	WeaponType = EWeaponType::WeaponWhirlwind;
 	WeaponLevel = 1;
+	CoolDown = 6.0f;
 }
 
 void AWeaponWhirlwind::BeginPlay()
@@ -22,7 +23,7 @@ void AWeaponWhirlwind::BeginPlay()
 void AWeaponWhirlwind::Fire()
 {
 	FActorSpawnParameters SpawnPara;
-	
+	UE_LOG(LogTemp, Warning, TEXT("WhirlwindFire"));
 	switch (WeaponLevel)
 	{
 		case 1:

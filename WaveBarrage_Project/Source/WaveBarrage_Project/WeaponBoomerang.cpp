@@ -21,7 +21,7 @@ void AWeaponBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
-	UE_LOG(LogTemp, Warning, TEXT("BoomerangSpawn"));
+	
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (MyCharacter)
 	{
