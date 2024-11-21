@@ -6,6 +6,13 @@
 #include "GameFramework/PlayerState.h"
 #include "WBPlayerState.generated.h"
 
+UENUM(BlueprintType)
+enum class EPlayerState : uint8
+{
+	Waiting UMETA(DisplayName = "Waiting"),
+	Ready   UMETA(DisplayName = "Ready")
+};
+
 /**
  * 
  */
@@ -55,4 +62,17 @@ public:
 	TMap<FString, int16> ItemLevel;
 
 	int32 GetDamageMultiplier() const;
+
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerState)
+	EPlayerState CurrentState = EPlayerState::Waiting;
+
+	// 상태 변경 함수
+	void SetPlayerState(EPlayerState NewState);
+
+	UFUNCTION()
+	void OnRep_PlayerState();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+
 };

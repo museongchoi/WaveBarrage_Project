@@ -24,4 +24,12 @@ public:
 	TSubclassOf<UUserWidget> widgetClass;
 
 	UUserWidget* CardSelectionWidgetInstance;
+
+
+	UFUNCTION(BlueprintCallable)
+	void CardClicked();
+
+	UFUNCTION(Server,Reliable)
+	void C2S_SetPlayerReady();
+	void C2S_SetPlayerReady_Implementation();
 };
