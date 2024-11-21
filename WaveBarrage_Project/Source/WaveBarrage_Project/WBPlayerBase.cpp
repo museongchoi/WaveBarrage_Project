@@ -86,24 +86,33 @@ void AWBPlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ConfigureInputMapping();
-	MyPlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	
-	if (MyPlayerController)
+	if (IsLocallyControlled())
 	{
-		MyPlayerController->bShowMouseCursor = true;
+		ConfigureInputMapping();
+		MyPlayerController = Cast<APlayerController>(GetController());
+
+		if (MyPlayerController)
+		{
+			MyPlayerController->bShowMouseCursor = true;
+		}
+		if (!MyPlayerController)
+		{
+			UE_LOG(LogTemp, Error, TEXT("MyPlayerController is null on %s"), *GetName());
+		}
 	}
 
 	if (WeaponPotionComponent && ChampionOnlyWeapon)
 	{
-		
-
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		SpawnedWeapon = GetWorld()->SpawnActor<AWeaponJinx>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedWeapon)
 		{
-			SpawnedWeapon->AttachToComponent(WeaponPotionComponent, FAttachmentTransformRules::KeepWorldTransform);
+			// 부착 규칙을 정의합니다.
+			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+			// 캐릭터 메쉬에 부착 (소켓 없이)
+			SpawnedWeapon->AttachToComponent(GetMesh(), AttachmentRules);
 			SpawnedWeapon->OwnerCharacter = this;
 			EquippedWeapons.Add(SpawnedWeapon);
 		}
@@ -121,10 +130,9 @@ void AWBPlayerBase::BeginPlay()
 		CursorHitAiming();
 	}
 
-	if (HasAuthority())
-	{
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 3.0f, true);
-	}
+
+	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWBPlayerBase::AttackFire, 3.0f, true);
+
 }
 
 // Called every frame
@@ -285,9 +293,7 @@ void AWBPlayerBase::AutomaticAiming()
 		if (ClosestEnemy)
 		{
 			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
-			//GetMesh()->SetWorldRotation(FRotator(0.0f, TargetRotation.Yaw - 90.f, 0.0f));
-			// 멀티캐스트로 모든 클라이언트에 회전 정보를 동기화
-			//ServerSetOrientation(TargetRotation.Yaw, false);
+
 			if (!HasAuthority())
 			{
 				ServerSetOrientation(TargetRotation.Yaw, false);
@@ -314,16 +320,14 @@ void AWBPlayerBase::CursorHitAiming()
 				FVector TargetLocation = HitResult.Location;
 				FVector ActorLocation = GetActorLocation();
 
+				UE_LOG(LogTemp, Warning, TEXT("TargetLocation : %s"), *TargetLocation.ToString())
+
 				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
 
-
-				if (!HasAuthority())
+				
+				if (IsLocallyControlled())
 				{
 					ServerSetOrientation(NewRotation.Yaw, false);
-				}
-				else if (GetRemoteRole() == ROLE_AutonomousProxy)
-				{
-					MulticastSetOrientation(NewRotation.Yaw, false);
 				}
 			}
 		}
@@ -332,47 +336,48 @@ void AWBPlayerBase::CursorHitAiming()
 
 void AWBPlayerBase::ServerSetOrientation_Implementation(float NewRotation, bool bOrientRotationToMovement)
 {
-	GetCharacterMovement()->bOrientRotationToMovement = bOrientRotationToMovement;
-	if (NewRotation != 999.99f)
-	{
-		GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
-		UE_LOG(LogTemp, Warning, TEXT("ServerSetOrientation : %f"), NewRotation);
-
-	}
-
-
-	// 서버에서 회전 설정 후 모든 클라이언트에 동기화 요청
+	// 서버에서 클라이언트로 회전 정보 전송
 	MulticastSetOrientation(NewRotation, bOrientRotationToMovement);
+
 }
 
 void AWBPlayerBase::MulticastSetOrientation_Implementation(float NewRotation, bool bOrientRotation)
 {
-	
+
 	GetCharacterMovement()->bOrientRotationToMovement = bOrientRotation;
-	GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
-	UE_LOG(LogTemp, Warning, TEXT("MulticastSetOrientation NewRotation : %f"), NewRotation);
+	//GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.0f, 0.0f));
+
+	FRotator NewMeshRotation(0.0f, NewRotation - 90.0f, 0.0f);
+	GetMesh()->SetWorldRotation(NewMeshRotation);
+
+	// 무기의 회전도 캐릭터 메쉬의 회전과 일치시킴
+	if (SpawnedWeapon && SpawnedWeapon->ProjectileSpawnPoint)
+	{
+		FRotator SpawnPointRotation = FRotator(0.0f, NewRotation, 0.0f);
+		SpawnedWeapon->ProjectileSpawnPoint->SetWorldRotation(SpawnPointRotation);
+	}
 }
 
 void AWBPlayerBase::AttackFire()
 {
+	if (IsLocallyControlled())
+	{
+		if (!bAutoMode)
+		{
+			CursorHitAiming();
+		}
+		else if (bAutoMode)
+		{
+			AutomaticAiming();
+		}
+	}
+
 	if (HasAuthority())
 	{
-		ServerSetOrientation(999.99f, false);
+		// 공격 로직 및 서버 측 처리를 여기서 수행
+		if (SpawnedWeapon)
+		{
+			SpawnedWeapon->Fire();
+		}
 	}
-
-	if (!bAutoMode)
-	{
-		CursorHitAiming();
-	}
-	else if (bAutoMode)
-	{
-		AutomaticAiming();
-	}
-
-	// 서버와 클라이언트 모두에서 발사
-	if (SpawnedWeapon)
-	{
-		SpawnedWeapon->Fire();
-	}
-
 }

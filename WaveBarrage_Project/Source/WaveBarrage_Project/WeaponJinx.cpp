@@ -10,9 +10,20 @@
 
 AWeaponJinx::AWeaponJinx()
 {
+	// 루트 컴포넌트를 생성
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
 	// 투사체 스폰 포인트 컴포넌트
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
-	RootComponent = ProjectileSpawnPoint;
+	ProjectileSpawnPoint->SetupAttachment(RootComponent);
+	//RootComponent = ProjectileSpawnPoint;
+
+	// 투사체 스폰 포인트의 로컬 위치와 회전 설정
+	//ProjectileSpawnPoint->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f)); // 캐릭터 앞쪽으로 100 단위 이동
+	//ProjectileSpawnPoint->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f)); // 필요에 따라 회전 조정
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
 
 	WeaponType = EWeaponType::WeaponJinx;
 	WeaponLevel = 1;
@@ -20,6 +31,7 @@ AWeaponJinx::AWeaponJinx()
 	ProjectileCount = 3;
 	MaxProjectileCnt = 0;
 	CurProjectileCnt = 0;
+
 }
 
 void AWeaponJinx::BeginPlay()
@@ -31,6 +43,18 @@ void AWeaponJinx::BeginPlay()
 		OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
 
 	}
+
+
+	if (OwnerCharacter && ProjectileSpawnPoint)
+	{
+		// 부착 규칙을 정의합니다.
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+		// `ProjectileSpawnPoint`를 캐릭터 메쉬에 부착합니다.
+		ProjectileSpawnPoint->AttachToComponent(OwnerCharacter->GetMesh(), AttachmentRules);
+	}
+	// 무기 회전이 복제되는지 확인하기 위해 로그 출력
+	UE_LOG(LogTemp, Warning, TEXT("Weapon Rotation on %s: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"), *GetActorRotation().ToString());
 }
 
 void AWeaponJinx::Fire()
@@ -64,9 +88,12 @@ void AWeaponJinx::SpawnProjectile()
 		SpawnParams.Instigator = Cast<APawn>(OwnerCharacter);
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		// Get spawn location and rotation from ProjectileSpawnPoint
 		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+		//FRotator CharacterMeshRotation = OwnerCharacter->GetMesh()->GetComponentRotation();
+		//FRotator SpawnRotation = CharacterMeshRotation;
+		//SpawnRotation.Yaw += 90.0f;
 
 		// Spawn the projectile actor
 		AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
@@ -78,6 +105,9 @@ void AWeaponJinx::SpawnProjectile()
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
 
+			// 로그 추가
+			UE_LOG(LogTemp, Warning, TEXT("Weapon Rotation on %s: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"), *GetActorRotation().ToString());
+			UE_LOG(LogTemp, Warning, TEXT("ProjectileSpawnPoint Rotation: %s"), *ProjectileSpawnPoint->GetComponentRotation().ToString());
 		}
 	}
 
