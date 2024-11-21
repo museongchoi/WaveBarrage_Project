@@ -305,25 +305,22 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 		break;
 	case ESpawnType::Circle:
 		{
-			for (AWBPlayerBase* Player : Players)
+			if (IsValid(Players[0]))
 			{
-				if (IsValid(Player))
-				{
 
-					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Player->GetActorLocation(), FRotator::ZeroRotator, SpawnPara);
-					if (Spawned)
+				AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Players[0]->GetActorLocation(), FRotator::ZeroRotator, SpawnPara);
+				if (Spawned)
+				{
+					AWBGameState* GS = Cast<AWBGameState>(GameState);
+					if (IsValid(GS))
 					{
-						AWBGameState* GS = Cast<AWBGameState>(GameState);
-						if (IsValid(GS))
-						{
-							GS->S2C_MGSetTargetPlayer(Spawned, Player);
-						}
-						Spawned->TargetPlayer = Player;
-						Spawned->MonsterClass = MonsterClass;
-						Spawned->SpawnCount = SpawnCount;
-						MonsterGroups.Emplace(Spawned);
-						Spawned->SpawnMonster();
+						GS->S2C_MGSetTargetPlayer(Spawned, Players[0]);
 					}
+					Spawned->TargetPlayer = Players[0];
+					Spawned->MonsterClass = MonsterClass;
+					Spawned->SpawnCount = SpawnCount;
+					MonsterGroups.Emplace(Spawned);
+					Spawned->SpawnCirclePositionMonster();
 				}
 			}
 		}

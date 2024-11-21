@@ -37,17 +37,6 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 			SetActorLocation(Monsters[0]->GetActorLocation());
 		}
 	}
-	else if(Monsters.Num() <= 0)
-	{
-		// 나중에 여유되면 델리게이트로 변경
-		AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		if (IsValid(GM))
-		{
-			GM->MonsterGroups.Remove(this);
-		}
-		Destroy();
-		//FVector(FMath::RandRange(1, 500), FMath::RandRange(1, 500),0)
-	}
 }
 
 void AWBMonsterGroup::SpawnMonster()
@@ -79,7 +68,7 @@ void AWBMonsterGroup::SpawnRandomPositionMonster()
 	{
 		for (int i = 0; i < SpawnCount; i++)
 		{
-			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(1, 1500), FMath::RandRange(1, 1500), 0), GetActorRotation(), SpawnPara);
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(1, 1000), FMath::RandRange(1, 1000), 0), GetActorRotation(), SpawnPara);
 			if (IsValid(Spawned))
 			{
 				Spawned->SetTargetPlayer(TargetPlayer);
@@ -87,6 +76,45 @@ void AWBMonsterGroup::SpawnRandomPositionMonster()
 			}
 		}
 		SpawnEnd = true;
+	}
+}
+
+void AWBMonsterGroup::SpawnCirclePositionMonster()
+{
+	FActorSpawnParameters SpawnPara;
+	SpawnPara.Owner = this;
+	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	if (MonsterClass && HasAuthority())
+	{
+		for (int i = 0; i < SpawnCount; i++)
+		{
+			float Angle = i * (2 * PI / SpawnCount);
+			float X = 1000 * FMath::Cos(Angle);
+			float Y = 1000 * FMath::Sin(Angle);
+			float Z = 0;
+
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(X,Y,0), GetActorRotation(), SpawnPara);
+			if (IsValid(Spawned))
+			{
+				Spawned->SetTargetPlayer(TargetPlayer);
+				Monsters.Emplace(Spawned);
+			}
+		}
+		SpawnEnd = true;
+	}
+}
+
+void AWBMonsterGroup::RemoveMonster(AWBMonsterBase* Monster)
+{
+	Monsters.Remove(Monster);
+	if (Monsters.Num() <= 0)
+	{
+		AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (IsValid(GM))
+		{
+			GM->MonsterGroups.Remove(this);
+		}
+		Destroy();
 	}
 }
 

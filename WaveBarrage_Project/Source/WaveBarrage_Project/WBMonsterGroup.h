@@ -26,6 +26,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void SpawnMonster();
 	void SpawnRandomPositionMonster();
+	void SpawnCirclePositionMonster();
+	void RemoveMonster(AWBMonsterBase* Monster);
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> Root;
@@ -43,5 +45,5 @@ public:
 	int SpawnCount;
 
 	bool SpawnEnd = false;
-	
+	//bool 
 };
