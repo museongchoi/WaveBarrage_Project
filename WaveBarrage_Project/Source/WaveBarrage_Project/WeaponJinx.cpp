@@ -26,6 +26,11 @@ void AWeaponJinx::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (OwnerCharacter == nullptr && GetOwner())
+	{
+		OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
+
+	}
 }
 
 void AWeaponJinx::Fire()
@@ -39,15 +44,14 @@ void AWeaponJinx::Fire()
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
 		if (PlayerState)
 		{
-			//UE_LOG(LogTemp, Error, TEXT("5. AWeaponJinx Fire Check!!!!!!!"));
 
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
-			UE_LOG(LogTemp, Error, TEXT("%d, %d, %d"), MaxProjectileCnt, ProjectileCount, PlayerState->ProjectileCounts);
+			
 		}
 	}
 
 	// Set timer to repeatedly call SpawnProjectile
-	UKismetSystemLibrary::K2_SetTimer(this, TEXT("SpawnProjectile"), 0.02f, true);
+	UKismetSystemLibrary::K2_SetTimer(this, TEXT("SpawnProjectile"), 0.1f, true);
 }
 
 void AWeaponJinx::SpawnProjectile()
@@ -70,7 +74,6 @@ void AWeaponJinx::SpawnProjectile()
 		{
 			// Increment current projectile count
 			CurProjectileCnt++;
-			UE_LOG(LogTemp, Error, TEXT("%d"), CurProjectileCnt);
 			int32 FinalDamage = CalculateFinalDamage();
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
@@ -81,7 +84,6 @@ void AWeaponJinx::SpawnProjectile()
 	// Check if the current projectile count has reached the max
 	if (CurProjectileCnt >= MaxProjectileCnt)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%d"), MaxProjectileCnt);
 
 		// Clear the timer to stop spawning projectiles
 		UKismetSystemLibrary::K2_ClearTimer(this, TEXT("SpawnProjectile"));
@@ -89,8 +91,18 @@ void AWeaponJinx::SpawnProjectile()
 		// Reset current projectile count
 		CurProjectileCnt = 0;
 
-		OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-		OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
+		if(HasAuthority())
+		{
+			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
+		}
+		
+
+		// 서버에서 플레이어의 원래 방향으로 회전 설정
+		if (AWBPlayerBase* PlayerBase = Cast<AWBPlayerBase>(OwnerCharacter))
+		{
+			PlayerBase->ServerSetOrientation(OwnerCharacter->GetActorRotation().Yaw, true);
+		}
 
 	}
 }

@@ -25,16 +25,9 @@ public:
 
 	virtual void BeginPlay() override;
 
-
-
 	void AddExp(int Value);
 
-
-	UFUNCTION(BlueprintCallable)
 	void LevelUp();
-
-	//UFUNCTION(NetMulticast, Reliable)
-	//void MulticastLevelUp();
 
 	UFUNCTION()
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
@@ -44,13 +37,8 @@ public:
 	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
 
 public:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int Level;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxExp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Exp;
 
 	UPROPERTY(EditAnywhere)
