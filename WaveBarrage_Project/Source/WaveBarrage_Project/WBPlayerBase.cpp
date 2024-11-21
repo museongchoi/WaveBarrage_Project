@@ -18,6 +18,8 @@
 #include "Kismet/KismetMathLibrary.h"
 //#include "Engine/EngineTypes.h"
 #include "WBMonsterBase.h"
+#include "GameFramework/Character.h"
+
 
 // Sets default values
 AWBPlayerBase::AWBPlayerBase()
@@ -283,9 +285,17 @@ void AWBPlayerBase::AutomaticAiming()
 		if (ClosestEnemy)
 		{
 			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
-			GetMesh()->SetWorldRotation(FRotator(0.0f, TargetRotation.Yaw - 90.f, 0.0f));
+			//GetMesh()->SetWorldRotation(FRotator(0.0f, TargetRotation.Yaw - 90.f, 0.0f));
 			// 멀티캐스트로 모든 클라이언트에 회전 정보를 동기화
-			ServerSetOrientation(TargetRotation.Yaw, false);
+			//ServerSetOrientation(TargetRotation.Yaw, false);
+			if (!HasAuthority())
+			{
+				ServerSetOrientation(TargetRotation.Yaw, false);
+			}
+			else
+			{
+				MulticastSetOrientation(TargetRotation.Yaw, false);
+			}
 		}
 	}
 }
@@ -305,12 +315,13 @@ void AWBPlayerBase::CursorHitAiming()
 				FVector ActorLocation = GetActorLocation();
 
 				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
-				
+
+
 				if (!HasAuthority())
 				{
 					ServerSetOrientation(NewRotation.Yaw, false);
 				}
-				else
+				else if (GetRemoteRole() == ROLE_AutonomousProxy)
 				{
 					MulticastSetOrientation(NewRotation.Yaw, false);
 				}
@@ -325,7 +336,10 @@ void AWBPlayerBase::ServerSetOrientation_Implementation(float NewRotation, bool 
 	if (NewRotation != 999.99f)
 	{
 		GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
+		UE_LOG(LogTemp, Warning, TEXT("ServerSetOrientation : %f"), NewRotation);
+
 	}
+
 
 	// 서버에서 회전 설정 후 모든 클라이언트에 동기화 요청
 	MulticastSetOrientation(NewRotation, bOrientRotationToMovement);
@@ -333,33 +347,21 @@ void AWBPlayerBase::ServerSetOrientation_Implementation(float NewRotation, bool 
 
 void AWBPlayerBase::MulticastSetOrientation_Implementation(float NewRotation, bool bOrientRotation)
 {
+	
 	GetCharacterMovement()->bOrientRotationToMovement = bOrientRotation;
 	GetMesh()->SetWorldRotation(FRotator(0.0f, NewRotation - 90.f, 0.0f));
-	UE_LOG(LogTemp, Warning, TEXT("NewRotation : %f"), NewRotation);
-
+	UE_LOG(LogTemp, Warning, TEXT("MulticastSetOrientation NewRotation : %f"), NewRotation);
 }
 
 void AWBPlayerBase::AttackFire()
 {
 	if (HasAuthority())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HasAuthority Call"));
 		ServerSetOrientation(999.99f, false);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("client Call"));
-
 	}
 
 	if (!bAutoMode)
 	{
-		if (!HasAuthority())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("client Call"));
-
-		}
-
 		CursorHitAiming();
 	}
 	else if (bAutoMode)
@@ -367,33 +369,10 @@ void AWBPlayerBase::AttackFire()
 		AutomaticAiming();
 	}
 
-	if (HasAuthority())
-	{
-		SpawnedWeapon->Fire();
-		MulticastAttackFire();
-	}
-	else
-	{
-		// 클라이언트에서도 로컬에서 공격 시도 시, 메쉬 회전 즉시 반영
-		if (SpawnedWeapon)
-		{
-			ServerAttackFire();  // 서버에 공격 요청
-		}
-	}
-}
-
-void AWBPlayerBase::ServerAttackFire_Implementation()
-{
-	if (SpawnedWeapon)
-	{
-		MulticastAttackFire(); // 모든 클라이언트에 발사 동기화
-	}
-}
-
-void AWBPlayerBase::MulticastAttackFire_Implementation()
-{
+	// 서버와 클라이언트 모두에서 발사
 	if (SpawnedWeapon)
 	{
 		SpawnedWeapon->Fire();
 	}
+
 }

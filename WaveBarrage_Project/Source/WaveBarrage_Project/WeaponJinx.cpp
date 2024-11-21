@@ -95,6 +95,7 @@ void AWeaponJinx::SpawnProjectile()
 		{
 			OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 			OwnerCharacter->GetMesh()->SetWorldRotation(FRotator(0.0f, OwnerCharacter->GetActorRotation().Yaw - 90.0f, 0.0f));
+			OwnerCharacter->ServerSetOrientation(OwnerCharacter->GetActorRotation().Yaw, true);
 		}
 		
 
