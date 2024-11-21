@@ -13,7 +13,8 @@
 
 AWBGameMode::AWBGameMode()
 {
-
+	Level = 1;
+	MaxExp = 10;
 }
 
 void AWBGameMode::BeginPlay()
@@ -252,27 +253,23 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 	{
 	case ESpawnType::Normal:
 		{
-			for (AWBPlayerBase* Player : Players)
+			if (IsValid(Players[0]))
 			{
-				if (IsValid(Player))
+				for (USceneComponent* Comp : Players[0]->MonsterSpawnPositions)
 				{
-					for (USceneComponent* Comp : Player->MonsterSpawnPositions)
+					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), FRotator::ZeroRotator, SpawnPara);
+					if (Spawned)
 					{
-						AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Comp->GetComponentLocation(), FRotator::ZeroRotator, SpawnPara);
-						if (Spawned)
+						AWBGameState* GS = Cast<AWBGameState>(GameState);
+						if (IsValid(GS))
 						{
-							AWBGameState* GS = Cast<AWBGameState>(GameState);
-							if (IsValid(GS))
-							{
-								GS->S2C_MGSetTargetPlayer(Spawned, Player);
-							}
-							Spawned->TargetPlayer = Player;
-							Spawned->TargetPlayer = Player;
-							Spawned->MonsterClass = MonsterClass;
-							Spawned->SpawnCount = SpawnCount;
-							MonsterGroups.Emplace(Spawned);
-							Spawned->SpawnRandomPositionMonster();
+							GS->S2C_MGSetTargetPlayer(Spawned, Players[0]);
 						}
+						Spawned->TargetPlayer = Players[0];
+						Spawned->MonsterClass = MonsterClass;
+						Spawned->SpawnCount = SpawnCount;
+						MonsterGroups.Emplace(Spawned);
+						Spawned->SpawnRandomPositionMonster();
 					}
 				}
 			}
@@ -280,25 +277,22 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 		break;
 	case ESpawnType::Minion:
 		{
-			for (AWBPlayerBase* Player : Players)
+			if (IsValid(Players[0]))
 			{
-				if (IsValid(Player))
-				{
 
-					AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Player->GetActorLocation() + FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
-					if (Spawned)
+				AWBMonsterGroup* Spawned = GetWorld()->SpawnActor<AWBMonsterGroup>(AWBMonsterGroup::StaticClass(), Players[0]->GetActorLocation() + FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+				if (Spawned)
+				{
+					AWBGameState* GS = Cast<AWBGameState>(GameState);
+					if (IsValid(GS))
 					{
-						AWBGameState* GS = Cast<AWBGameState>(GameState);
-						if (IsValid(GS))
-						{
-							GS->S2C_MGSetTargetPlayer(Spawned, Player);
-						}
-						Spawned->TargetPlayer = Player;
-						Spawned->MonsterClass = MonsterClass;
-						Spawned->SpawnCount = SpawnCount;
-						MonsterGroups.Emplace(Spawned);
-						Spawned->SpawnMonster();
+						GS->S2C_MGSetTargetPlayer(Spawned, Players[0]);
 					}
+					Spawned->TargetPlayer = Players[0];
+					Spawned->MonsterClass = MonsterClass;
+					Spawned->SpawnCount = SpawnCount;
+					MonsterGroups.Emplace(Spawned);
+					Spawned->SpawnMonster();
 				}
 			}
 		}

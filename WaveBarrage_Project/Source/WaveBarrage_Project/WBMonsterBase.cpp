@@ -21,6 +21,7 @@ AWBMonsterBase::AWBMonsterBase()
 	SphereComp->GetBodyInstance()->bLockZTranslation = true;
 	SphereComp->GetBodyInstance()->bLockXRotation = true;
 	SphereComp->GetBodyInstance()->bLockYRotation = true;
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &AWBMonsterBase::OnSphereOverlapBegin);
 
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComp"));
 	SkeletalMeshComp->SetupAttachment(RootComponent);
@@ -84,6 +85,17 @@ void AWBMonsterBase::SetTargetPlayer(AActor* Target)
 	if (IsValid(FSMComp))
 	{
 		FSMComp->TargetPlayer = Target;
+	}
+}
+
+void AWBMonsterBase::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (HasAuthority())
+	{
+		if (OtherActor->ActorHasTag(TEXT("Player")))
+		{
+
+		}
 	}
 }
 
