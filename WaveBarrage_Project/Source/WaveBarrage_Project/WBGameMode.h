@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Card Selection")
 	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
 
+	UFUNCTION()
+	void UpdateTargetPlayer();
+
 public:
 	int Level;
 	int MaxExp;

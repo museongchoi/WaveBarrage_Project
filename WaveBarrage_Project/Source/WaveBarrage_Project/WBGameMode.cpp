@@ -20,6 +20,8 @@ void AWBGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FTimerHandle THandle;
+	GetWorld()->GetTimerManager().SetTimer(THandle, this, &AWBGameMode::UpdateTargetPlayer, 2.0f, true);
 	//if (LobbyWidgetClass)
 	//{
 	//	// 로비 위젯 생성 및 화면에 추가
@@ -49,6 +51,7 @@ void AWBGameMode::BeginPlay()
 void AWBGameMode::AddExp(int Value)
 {
 	Exp += Value;
+	UE_LOG(LogTemp, Warning, TEXT("EXP : %i"), Exp);
 	if (MaxExp <= Exp)
 	{
 		Exp = 0;
@@ -220,6 +223,21 @@ void AWBGameMode::ApplyCardEffect(AWBPlayerController* PlayerController, int32 C
 
 			// 패시브 레벨 업데이트
 			PlayerState->ItemLevel.Add(FString::FromInt(CardIndex), 1); // 패시브 레벨 추가 (기본 레벨 1)
+		}
+	}
+}
+
+void AWBGameMode::UpdateTargetPlayer()
+{
+	for (AWBMonsterGroup* MG : MonsterGroups)
+	{
+		AWBGameState* GS = Cast<AWBGameState>(GameState);
+		if (IsValid(GS) && IsValid(MG))
+		{
+			AActor* NearPlayer = GetNearPlayer(MG);
+			MG->TargetPlayer = NearPlayer;
+			MG->UpdateTargetPlayer();
+			GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
 		}
 	}
 }
