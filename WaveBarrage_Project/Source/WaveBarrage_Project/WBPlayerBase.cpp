@@ -19,6 +19,7 @@
 //#include "Engine/EngineTypes.h"
 #include "WBMonsterBase.h"
 #include "GameFramework/Character.h"
+#include "Net/UnrealNetwork.h"
 
 
 // Sets default values
@@ -147,6 +148,8 @@ void AWBPlayerBase::Tick(float DeltaTime)
 void AWBPlayerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AWBPlayerBase,EquippedWeapons);
 }
 
 // Called to bind functionality to input

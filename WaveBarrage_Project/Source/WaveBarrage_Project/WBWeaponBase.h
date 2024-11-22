@@ -56,29 +56,29 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon",Replicated)
 	EWeaponType WeaponType; // 무기 타입을 나타내는 변수
 
 public:
 
 	// 무기 레벨
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Replicated)
 	int32 WeaponLevel;
 
 	// 데미지
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 Damage;
 
 	// 스킬 가속
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 SkillAcceleration;
 
 	// 스킬 기본 속도
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float CoolDown;
 
 	// 크리티컬 확율
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 CriticalChance;
 
 
@@ -88,15 +88,15 @@ public:
 	TSubclassOf<AActor> ProjectileClass;
 
 	// 발사체 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 ProjectileCount;
 
 	// 현재 발사체 개수 (Default : 0)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 CurProjectileCnt;
 
 	// 최대 발사체 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 MaxProjectileCnt;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

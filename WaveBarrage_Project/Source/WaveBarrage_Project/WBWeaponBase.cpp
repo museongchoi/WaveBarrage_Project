@@ -109,5 +109,6 @@ void AWBWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AWBWeaponBase, WeaponLevel);
+	DOREPLIFETIME(AWBWeaponBase, WeaponType);
 }
 

@@ -33,34 +33,33 @@ void AWBPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+
 }
 
 void AWBPlayerController::CardClicked()
 {
-    C2S_SetPlayerReady();
+	C2S_SetPlayerReady();
 }
 
 void AWBPlayerController::C2S_SetPlayerReady_Implementation()
 {
-    AWBPlayerState* MyPlayerState = GetPlayerState<AWBPlayerState>();
-    if (MyPlayerState)
-    {
-        MyPlayerState->SetPlayerState(EPlayerState::Ready);
-    }
+	AWBPlayerState* MyPlayerState = GetPlayerState<AWBPlayerState>();
+	if (MyPlayerState)
+	{
+		MyPlayerState->SetPlayerState(EPlayerState::Ready);
+	}
 
-    AWBGameState* MyGameState = GetWorld()->GetGameState<AWBGameState>();
-    if (MyGameState)
-    {
-        MyGameState->CheckAllPlayersReady();
-    }
+	AWBGameState* MyGameState = GetWorld()->GetGameState<AWBGameState>();
+	if (MyGameState)
+	{
+		MyGameState->CheckAllPlayersReady();
+	}
 }
 
 void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* PlayerController, int32 CardIndex)
 {
 	if (PlayerController->IsLocalPlayerController())
 	{
-		
 		AWBPlayerBase* MyPlayer = Cast<AWBPlayerBase>(PlayerController->GetCharacter());
 		if (MyPlayer)
 		{
@@ -77,7 +76,7 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 				FString WeaponTypeString;
 				switch (static_cast<EWeaponType>(CardIndex))
 				{
-					
+
 				case EWeaponType::WeaponJinx:
 					WeaponTypeString = "Jinx";
 					break;
@@ -98,76 +97,76 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 				}
 				// 무기 레벨 가져오기
 				int16* CurrentLevelPtr = MyPlayerState->ItemLevel.Find(WeaponTypeString);
-				int WeaponLevel = (CurrentLevelPtr) ? FMath::Min((*CurrentLevelPtr) + 1, 5) : 1;
+				int MyWeaponLevel = (CurrentLevelPtr) ? FMath::Min((*CurrentLevelPtr) + 1, 5) : 1;
 
 				// 데이터 테이블에서 해당 무기와 레벨의 능력치를 가져오기
-				
-					
-					FName RowName = FName(*FString::Printf(TEXT("%s_%d"), *WeaponTypeString, WeaponLevel));
-					FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
-					if (WeaponData)
+				FName RowName = FName(*FString::Printf(TEXT("%s_%d"), *WeaponTypeString, MyWeaponLevel));
+				FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
+				if (WeaponData)
+				{
+					// 로그 : 무기 업데이트 전 데미지 출력
+/*					for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
 					{
-						// 로그 : 무기 업데이트 전 데미지 출력
-	/*					for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
+						if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
 						{
-							if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
-							{
-								UE_LOG(LogTemp, Warning, TEXT(" CurWeapon: %s"), *WeaponTypeString);
-							}
-						}*/
-
-						bool bWeaponExists = false;
-
-						// 무기 업데이트
-						for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
-						{
-							if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
-							{
-								Weapon->WeaponLevel = WeaponData->WeaponLevel;
-								Weapon->Damage = WeaponData->Damage;
-								Weapon->SkillAcceleration = WeaponData->SkillAcceleration;
-								Weapon->CoolDown = WeaponData->CoolDown;
-								Weapon->CriticalChance = WeaponData->CriticalChance;
-								Weapon->ProjectileCount = WeaponData->ProjectileCount;
-								Weapon->ProjectileClass = WeaponData->ProjectileClass;
-
-		
-								// 무기 업데이트 후 데미지 출력
-								UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Level: %d"), *WeaponTypeString, Weapon->WeaponLevel);
-
-								bWeaponExists = true;
-							
-								break;
-							}
+							UE_LOG(LogTemp, Warning, TEXT(" CurWeapon: %s"), *WeaponTypeString);
 						}
-						
-						UE_LOG(LogTemp, Warning, TEXT("bWeaponExists: %s"), bWeaponExists ? TEXT("true") : TEXT("false"));
-						//if (!bWeaponExists)
-						//{
-						//	UE_LOG(LogTemp, Warning, TEXT("ReqWeaponCreate"));
-						//	C2S_SpawnWeapon(CardIndex, MyPlayer);
-						//}
-						if (!bWeaponExists)
+					}*/
+
+					bool bWeaponExists = false;
+
+
+					// 무기 업데이트
+					for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
+					{
+						if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
 						{
-							//// 새로운 무기 생성
-							//FActorSpawnParameters SpawnParams;
-							//SpawnParams.Owner = MyPlayer;
-							//AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(MyPlayer->WeaponAttachBoxes[CardIndex], MyPlayer->GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-							//if (NewWeapon)
-							//{
-							//	NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-							//	NewWeapon->OwnerCharacter = MyPlayer;
-							//	MyPlayer->EquippedWeapons.Add(NewWeapon);
-							//}
-							C2S_SpawnWeapon(CardIndex, MyPlayer);
-							
+							Weapon->WeaponLevel = WeaponData->WeaponLevel;
+							Weapon->Damage = WeaponData->Damage;
+							Weapon->SkillAcceleration = WeaponData->SkillAcceleration;
+							Weapon->CoolDown = WeaponData->CoolDown;
+							Weapon->CriticalChance = WeaponData->CriticalChance;
+							Weapon->ProjectileCount = WeaponData->ProjectileCount;
+							Weapon->ProjectileClass = WeaponData->ProjectileClass;
+
+
+							// 무기 업데이트 후 데미지 출력
+							UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Level: %d"), *WeaponTypeString, Weapon->WeaponLevel);
+
+							bWeaponExists = true;
+
+							break;
 						}
-
-
-						// 무기 레벨 업데이트
-						MyPlayerState->ItemLevel.Add(WeaponTypeString, WeaponLevel);
 					}
-				
+					UE_LOG(LogTemp, Warning, TEXT("bWeaponExists value: %s"), bWeaponExists ? TEXT("true") : TEXT("false"));
+
+					//if (!bWeaponExists)
+					//{
+					//	UE_LOG(LogTemp, Warning, TEXT("ReqWeaponCreate"));
+					//	C2S_SpawnWeapon(CardIndex, MyPlayer);
+					//}
+					if (!bWeaponExists)
+					{
+						//// 새로운 무기 생성
+						//FActorSpawnParameters SpawnParams;
+						//SpawnParams.Owner = MyPlayer;
+						//AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(MyPlayer->WeaponAttachBoxes[CardIndex], MyPlayer->GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+						//if (NewWeapon)
+						//{
+						//	NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
+						//	NewWeapon->OwnerCharacter = MyPlayer;
+						//	MyPlayer->EquippedWeapons.Add(NewWeapon);
+						//}
+						
+						C2S_SpawnWeapon(CardIndex, MyPlayer);
+						
+					}
+
+
+					// 무기 레벨 업데이트
+					MyPlayerState->ItemLevel.Add(WeaponTypeString, MyWeaponLevel);
+				}
+
 			}
 			// 패시브 카드 처리 (5-9)
 			else if (CardIndex >= 5 && CardIndex <= 9)
@@ -214,7 +213,7 @@ void AWBPlayerController::C2S_ApplyCardEffect_Implementation(AWBPlayerController
 	}
 }
 
-void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex,AWBPlayerBase* MyPlayer)
+void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPlayerBase* MyPlayer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("WeaponCreateStart"));
 	if (HasAuthority()) // 서버에서만 실행
