@@ -7,6 +7,8 @@
 #include "WBPlayerBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "ProCuteLauncher.h"
+#include "Kismet/GameplayStatics.h"
+#include "WBPlayerController.h"
 
 AWeaponJinx::AWeaponJinx()
 {
@@ -65,11 +67,9 @@ void AWeaponJinx::Fire()
 	// Get projectile count from player state and update max projectile count
 	if (HasAuthority() && OwnerCharacter)
 	{
-
 		AWBPlayerState* PlayerState = Cast<AWBPlayerState>(OwnerCharacter->GetPlayerState());
 		if (PlayerState)
 		{
-
 			MaxProjectileCnt = ProjectileCount + PlayerState->ProjectileCounts;
 			
 		}
@@ -103,6 +103,7 @@ void AWeaponJinx::SpawnProjectile()
 			// Increment current projectile count
 			CurProjectileCnt++;
 			int32 FinalDamage = CalculateFinalDamage();
+			CanCritialAttack(FinalDamage);
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
 
@@ -138,3 +139,5 @@ void AWeaponJinx::SpawnProjectile()
 
 	}
 }
+
+

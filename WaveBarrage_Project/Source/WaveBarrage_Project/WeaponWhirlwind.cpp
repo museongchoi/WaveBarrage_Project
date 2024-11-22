@@ -4,7 +4,6 @@
 #include "WeaponWhirlwind.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProWhirlwindBlade.h"
-#include "Kismet/GameplayStatics.h"
 
 AWeaponWhirlwind::AWeaponWhirlwind()
 {
@@ -100,11 +99,9 @@ void AWeaponWhirlwind::BeginPlay()
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown, true);
 		UE_LOG(LogTemp, Warning, TEXT("Spawned on %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"));
 	}
-	else
-	{
-		ACharacter* MyCharacter = UGameplayStatics::GetPlayerController(GetWorld(),0)->GetCharacter();
-		UE_LOG(LogTemp, Warning, TEXT("Spawned on %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"));
-	}
+
+	CalculateAttackStatus();
+
 }
 
 void AWeaponWhirlwind::Fire()

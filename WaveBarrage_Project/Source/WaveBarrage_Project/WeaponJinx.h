@@ -23,4 +23,5 @@ public:
 	virtual void Fire() override;
 
 	virtual void SpawnProjectile() override;
+
 };

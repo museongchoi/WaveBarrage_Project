@@ -81,8 +81,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 CriticalChance;
 
-
-
 	// πﬂªÁ√º
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AActor> ProjectileClass;
@@ -105,4 +103,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	AWBPlayerBase* OwnerCharacter;
 
+	UFUNCTION()
+	virtual void CalculateAttackStatus();
+
+	UFUNCTION()
+	int32 CanCritialAttack(int32 WeaponBaseDamage);
 };

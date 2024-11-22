@@ -52,7 +52,7 @@ void AWeaponCuteLauncher::BeginPlay()
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
 	}
 
-
+	CalculateAttackStatus();
 }
 
 void AWeaponCuteLauncher::Fire()
@@ -73,6 +73,7 @@ void AWeaponCuteLauncher::Fire()
 			// Increment current projectile count
 			CurProjectileCnt++;
 			int32 FinalDamage = CalculateFinalDamage();
+			CanCritialAttack(FinalDamage);
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
 			//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);

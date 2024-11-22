@@ -9,6 +9,8 @@
 #include "WBProjectileBase.h"
 #include "Net/UnrealNetwork.h"
 #include "WBPlayerState.h"
+#include "Kismet/GameplayStatics.h"
+#include "WBPlayerController.h"
 
 // Sets default values
 AWBWeaponBase::AWBWeaponBase()
@@ -111,4 +113,42 @@ void AWBWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(AWBWeaponBase, WeaponLevel);
 	DOREPLIFETIME(AWBWeaponBase, WeaponType);
 }
+
+void AWBWeaponBase::CalculateAttackStatus()
+{
+	AWBPlayerController* MyPlayerController = Cast<AWBPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	if (MyPlayerController->IsLocalPlayerController())
+	{
+		AWBPlayerState* MyPlayerState = MyPlayerController->GetPlayerState<AWBPlayerState>();
+		if (MyPlayerState)
+		{			
+			MaxProjectileCnt = ProjectileCount + MyPlayerState->ProjectileCounts;
+			CoolDown = CoolDown * ((1 - MyPlayerState->SkillAcceleration) / (MyPlayerState->SkillAcceleration + 100));
+			CriticalChance = MyPlayerState->CriticalHitChance * 0.01f;
+		}
+	}
+}
+
+int32 AWBWeaponBase::CanCritialAttack(int32 WeaponBaseDamage)
+{
+	WeaponBaseDamage = Damage;
+
+	bool bCanCritical = false;
+
+	float Random = FMath::FRand(); // 0~1
+
+	if (Random <= CriticalChance)
+	{
+		bCanCritical = true;
+	}
+
+	if (!bCanCritical)
+	{
+		return WeaponBaseDamage;
+	}
+
+	return WeaponBaseDamage * 1.5f;
+}
+
 

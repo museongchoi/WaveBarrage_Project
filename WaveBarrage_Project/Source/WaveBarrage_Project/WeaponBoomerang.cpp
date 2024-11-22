@@ -22,6 +22,8 @@ AWeaponBoomerang::AWeaponBoomerang()
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
+	
+
 }
 
 void AWeaponBoomerang::BeginPlay()
@@ -43,8 +45,7 @@ void AWeaponBoomerang::BeginPlay()
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
 	}
 
-
-
+	CalculateAttackStatus();
 
 
 }
@@ -82,6 +83,7 @@ void AWeaponBoomerang::SpawnProjectile()
 			CurProjectileCnt = 0;
 
 			int32 FinalDamage = CalculateFinalDamage();
+			CanCritialAttack(FinalDamage);
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
 			SpawnedProjectile->SetReplicates(true);
