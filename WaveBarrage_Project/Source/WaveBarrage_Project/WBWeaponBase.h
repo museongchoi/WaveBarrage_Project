@@ -53,6 +53,8 @@ public:
 
 	virtual int32 CalculateFinalDamage();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	EWeaponType WeaponType; // 무기 타입을 나타내는 변수
@@ -60,7 +62,7 @@ protected:
 public:
 
 	// 무기 레벨
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated)
 	int32 WeaponLevel;
 
 	// 데미지

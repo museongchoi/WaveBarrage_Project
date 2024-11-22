@@ -101,23 +101,25 @@ void AWBPlayerBase::BeginPlay()
 		}
 	}
 
-	if (WeaponPotionComponent && ChampionOnlyWeapon)
+	if (HasAuthority())
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnedWeapon = GetWorld()->SpawnActor<AWeaponJinx>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-		if (SpawnedWeapon)
+		if (WeaponPotionComponent && ChampionOnlyWeapon)
 		{
-			// 부착 규칙을 정의합니다.
-			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnedWeapon = GetWorld()->SpawnActor<AWeaponJinx>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+			if (SpawnedWeapon)
+			{
+				// 부착 규칙을 정의합니다.
+				FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
-			// 캐릭터 메쉬에 부착 (소켓 없이)
-			SpawnedWeapon->AttachToComponent(GetMesh(), AttachmentRules);
-			SpawnedWeapon->OwnerCharacter = this;
-			EquippedWeapons.Add(SpawnedWeapon);
+				// 캐릭터 메쉬에 부착 (소켓 없이)
+				SpawnedWeapon->AttachToComponent(GetMesh(), AttachmentRules);
+				SpawnedWeapon->OwnerCharacter = this;
+				EquippedWeapons.Add(SpawnedWeapon);
+			}
 		}
 	}
-
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(GM))
 	{

@@ -32,6 +32,7 @@ AWeaponJinx::AWeaponJinx()
 	MaxProjectileCnt = 0;
 	CurProjectileCnt = 0;
 
+
 }
 
 void AWeaponJinx::BeginPlay()

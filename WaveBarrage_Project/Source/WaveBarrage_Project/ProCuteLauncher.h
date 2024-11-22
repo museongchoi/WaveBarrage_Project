@@ -27,4 +27,7 @@ public:
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
 	bool CanCollision = false;
+
+
+
 };

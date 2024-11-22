@@ -15,6 +15,9 @@ AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 	CoolDown = 3.0f;
 	Damage = 15;
 	ProjectileCount = 0;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void AWeaponPoisonFootprint::BeginPlay()

@@ -34,8 +34,12 @@ public:
 	AActor* GetNearPlayer(AActor* Monster);
 
 
-	UFUNCTION(BlueprintCallable, Category = "Card Selection")
-	void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
+	//UFUNCTION(BlueprintCallable, Category = "Card Selection",Server,Reliable)
+	//void ApplyCardEffect(AWBPlayerController* PlayerController, int32 CardIndex);
+	//void ApplyCardEffect_Implementation(AWBPlayerController* PlayerController, int32 CardIndex);
+
+	
+
 
 	UFUNCTION()
 	void UpdateTargetPlayer();

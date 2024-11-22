@@ -11,6 +11,10 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 	WeaponLevel = 1;
 	CoolDown = 7.0f;
 	Damage = 55;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
+
 }
 
 void AWeaponWhirlwind::BeginPlay()

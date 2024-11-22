@@ -4,18 +4,18 @@
 #include "WBWeaponBase.h"
 #include "Components/SceneComponent.h"
 #include "WBPlayerBase.h"
-#include "WBPlayerState.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "WBProjectileBase.h"
-
+#include "Net/UnrealNetwork.h"
+#include "WBPlayerState.h"
 
 // Sets default values
 AWBWeaponBase::AWBWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
+	bReplicates = true;
 	// 투사체 스폰 포인트 컴포넌트
 	//ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
 	//RootComponent = ProjectileSpawnPoint;
@@ -97,11 +97,17 @@ int32 AWBWeaponBase::CalculateFinalDamage()
 		AWBPlayerState* PlayerState = OwnerCharacter->GetPlayerState<AWBPlayerState>();
 		if (PlayerState)
 		{
-			int32 DamageMultiplier = Damage + ((Damage*PlayerState->Damage)/100);
+			int32 DamageMultiplier = Damage + ((Damage * PlayerState->Damage)/100);
 			return DamageMultiplier;
 		}
 	}
 
 	return WeaponBaseDamage;
+}
+
+void AWBWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AWBWeaponBase, WeaponLevel);
 }
 

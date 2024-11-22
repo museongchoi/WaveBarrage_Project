@@ -19,6 +19,8 @@ AWeaponBoomerang::AWeaponBoomerang()
 	Damage = 40;
 	ProjectileCount = 1;
 
+	SetReplicates(true);
+	SetReplicateMovement(true);
 
 }
 

@@ -27,6 +27,10 @@ AWeaponCuteLauncher::AWeaponCuteLauncher()
 	ProjectileCount = 1;
 	WeaponLevel = 1;
 
+	SetReplicates(true);
+	SetReplicateMovement(true);
+
+	UE_LOG(LogTemp, Warning, TEXT("CuteLauncherCreate"));
 }
 
 void AWeaponCuteLauncher::BeginPlay()
@@ -47,6 +51,8 @@ void AWeaponCuteLauncher::BeginPlay()
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
 	}
+
+
 }
 
 void AWeaponCuteLauncher::Fire()
