@@ -47,8 +47,14 @@ void AProPoisonFootprint::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedCo
 
 void AProPoisonFootprint::DamageTick(AActor* OtherActor)
 {
-	if (OtherActor)
+	if (OtherActor!=nullptr)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
+
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_DamageTick);
+	}
+	
 }

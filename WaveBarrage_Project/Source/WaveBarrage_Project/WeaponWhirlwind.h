@@ -19,6 +19,12 @@ public:
 
 	AWeaponWhirlwind();
 
+	UFUNCTION(Server, Reliable)
+	void C2S_SpawnWhirlwindBlade();
+	void C2S_SpawnWhirlwindBlade_Implementation();
+
+
+
 protected:
 
 	virtual void BeginPlay() override;

@@ -54,8 +54,6 @@ struct FWeaponData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxProjectileCnt;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<USceneComponent> ProjectileSpawnPoint;
 };
 
 UCLASS()

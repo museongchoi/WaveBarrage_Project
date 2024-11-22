@@ -4,9 +4,7 @@
 #include "WeaponPoisonFootprint.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProPoisonFootprint.h"
-#include "Kismet/GameplayStatics.h"
-#include "GameFramework/Character.h"
-#include "ProPoisonFootprint.h"
+
 
 AWeaponPoisonFootprint::AWeaponPoisonFootprint()
 {
@@ -24,21 +22,27 @@ void AWeaponPoisonFootprint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown, true);
+	if (HasAuthority())
+	{
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponPoisonFootprint::Fire, CoolDown, true);
+	}
 }
 
 void AWeaponPoisonFootprint::Fire()
 {	
-	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	FVector SPawnLocation = FVector(MyCharacter->GetActorLocation().X, MyCharacter->GetActorLocation().Y, 0);
-	FTransform SpawnTransform = FTransform(MyCharacter->GetActorRotation(),SPawnLocation);
+	
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+	FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y,0);
 
 	if (ProjectileClass)
 	{
-		AProPoisonFootprint* SpawnedProjectile = GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass,SpawnTransform);
+		AProPoisonFootprint* SpawnedProjectile = GetWorld()->SpawnActor<AProPoisonFootprint>(ProjectileClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 
 		int32 FinalDamage = CalculateFinalDamage();
 		SpawnedProjectile->SetDamage(FinalDamage);
 		SpawnedProjectile->CanCollision = true;
+		SpawnedProjectile->SetReplicates(true);
 	}
 }

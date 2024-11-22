@@ -55,6 +55,7 @@ void AProBoomerang::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AA
 {
 	Super::OnSphereOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
+	UE_LOG(LogTemp, Warning, TEXT("BoomerangOverlap"));
 	
 	if (OtherActor && OtherActor != this)
 	{

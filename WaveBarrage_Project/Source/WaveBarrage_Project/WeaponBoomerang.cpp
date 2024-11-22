@@ -27,7 +27,6 @@ AWeaponBoomerang::AWeaponBoomerang()
 void AWeaponBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
 	
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (MyCharacter)
@@ -38,6 +37,15 @@ void AWeaponBoomerang::BeginPlay()
 			MaxProjectileCnt = ProjectileCount + MyPs->ProjectileCounts;
 		}
 	}
+
+	if (HasAuthority())
+	{
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
+	}
+
+
+
+
 
 }
 
@@ -56,10 +64,16 @@ void AWeaponBoomerang::Fire()
 void AWeaponBoomerang::SpawnProjectile()
 {
 	Super::SpawnProjectile();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+
 	if (ProjectileClass)
 	{
 		FTransform SpawnTransform = FTransform (ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation());
-		AProBoomerang* SpawnedProjectile = GetWorld()->SpawnActor<AProBoomerang>(ProjectileClass, SpawnTransform);
+		AProBoomerang* SpawnedProjectile = GetWorld()->SpawnActor<AProBoomerang>(ProjectileClass, SpawnTransform,SpawnParams);
 
 		CurProjectileCnt++;
 		if (CurProjectileCnt >= MaxProjectileCnt)
@@ -70,6 +84,7 @@ void AWeaponBoomerang::SpawnProjectile()
 			int32 FinalDamage = CalculateFinalDamage();
 			SpawnedProjectile->SetDamage(FinalDamage);
 			SpawnedProjectile->CanCollision = true;
+			SpawnedProjectile->SetReplicates(true);
 
 		}
 		

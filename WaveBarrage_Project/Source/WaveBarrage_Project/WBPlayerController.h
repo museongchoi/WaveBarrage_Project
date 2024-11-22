@@ -51,9 +51,9 @@ public:
 	void C2S_ApplyCardEffect_Implementation(AWBPlayerController* PlayerController, int32 CardIndex);
 
 
-	//UFUNCTION(Server, Reliable)
-	//void C2S_SpawnWeapon(int32 CardIndex, AWBPlayerBase* MyPlayer);
-	//void C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPlayerBase* MyPlayer);
+	UFUNCTION(Server, Reliable)
+	void C2S_SpawnWeapon(int32 CardIndex, AWBPlayerBase* MyPlayer);
+	void C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPlayerBase* MyPlayer);
 
 
 };

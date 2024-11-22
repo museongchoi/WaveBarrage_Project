@@ -61,12 +61,9 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 	if (PlayerController->IsLocalPlayerController())
 	{
 		
-		AWBPlayerBase* MyPlayer = Cast<AWBPlayerBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+		AWBPlayerBase* MyPlayer = Cast<AWBPlayerBase>(PlayerController->GetCharacter());
 		if (MyPlayer)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PlayerController: %s, Player: %s"),
-				*PlayerController->GetName(), *MyPlayer->GetName());
-
 			AWBPlayerState* MyPlayerState = MyPlayer->GetPlayerState<AWBPlayerState>();
 			if (!MyPlayerState)
 			{
@@ -105,17 +102,17 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 
 				// 데이터 테이블에서 해당 무기와 레벨의 능력치를 가져오기
 				
-					UE_LOG(LogTemp, Warning, TEXT("ApplayCardEffect"));
+					
 					FName RowName = FName(*FString::Printf(TEXT("%s_%d"), *WeaponTypeString, WeaponLevel));
 					FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
 					if (WeaponData)
 					{
 						// 로그 : 무기 업데이트 전 데미지 출력
-						/*for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
+	/*					for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
 						{
 							if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
 							{
-								UE_LOG(LogTemp, Warning, TEXT("Before Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
+								UE_LOG(LogTemp, Warning, TEXT(" CurWeapon: %s"), *WeaponTypeString);
 							}
 						}*/
 
@@ -136,9 +133,10 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 
 		
 								// 무기 업데이트 후 데미지 출력
-								UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Damage: %d"), *WeaponTypeString, Weapon->Damage);
+								UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Level: %d"), *WeaponTypeString, Weapon->WeaponLevel);
 
 								bWeaponExists = true;
+							
 								break;
 							}
 						}
@@ -151,17 +149,18 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 						//}
 						if (!bWeaponExists)
 						{
-							// 새로운 무기 생성
-							FActorSpawnParameters SpawnParams;
-							SpawnParams.Owner = MyPlayer;
-							AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(MyPlayer->WeaponAttachBoxes[CardIndex], MyPlayer->GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
-							if (NewWeapon)
-							{
-								NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-								NewWeapon->OwnerCharacter = MyPlayer;
-								MyPlayer->EquippedWeapons.Add(NewWeapon);
-							}
-							UE_LOG(LogTemp, Warning, TEXT("WeaponCreate"));
+							//// 새로운 무기 생성
+							//FActorSpawnParameters SpawnParams;
+							//SpawnParams.Owner = MyPlayer;
+							//AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(MyPlayer->WeaponAttachBoxes[CardIndex], MyPlayer->GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+							//if (NewWeapon)
+							//{
+							//	NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
+							//	NewWeapon->OwnerCharacter = MyPlayer;
+							//	MyPlayer->EquippedWeapons.Add(NewWeapon);
+							//}
+							C2S_SpawnWeapon(CardIndex, MyPlayer);
+							
 						}
 
 
@@ -215,27 +214,27 @@ void AWBPlayerController::C2S_ApplyCardEffect_Implementation(AWBPlayerController
 	}
 }
 
-//void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex,AWBPlayerBase* MyPlayer)
-//{
-//	UE_LOG(LogTemp, Warning, TEXT("WeaponCreateStart"));
-//	if (HasAuthority()) // 서버에서만 실행
-//	{
-//		FActorSpawnParameters SpawnParams;
-//		SpawnParams.Owner = MyPlayer;
-//
-//		AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(
-//			MyPlayer->WeaponAttachBoxes[CardIndex],
-//			MyPlayer->GetActorLocation(),
-//			FRotator::ZeroRotator,
-//			SpawnParams);
-//
-//		if (NewWeapon)
-//		{
-//			NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-//			NewWeapon->OwnerCharacter = MyPlayer;
-//			MyPlayer->EquippedWeapons.Add(NewWeapon);
-//
-//		}
-//	}
-//	UE_LOG(LogTemp, Warning, TEXT("WeaponCreate"));
-//}
+void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex,AWBPlayerBase* MyPlayer)
+{
+	UE_LOG(LogTemp, Warning, TEXT("WeaponCreateStart"));
+	if (HasAuthority()) // 서버에서만 실행
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = MyPlayer;
+
+		AWBWeaponBase* NewWeapon = GetWorld()->SpawnActor<AWBWeaponBase>(
+			MyPlayer->WeaponAttachBoxes[CardIndex],
+			MyPlayer->GetActorLocation(),
+			FRotator::ZeroRotator,
+			SpawnParams);
+
+		if (NewWeapon)
+		{
+			NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
+			NewWeapon->OwnerCharacter = MyPlayer;
+			MyPlayer->EquippedWeapons.Add(NewWeapon);
+
+		}
+	}
+
+}

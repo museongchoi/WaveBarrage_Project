@@ -34,11 +34,13 @@ void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp,
 {
 	Super::OnSphereOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	
+	
+
 	if (OtherActor && OtherActor != this)
 	{
 		if (HasAuthority() && CanCollision == true)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
+			//UE_LOG(LogTemp, Warning, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
 
 			AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
 			if (Monster)
