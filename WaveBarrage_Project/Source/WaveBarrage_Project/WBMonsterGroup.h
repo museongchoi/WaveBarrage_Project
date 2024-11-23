@@ -46,4 +46,6 @@ public:
 	int SpawnCount;
 
 	bool SpawnEnd = false;
+	UPROPERTY(EditAnywhere)
+	bool IsNotUpdate = false;
 };

@@ -377,10 +377,13 @@ void AWBGameMode::UpdateTargetPlayer()
 		AWBGameState* GS = Cast<AWBGameState>(GameState);
 		if (IsValid(GS) && IsValid(MG))
 		{
-			AActor* NearPlayer = GetNearPlayer(MG);
-			MG->TargetPlayer = NearPlayer;
-			MG->UpdateTargetPlayer();
-			GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
+			if (MG->IsNotUpdate)
+			{
+				AActor* NearPlayer = GetNearPlayer(MG);
+				MG->TargetPlayer = NearPlayer;
+				MG->UpdateTargetPlayer();
+				GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
+			}
 		}
 	}
 }
@@ -433,6 +436,7 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 					Spawned->TargetPlayer = Players[0];
 					Spawned->MonsterClass = MonsterClass;
 					Spawned->SpawnCount = SpawnCount;
+					Spawned->IsNotUpdate = true;
 					MonsterGroups.Emplace(Spawned);
 					Spawned->SpawnMonster();
 				}
