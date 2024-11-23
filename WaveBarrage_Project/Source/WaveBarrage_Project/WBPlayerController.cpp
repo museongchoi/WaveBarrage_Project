@@ -104,8 +104,8 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 				FWeaponData* WeaponData = WeaponDataTable->FindRow<FWeaponData>(RowName, TEXT(""));
 				if (WeaponData)
 				{
-					// 로그 : 무기 업데이트 전 데미지 출력
-/*					for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
+					 //로그 : 무기 업데이트 전 데미지 출력
+					/*for (AWBWeaponBase* Weapon : MyPlayer->EquippedWeapons)
 					{
 						if (Weapon && Weapon->GetWeaponType() == static_cast<EWeaponType>(CardIndex))
 						{
@@ -232,7 +232,7 @@ void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPla
 			NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
 			NewWeapon->OwnerCharacter = MyPlayer;
 			MyPlayer->EquippedWeapons.Add(NewWeapon);
-
+			UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *NewWeapon->OwnerCharacter->GetName());
 		}
 	}
 

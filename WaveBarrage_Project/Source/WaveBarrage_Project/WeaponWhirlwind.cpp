@@ -106,6 +106,7 @@ void AWeaponWhirlwind::BeginPlay()
 
 void AWeaponWhirlwind::Fire()
 {
+	Super::Fire();
 	UE_LOG(LogTemp, Warning, TEXT("WhirlwindFire"));
 	
 

@@ -37,52 +37,48 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	if (MyCharacter)
-	{
-		AWBPlayerState* MyPs = Cast<AWBPlayerState>(MyCharacter->GetPlayerState());
-		if (MyPs)
-		{
-			MaxProjectileCnt = ProjectileCount + MyPs->ProjectileCounts;
-		}
-	}
+	CalculateAttackStatus();
 
-	if(!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
+	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
 	}
 
-	CalculateAttackStatus();
+
 }
 
 void AWeaponCuteLauncher::Fire()
 {
+
 	CuteLauncherAutomaticAiming();
 
-	if (ProjectileClass && ProjectileSpawnPoint)
+	if (HasAuthority())
 	{
-
-		// Get spawn location and rotation from ProjectileSpawnPoint
-		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-
-		// Spawn the projectile actor
-		AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation);
-		if (SpawnedProjectile)
+		if (ProjectileClass && ProjectileSpawnPoint)
 		{
-			// Increment current projectile count
-			CurProjectileCnt++;
-			int32 FinalDamage = CalculateFinalDamage();
-			CanCritialAttack(FinalDamage);
-			SpawnedProjectile->SetDamage(FinalDamage);
-			SpawnedProjectile->CanCollision = true;
-			//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
 
+			// Get spawn location and rotation from ProjectileSpawnPoint
+			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+			// Spawn the projectile actor
+			AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation);
+			if (SpawnedProjectile)
+			{
+				// Increment current projectile count
+				CurProjectileCnt++;
+				int32 FinalDamage = CalculateFinalDamage();
+				CanCritialAttack(FinalDamage);
+				SpawnedProjectile->SetDamage(FinalDamage);
+				SpawnedProjectile->CanCollision = true;
+				//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
+
+			}
 		}
-	}
-	if (CurProjectileCnt >= MaxProjectileCnt)
-	{
-		return;
+		if (CurProjectileCnt >= MaxProjectileCnt)
+		{
+			return;
+		}
 	}
 }
 

@@ -132,10 +132,13 @@ public:
 	UPROPERTY()
 	AWBWeaponBase* GeneralSpawnedWeapon;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Replicated)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, ReplicatedUsing = OnRep_EquippedWeapons)
 	TArray<AWBWeaponBase*> EquippedWeapons;
 
 	FTimerHandle FTimerHandle_AttackFire;
 	FTimerHandle FTimerHandle_AutomaticAiming;
 	FTimerHandle FTimerHandle_CursorAiming;
+
+	UFUNCTION()
+	void OnRep_EquippedWeapons();
 };

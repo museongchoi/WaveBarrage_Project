@@ -22,31 +22,19 @@ AWeaponBoomerang::AWeaponBoomerang()
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
-	
-
 }
 
 void AWeaponBoomerang::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	if (MyCharacter)
-	{
-		AWBPlayerState* MyPs = Cast<AWBPlayerState>(MyCharacter->GetPlayerState());
-		if (MyPs)
-		{
-			MaxProjectileCnt = ProjectileCount + MyPs->ProjectileCounts;
-		}
-	}
+
+	CalculateAttackStatus();
 
 	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponBoomerang::Fire, CoolDown, true);
 	}
-
-	CalculateAttackStatus();
-
 
 }
 
