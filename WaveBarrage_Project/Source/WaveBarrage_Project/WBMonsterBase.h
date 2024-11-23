@@ -42,7 +42,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> SphereComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComp;
 
 	UPROPERTY(VisibleAnywhere)
