@@ -124,7 +124,10 @@ void AWBWeaponBase::CalculateAttackStatus()
 		if (MyPlayerState)
 		{			
 			MaxProjectileCnt = ProjectileCount + MyPlayerState->ProjectileCounts;
-			CoolDown = CoolDown * ((1 - MyPlayerState->SkillAcceleration) / (MyPlayerState->SkillAcceleration + 100));
+			if (SkillAcceleration > 0)
+			{
+				CoolDown = CoolDown * ((1 - MyPlayerState->SkillAcceleration) / (MyPlayerState->SkillAcceleration + 100));
+			}
 			CriticalChance = MyPlayerState->CriticalHitChance * 0.01f;
 		}
 	}

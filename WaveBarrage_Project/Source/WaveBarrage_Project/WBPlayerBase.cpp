@@ -87,6 +87,7 @@ void AWBPlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
 	if (IsLocallyControlled())
 	{
 		ConfigureInputMapping();
@@ -101,26 +102,32 @@ void AWBPlayerBase::BeginPlay()
 			UE_LOG(LogTemp, Error, TEXT("MyPlayerController is null on %s"), *GetName());
 		}
 	}
-
+	
 	if (HasAuthority())
 	{
 		if (WeaponPotionComponent && ChampionOnlyWeapon)
 		{
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+
 			SpawnedWeapon = GetWorld()->SpawnActor<AWeaponJinx>(ChampionOnlyWeapon, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+
 			if (SpawnedWeapon)
 			{
 				// 부착 규칙을 정의합니다.
 				FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
 				// 캐릭터 메쉬에 부착 (소켓 없이)
-				SpawnedWeapon->AttachToComponent(GetMesh(), AttachmentRules);
+				SpawnedWeapon->AttachToComponent(this->GetMesh(), AttachmentRules);
 				SpawnedWeapon->OwnerCharacter = this;
 				EquippedWeapons.Add(SpawnedWeapon);
+				OnRep_EquippedWeapons();
+				UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *SpawnedWeapon->OwnerCharacter->GetName());
 			}
 		}
 	}
+	
 	AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(GM))
 	{
@@ -237,6 +244,10 @@ void AWBPlayerBase::ToggleAutoMode()
 	{
 		bAutoMode = true;
 	}
+}
+
+void AWBPlayerBase::OnRep_EquippedWeapons()
+{
 }
 
 // 가장 가까운 몬스터 자동 타겟팅

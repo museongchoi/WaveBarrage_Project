@@ -44,10 +44,9 @@ void AWeaponJinx::BeginPlay()
 	if (OwnerCharacter == nullptr && GetOwner())
 	{
 		OwnerCharacter = Cast<AWBPlayerBase>(GetOwner());
-
 	}
 
-
+	UE_LOG(LogTemp, Warning, TEXT("JinxWeapon Spawned, OwnerCharacter : %s"), *OwnerCharacter->GetName());
 	if (OwnerCharacter && ProjectileSpawnPoint)
 	{
 		// 부착 규칙을 정의합니다.
