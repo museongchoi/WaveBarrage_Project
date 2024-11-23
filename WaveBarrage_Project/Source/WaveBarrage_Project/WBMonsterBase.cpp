@@ -7,12 +7,15 @@
 #include "WBItemBase.h"
 #include "WBMonsterGroup.h"
 #include "WBMonsterProjectile.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 // Sets default values
 AWBMonsterBase::AWBMonsterBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	RootComponent = SphereComp;
@@ -28,8 +31,13 @@ AWBMonsterBase::AWBMonsterBase()
 
 	FSMComp = CreateDefaultSubobject<UWBFSMComponent>(TEXT("FSM Comp"));
 
-	bReplicates = true;
+	FloatMovementComp = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
+	FloatMovementComp->MaxSpeed = 300.0f;
+	FloatMovementComp->Acceleration = 300.0f;
 
+	bReplicates = true;
+	SetReplicateMovement(true);
+	SetReplicates(true);
 	
 }
 
@@ -80,10 +88,17 @@ void AWBMonsterBase::Skill()
 
 }
 
+void AWBMonsterBase::MoveFroward()
+{
+	UE_LOG(LogTemp, Warning, TEXT("MoveFroward Call"));
+	FloatMovementComp->AddInputVector(GetActorForwardVector());
+}
+
 void AWBMonsterBase::SetTargetPlayer(AActor* Target)
 {
 	if (IsValid(FSMComp))
 	{
+		
 		FSMComp->TargetPlayer = Target;
 	}
 }

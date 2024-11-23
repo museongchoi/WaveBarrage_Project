@@ -8,11 +8,12 @@
 
 class USphereComponent;
 class UWBFSMComponent;
+class UFloatingPawnMovement;
 
 
 
 UCLASS()
-class WAVEBARRAGE_PROJECT_API AWBMonsterBase : public AActor
+class WAVEBARRAGE_PROJECT_API AWBMonsterBase : public APawn
 {
 	GENERATED_BODY()
 	
@@ -30,6 +31,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	void Attack();
 	void Skill();
+	void MoveFroward();
 
 	void SetTargetPlayer(AActor* Target);
 	void OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -45,6 +47,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UWBFSMComponent> FSMComp;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UFloatingPawnMovement> FloatMovementComp;
 
 	UPROPERTY(EditAnywhere)
 	int HP;

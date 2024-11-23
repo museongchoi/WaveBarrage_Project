@@ -24,6 +24,7 @@ void UWBFSMComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Base = Cast<AWBMonsterBase>(GetOwner());
 	MState = EMonsterState::Idle;
 	
 }
@@ -48,11 +49,14 @@ void UWBFSMComponent::IdleState()
 
 void UWBFSMComponent::MoveState(float DeltaTime)
 {
-	// 레이 캐스트 해서 앞에 몬스터로 막혀 있으면 멈추도록 변경
-	// 
 	//타겟 플레이어 방향으로 이동
-	FVector Dist = GetOwner()->GetActorForwardVector() * MoveDistance * DeltaTime;
-	GetOwner()->AddActorWorldOffset(Dist, true);
+
+	
+	if (IsValid(Base))
+	{
+		Base->MoveFroward();
+	}
+
 
 	//아니면서 지속 시간이 끝나면 IdleState
 	if (CanAttack && !bIsAttackDelay)

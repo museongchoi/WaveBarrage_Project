@@ -42,6 +42,8 @@ public:
 	void ChangeState(EMonsterState State);
 
 public:
+	class AWBMonsterBase* Base;
+
 	EMonsterState MState;
 	UPROPERTY(EditAnywhere)
 	bool CanAttack = false;
