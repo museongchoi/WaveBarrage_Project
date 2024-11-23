@@ -51,7 +51,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UFloatingPawnMovement> FloatMovementComp;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int HP;
 
 	UPROPERTY(EditAnywhere)

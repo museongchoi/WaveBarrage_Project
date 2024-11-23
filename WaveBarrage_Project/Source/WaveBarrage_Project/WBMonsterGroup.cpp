@@ -5,6 +5,7 @@
 #include "WBMonsterBase.h"
 #include "WBGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AWBMonsterGroup::AWBMonsterGroup()
@@ -41,6 +42,9 @@ void AWBMonsterGroup::Tick(float DeltaTime)
 
 void AWBMonsterGroup::SpawnMonster()
 {
+	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPlayer->GetActorLocation());
+	SetActorRotation(TargetRotation);
+
 	FActorSpawnParameters SpawnPara;
 	SpawnPara.Owner = this;
 	SpawnPara.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -48,10 +52,15 @@ void AWBMonsterGroup::SpawnMonster()
 	{
 		for (int i = 0; i < SpawnCount; i++)
 		{
-			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation(), GetActorRotation(), SpawnPara);
+			int Row = FMath::CeilToInt(i / 8.0f);
+			float Angle = i * (2 * PI / 8);
+			float X = 100 * Row * FMath::Cos(Angle);
+			float Y = 100 * Row * FMath::Sin(Angle);
+			float Z = 0;
+
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(X, Y, 0), GetActorRotation(), SpawnPara);
 			if (IsValid(Spawned))
 			{
-				Spawned->SetTargetPlayer(TargetPlayer);
 				Monsters.Emplace(Spawned);
 			}
 		}

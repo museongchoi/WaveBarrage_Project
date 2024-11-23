@@ -45,6 +45,10 @@ void UWBFSMComponent::IdleState()
 		GetOwner()->SetActorRotation(TargetRot);
 		ChangeState(EMonsterState::Move);
 	}
+	else if (bIsMoveStraight)
+	{
+		ChangeState(EMonsterState::Move);
+	}
 }
 
 void UWBFSMComponent::MoveState(float DeltaTime)
