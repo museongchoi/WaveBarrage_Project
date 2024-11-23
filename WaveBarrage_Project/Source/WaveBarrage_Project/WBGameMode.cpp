@@ -377,10 +377,13 @@ void AWBGameMode::UpdateTargetPlayer()
 		AWBGameState* GS = Cast<AWBGameState>(GameState);
 		if (IsValid(GS) && IsValid(MG))
 		{
-			AActor* NearPlayer = GetNearPlayer(MG);
-			MG->TargetPlayer = NearPlayer;
-			MG->UpdateTargetPlayer();
-			GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
+			if (MG->IsNotUpdate)
+			{
+				AActor* NearPlayer = GetNearPlayer(MG);
+				MG->TargetPlayer = NearPlayer;
+				MG->UpdateTargetPlayer();
+				GS->S2C_MGSetTargetPlayer(MG, NearPlayer);
+			}
 		}
 	}
 }
@@ -433,6 +436,7 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 					Spawned->TargetPlayer = Players[0];
 					Spawned->MonsterClass = MonsterClass;
 					Spawned->SpawnCount = SpawnCount;
+					Spawned->IsNotUpdate = true;
 					MonsterGroups.Emplace(Spawned);
 					Spawned->SpawnMonster();
 				}
@@ -463,20 +467,20 @@ void AWBGameMode::SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase>
 		break;
 	case ESpawnType::Elite:
 		{
-			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 50), FRotator::ZeroRotator, SpawnPara);
 			AWBGameState* GS = Cast<AWBGameState>(GameState);
 			if (IsValid(GS))
 			{
-				GS->S2C_MBSetTargetPlayer(Spawned, GetNearPlayer(Spawned));
+				GS->S2C_MBSetTargetPlayer(Spawned, Players[0]);
 			}
-			Spawned->SetTargetPlayer(GetNearPlayer(Spawned));
+			Spawned->SetTargetPlayer(GetNearPlayer(Players[0]));
 			
 		}
 		break;
 	case ESpawnType::Boss:
 		{
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, FVector(x, y, 0), FRotator::ZeroRotator, SpawnPara);
-			Spawned->SetTargetPlayer(GetNearPlayer(Spawned));
+			Spawned->SetTargetPlayer(Players[0]);
 		}
 		break;
 	default:

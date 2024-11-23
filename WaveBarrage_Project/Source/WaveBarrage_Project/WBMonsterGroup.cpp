@@ -77,7 +77,7 @@ void AWBMonsterGroup::SpawnRandomPositionMonster()
 	{
 		for (int i = 0; i < SpawnCount; i++)
 		{
-			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(1, 1000), FMath::RandRange(1, 1000), 0), GetActorRotation(), SpawnPara);
+			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(FMath::RandRange(-1000, 1000), FMath::RandRange(-1000, 1000), 0), GetActorRotation(), SpawnPara);
 			if (IsValid(Spawned))
 			{
 				Spawned->SetTargetPlayer(TargetPlayer);
@@ -98,8 +98,8 @@ void AWBMonsterGroup::SpawnCirclePositionMonster()
 		for (int i = 0; i < SpawnCount; i++)
 		{
 			float Angle = i * (2 * PI / SpawnCount);
-			float X = 1000 * FMath::Cos(Angle);
-			float Y = 1000 * FMath::Sin(Angle);
+			float X = 1500 * FMath::Cos(Angle);
+			float Y = 1500 * FMath::Sin(Angle);
 			float Z = 0;
 
 			AWBMonsterBase* Spawned = GetWorld()->SpawnActor<AWBMonsterBase>(MonsterClass, GetActorLocation() + FVector(X,Y,0), GetActorRotation(), SpawnPara);

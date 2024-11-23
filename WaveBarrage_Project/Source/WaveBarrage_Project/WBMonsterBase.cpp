@@ -8,6 +8,7 @@
 #include "WBMonsterGroup.h"
 #include "WBMonsterProjectile.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWBMonsterBase::AWBMonsterBase()
@@ -109,7 +110,7 @@ void AWBMonsterBase::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 	{
 		if (OtherActor->ActorHasTag(TEXT("Player")))
 		{
-
+			UGameplayStatics::ApplyDamage(OtherActor, AttackPoint, GetInstigatorController(), this, UDamageType::StaticClass());
 		}
 	}
 }
