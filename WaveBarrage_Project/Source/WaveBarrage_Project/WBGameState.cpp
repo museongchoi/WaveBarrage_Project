@@ -17,7 +17,10 @@ void AWBGameState::S2C_MGSetTargetPlayer_Implementation(AWBMonsterGroup* MG, AAc
 
 void AWBGameState::S2C_MBSetTargetPlayer_Implementation(AWBMonsterBase* MB, AActor* TargetPlayer)
 {
-	MB->SetTargetPlayer(TargetPlayer);
+    if (IsValid(MB) && IsValid(TargetPlayer))
+    {
+        MB->SetTargetPlayer(TargetPlayer);
+    }
 }
 
 void AWBGameState::CheckAllPlayersReady()
