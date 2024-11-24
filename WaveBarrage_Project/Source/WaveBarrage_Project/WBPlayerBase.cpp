@@ -106,38 +106,6 @@ void AWBPlayerBase::BeginPlay()
 			}
 		}
 
-		//// 서버에서만 PlayerID를 할당합니다.
-		//// 예를 들어, 플레이어의 Controller ID를 사용할 수 있습니다.
-		//APlayerController* PC = Cast<APlayerController>(GetController());
-		//if (PC)
-		//{
-		//	PlayerID = PC->GetLocalPlayer()->GetControllerId() + 1; // 간단한 예시
-		//	UE_LOG(LogTemp, Log, TEXT("Assigned PlayerID %d"), PlayerID);
-		//}
-
-		//// GameState에 PlayerID 등록 (필요 시)
-		//AWBGameState* GS = GetWorld()->GetGameState<AWBGameState>();
-		//if (GS)
-		//{
-		//	bool bFound = false;
-		//	for (auto& PS : GS->PlayerStates)
-		//	{
-		//		if (PS.PlayerID == 0)
-		//		{
-		//			PS.PlayerID = PlayerID;
-		//			PS.HP = 100;
-		//			bFound = true;
-		//			UE_LOG(LogTemp, Warning, TEXT("PlayerState 등록: PlayerID = %d, HP = %d"), PlayerID, PS.HP);
-		//			break;
-		//		}
-		//	}
-
-		//	if (!bFound)
-		//	{
-		//		// PlayerStates 배열에 빈 슬롯이 없을 경우 처리
-		//		UE_LOG(LogTemp, Warning, TEXT("PlayerStates 배열에 빈 슬롯이 없습니다."));
-		//	}
-		//}
 	}
 	
 	if (IsLocallyControlled())
@@ -175,7 +143,7 @@ void AWBPlayerBase::BeginPlay()
 				SpawnedWeapon->OwnerCharacter = this;
 				EquippedWeapons.Add(SpawnedWeapon);
 				OnRep_EquippedWeapons();
-				UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *SpawnedWeapon->OwnerCharacter->GetName());
+				//UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *SpawnedWeapon->OwnerCharacter->GetName());
 			}
 		}
 	}
@@ -332,12 +300,8 @@ void AWBPlayerBase::AutomaticAiming()
 		CollisionParams
 	);
 
-	
-
 	// 디버그용 구체 표시
-	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
-	// 디버그용 구체 표시 (한 프레임 동안 표시)
-	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
+	//DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, 1.f);
 
 	if (bHit)
 	{
@@ -389,7 +353,6 @@ void AWBPlayerBase::CursorHitAiming()
 				FVector TargetLocation = HitResult.Location;
 				FVector ActorLocation = GetActorLocation();
 
-				UE_LOG(LogTemp, Warning, TEXT("TargetLocation : %s"), *TargetLocation.ToString())
 
 				FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(FVector(ActorLocation.X, ActorLocation.Y, 0.0f), FVector(TargetLocation.X, TargetLocation.Y, 0.0f));
 
@@ -485,7 +448,6 @@ float AWBPlayerBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	UE_LOG(LogTemp, Log, TEXT("AWBPlayerBase::TakeDamage : DamageAmount = %f"), DamageAmount);
 
 	// 서버에서만 데미지를 처리
 	if (!HasAuthority())
@@ -507,7 +469,7 @@ float AWBPlayerBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	if (ActualDamage > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ApplyDamageToGameState Call"));
+		//UE_LOG(LogTemp, Warning, TEXT("ApplyDamageToGameState Call"));
 		ApplyDamageToGameState(ActualDamage);
 	}
 

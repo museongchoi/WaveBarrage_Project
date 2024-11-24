@@ -141,6 +141,7 @@ void AWBGameState::EndGame()
     // 예시로 모든 플레이어에게 게임 종료 메시지를 브로드캐스트합니다.
     for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
     {
+
         APlayerController* PC = It->Get();
         if (PC)
         {
@@ -176,7 +177,7 @@ void AWBGameState::UpdateAllPlayerHPHell()
             if (NewHP != PS.HP)
             {
                 PS.HP = NewHP;
-                UE_LOG(LogTemp, Warning, TEXT("Player ID %d heal by %d, New HP %d"), PS.PlayerID, RegenAmount, PS.HP);
+                //UE_LOG(LogTemp, Warning, TEXT("Player ID %d heal by %d, New HP %d"), PS.PlayerID, RegenAmount, PS.HP);
             }
         }
     }

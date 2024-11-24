@@ -18,22 +18,6 @@ AWBWeaponBase::AWBWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
-	// 투사체 스폰 포인트 컴포넌트
-	//ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>("ProjectileSpawnPoint");
-	//RootComponent = ProjectileSpawnPoint;
-
-	// 기본 무기 타입 설정 (필요에 따라 수정 가능)
-	// WeaponType = EWeaponType::WeaponJinx;
-
-	// Initialize default values
-	//OwnerCharacter = nullptr;
-	//WeaponLevel = 1;
-	//Damage = 10;
-	//SkillAcceleration = 0;
-	//CriticalChance = 0; // Default critical chance is 5%
-	//ProjectileCount = 1;
-	//CurProjectileCnt = 0;
-	//MaxProjectileCnt = 10; // Default maximum projectile count
 
 }
 

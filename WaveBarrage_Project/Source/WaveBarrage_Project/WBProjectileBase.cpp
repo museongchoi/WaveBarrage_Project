@@ -34,19 +34,6 @@ void AWBProjectileBase::BeginPlay()
 void AWBProjectileBase::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
-	//if (OtherActor && OtherActor != this)
-	//{
-	//	if (HasAuthority())
-	//	{
-	//		UE_LOG(LogTemp, Error, TEXT("OnSphereOverlapBegin Check!!!!!!!"));
-
-	//		AWBMonsterBase* Monster = Cast<AWBMonsterBase>(OtherActor);
-	//		if (Monster)
-	//		{
-	//			UGameplayStatics::ApplyDamage(Monster, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
-	//		}
-	//	}
-	//}
 }
 
 void AWBProjectileBase::SetDamage(int32 InDamage)

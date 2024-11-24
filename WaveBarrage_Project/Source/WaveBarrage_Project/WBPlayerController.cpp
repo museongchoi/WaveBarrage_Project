@@ -9,28 +9,12 @@
 #include "WBMonsterGroup.h"
 #include "Kismet/GameplayStatics.h"
 #include "WBGameMode.h"
-//void AWBPlayerController::ShowCardSelectionWidget()
-//{
-	//if (widgetClass)
-	//{
- //       if (!CardSelectionWidgetInstance)
- //       {
- //           CardSelectionWidgetInstance = CreateWidget<UUserWidget>(this, widgetClass);
- //           if (CardSelectionWidgetInstance)
- //           {
- //               CardSelectionWidgetInstance->AddToViewport();
- //           }
- //       }
-	//}
-//}
+
 
 AWBPlayerController::AWBPlayerController()
 {
-	//WeaponDataTable = CreateDefaultSubobject<UDataTable>("WeaponDataTable");
-
 	WeaponDataTable = NewObject<UDataTable>();
 	WeaponDataTable->RowStruct = FWeaponData::StaticStruct();
-
 }
 
 void AWBPlayerController::BeginPlay()
@@ -141,7 +125,7 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 							break;
 						}
 					}
-					UE_LOG(LogTemp, Warning, TEXT("bWeaponExists value: %s"), bWeaponExists ? TEXT("true") : TEXT("false"));
+					//UE_LOG(LogTemp, Warning, TEXT("bWeaponExists value: %s"), bWeaponExists ? TEXT("true") : TEXT("false"));
 
 					//if (!bWeaponExists)
 					//{
@@ -218,7 +202,7 @@ void AWBPlayerController::C2S_ApplyCardEffect_Implementation(AWBPlayerController
 
 void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPlayerBase* MyPlayer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("WeaponCreateStart"));
+	//UE_LOG(LogTemp, Warning, TEXT("WeaponCreateStart"));
 	if (HasAuthority()) // 서버에서만 실행
 	{
 		FActorSpawnParameters SpawnParams;
@@ -235,7 +219,7 @@ void AWBPlayerController::C2S_SpawnWeapon_Implementation(int32 CardIndex, AWBPla
 			NewWeapon->AttachToComponent(MyPlayer->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
 			NewWeapon->OwnerCharacter = MyPlayer;
 			MyPlayer->EquippedWeapons.Add(NewWeapon);
-			UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *NewWeapon->OwnerCharacter->GetName());
+			//UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter : %s"), *NewWeapon->OwnerCharacter->GetName());
 		}
 	}
 
