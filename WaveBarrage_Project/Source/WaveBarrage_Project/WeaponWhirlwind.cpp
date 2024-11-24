@@ -11,6 +11,7 @@ AWeaponWhirlwind::AWeaponWhirlwind()
 	WeaponLevel = 1;
 	CoolDown = 7.0f;
 	Damage = 55;
+	Duration = 7;
 
 	SetReplicates(true);
 	SetReplicateMovement(true);
@@ -49,6 +50,7 @@ void AWeaponWhirlwind::C2S_SpawnWhirlwindBlade_Implementation()
 					WhirlwindBlade->CanCollision = true;
 					WhirlwindBlade->SetReplicates(true); // 복제 설정
 					WhirlwindBlade->SetOwner(this);
+					WhirlwindBlade->SetLifeSpan(Duration);
 				}
 			}
 
@@ -66,6 +68,7 @@ void AWeaponWhirlwind::C2S_SpawnWhirlwindBlade_Implementation()
 					WhirlwindBlade->CanCollision = true;
 					WhirlwindBlade->SetReplicates(true); // 복제 설정
 					WhirlwindBlade->SetOwner(this);
+					WhirlwindBlade->SetLifeSpan(Duration);
 				}
 			}
 			break;
@@ -81,6 +84,7 @@ void AWeaponWhirlwind::C2S_SpawnWhirlwindBlade_Implementation()
 					WhirlwindBlade->CanCollision = true;
 					WhirlwindBlade->SetReplicates(true); // 복제 설정
 					WhirlwindBlade->SetOwner(this);
+					WhirlwindBlade->SetLifeSpan(Duration);
 				}
 
 			}
@@ -96,7 +100,7 @@ void AWeaponWhirlwind::BeginPlay()
 
 	if (HasAuthority())
 	{
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, CoolDown, true);
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Fire, this, &AWeaponWhirlwind::Fire, 15.0f, true, 0.0f);
 		UE_LOG(LogTemp, Warning, TEXT("Spawned on %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"));
 	}
 
@@ -141,6 +145,8 @@ void AWeaponWhirlwind::Fire()
 						int32 FinalDamage = CalculateFinalDamage();
 						WhirlwindBlade->SetDamage(FinalDamage);
 						WhirlwindBlade->CanCollision = true;
+						WhirlwindBlade->SetLifeSpan(Duration);
+						UE_LOG(LogTemp, Warning, TEXT("Duration : %d"),Duration);
 					}
 				}
 
@@ -156,7 +162,7 @@ void AWeaponWhirlwind::Fire()
 						int32 FinalDamage = CalculateFinalDamage();
 						WhirlwindBlade->SetDamage(FinalDamage);
 						WhirlwindBlade->CanCollision = true;
-
+						WhirlwindBlade->SetLifeSpan(Duration);
 					}
 				}
 				break;
@@ -170,7 +176,7 @@ void AWeaponWhirlwind::Fire()
 						int32 FinalDamage = CalculateFinalDamage();
 						WhirlwindBlade->SetDamage(FinalDamage);
 						WhirlwindBlade->CanCollision = true;
-
+						WhirlwindBlade->SetLifeSpan(Duration);
 					}
 
 				}
@@ -182,6 +188,6 @@ void AWeaponWhirlwind::Fire()
 	else // 클라이언트라면 서버에 요청
 	{
 		C2S_SpawnWhirlwindBlade();
-		UE_LOG(LogTemp, Warning, TEXT("WhirlwindFire On Client"));
+		
 	}
 }

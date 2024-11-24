@@ -131,7 +131,7 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 							Weapon->CoolDown = WeaponData->CoolDown;
 							Weapon->CriticalChance = WeaponData->CriticalChance;
 							Weapon->ProjectileCount = WeaponData->ProjectileCount;
-
+							Weapon->Duration = WeaponData->Duration;
 
 							// 무기 업데이트 후 데미지 출력
 							UE_LOG(LogTemp, Warning, TEXT("After Update - Weapon: %s, Level: %d"), *WeaponTypeString, Weapon->WeaponLevel);

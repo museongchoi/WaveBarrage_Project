@@ -81,6 +81,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 CriticalChance;
 
+	//지속시간
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	int32 Duration = 0;
+
 	// 발사체
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AActor> ProjectileClass;

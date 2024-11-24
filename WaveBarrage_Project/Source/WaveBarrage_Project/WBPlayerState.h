@@ -37,6 +37,9 @@ public:
 	int32 ProjectileCounts;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Duration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -51,8 +54,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RangeSize;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Duration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 AcquisitionRadius;
