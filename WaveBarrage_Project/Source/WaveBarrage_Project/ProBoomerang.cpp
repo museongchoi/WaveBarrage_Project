@@ -10,7 +10,7 @@
 AProBoomerang::AProBoomerang()
 {
 	bReplicates = true;
-	LifeTime = 4.0f;
+	LifeTime = 5.0f;
 	Acceleration = -0.25f;
 
 }
@@ -26,12 +26,6 @@ void AProBoomerang::MoveForward(FVector Direction,float DeltaTime)
 {
 	Direction = Direction * ProjectileSpeed * DeltaTime;
 	AddActorWorldOffset(Direction , true);
-}
-
-void AProBoomerang::MoveBackWard(FVector Direction)
-{
-	Direction = AttackDirection * -1.0f * ProjectileSpeed;
-	AddActorWorldOffset(Direction);
 }
 
 void AProBoomerang::Tick(float DeltaTime)

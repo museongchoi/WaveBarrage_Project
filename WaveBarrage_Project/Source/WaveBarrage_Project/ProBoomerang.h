@@ -24,8 +24,6 @@ protected:
 
 	void MoveForward(FVector Direction, float DeltaTime);
 
-	void MoveBackWard(FVector Direction);
-
 public:
 
 	virtual void Tick(float DeltaTime) override;
