@@ -112,6 +112,13 @@ void AWBWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AWBWeaponBase, WeaponLevel);
 	DOREPLIFETIME(AWBWeaponBase, WeaponType);
+	DOREPLIFETIME(AWBWeaponBase, Damage);
+	DOREPLIFETIME(AWBWeaponBase, SkillAcceleration);
+	DOREPLIFETIME(AWBWeaponBase, ProjectileCount);
+	DOREPLIFETIME(AWBWeaponBase, CurProjectileCnt);
+	DOREPLIFETIME(AWBWeaponBase, MaxProjectileCnt);
+	DOREPLIFETIME(AWBWeaponBase, CoolDown);
+	DOREPLIFETIME(AWBWeaponBase, CriticalChance);
 }
 
 void AWBWeaponBase::CalculateAttackStatus()

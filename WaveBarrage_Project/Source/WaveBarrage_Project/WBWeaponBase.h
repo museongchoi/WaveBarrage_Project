@@ -66,19 +66,19 @@ public:
 	int32 WeaponLevel;
 
 	// 데미지
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 Damage;
 
 	// 스킬 가속
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 SkillAcceleration;
 
 	// 스킬 기본 속도
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	float CoolDown;
 
 	// 크리티컬 확율
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 CriticalChance;
 
 	// 발사체
@@ -86,15 +86,15 @@ public:
 	TSubclassOf<AActor> ProjectileClass;
 
 	// 발사체 개수
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 ProjectileCount;
 
 	// 현재 발사체 개수 (Default : 0)
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 CurProjectileCnt;
 
 	// 최대 발사체 개수
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	int32 MaxProjectileCnt;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
