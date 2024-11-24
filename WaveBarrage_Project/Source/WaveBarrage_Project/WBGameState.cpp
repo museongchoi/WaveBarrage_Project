@@ -25,7 +25,11 @@ AWBGameState::AWBGameState()
         }
     }
 
-    //GetWorld()->GetTimerManager().SetTimer(FTimerHandle_HPHill, this, &AWBGameState::UpdateAllPlayerHPHell, 3.0f, true);
+}
+
+void AWBGameState::BeginPlay()
+{
+    Super::BeginPlay();
 }
 
 void AWBGameState::S2C_MGSetTargetPlayer_Implementation(AWBMonsterGroup* MG, AActor* TargetPlayer)

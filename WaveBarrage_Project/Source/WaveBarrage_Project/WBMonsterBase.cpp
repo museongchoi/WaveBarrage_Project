@@ -22,7 +22,7 @@ AWBMonsterBase::AWBMonsterBase()
 	RootComponent = SphereComp;
 	SphereComp->SetSimulatePhysics(true);
 	SphereComp->SetEnableGravity(false);
-	SphereComp->GetBodyInstance()->bLockZTranslation = true;
+	//SphereComp->GetBodyInstance()->bLockZTranslation = true;
 	SphereComp->GetBodyInstance()->bLockXRotation = true;
 	SphereComp->GetBodyInstance()->bLockYRotation = true;
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &AWBMonsterBase::OnSphereOverlapBegin);
