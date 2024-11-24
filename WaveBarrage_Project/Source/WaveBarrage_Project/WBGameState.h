@@ -21,6 +21,8 @@ class WAVEBARRAGE_PROJECT_API AWBGameState : public AGameStateBase
 	
 public:
 	AWBGameState();
+	
+	virtual void BeginPlay() override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	void S2C_MGSetTargetPlayer(AWBMonsterGroup* MG, AActor* TargetPlayer);
