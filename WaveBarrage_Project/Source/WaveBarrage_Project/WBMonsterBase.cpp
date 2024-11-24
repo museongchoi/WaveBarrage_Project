@@ -35,6 +35,8 @@ AWBMonsterBase::AWBMonsterBase()
 	FloatMovementComp = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
 	FloatMovementComp->MaxSpeed = 300.0f;
 	FloatMovementComp->Acceleration = 300.0f;
+	FloatMovementComp->bConstrainToPlane = true;
+	FloatMovementComp->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::Z);
 
 	bReplicates = true;
 	SetReplicateMovement(true);
@@ -86,7 +88,9 @@ void AWBMonsterBase::Attack()
 
 void AWBMonsterBase::Skill()
 {
-
+	GetWorld()->SpawnActor<AActor>(MonsterProjectile, GetActorLocation(), GetActorRotation() + FRotator(0, 30, 0));
+	GetWorld()->SpawnActor<AActor>(MonsterProjectile, GetActorLocation(), GetActorRotation());
+	GetWorld()->SpawnActor<AActor>(MonsterProjectile, GetActorLocation(), GetActorRotation() - FRotator(0, 30, 0));
 }
 
 void AWBMonsterBase::MoveFroward()
