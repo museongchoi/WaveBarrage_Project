@@ -108,7 +108,7 @@ void AWBMonsterGroup::SpawnCirclePositionMonster()
 			{
 				Spawned->SetTargetPlayer(TargetPlayer);
 				Monsters.Emplace(Spawned);
-				Spawned->SetLifeSpan(45.0f);
+				Spawned->SetLifeSpan(50.0f);
 			}
 		}
 		SpawnEnd = true;
