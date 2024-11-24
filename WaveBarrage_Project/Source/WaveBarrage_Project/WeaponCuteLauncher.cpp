@@ -26,7 +26,6 @@ AWeaponCuteLauncher::AWeaponCuteLauncher()
 	CoolDown = 1.0f;
 	ProjectileCount = 1;
 	WeaponLevel = 1;
-
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
@@ -37,51 +36,22 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	
 
 	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
+		CalculateAttackStatus();
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
+		
 	}
-
-
 }
 
 void AWeaponCuteLauncher::Fire()
 {
-
-	CuteLauncherAutomaticAiming();
-
-	
-
-	if (HasAuthority())
+	if (CurProjectileCnt == 0)
 	{
-		if (ProjectileClass && ProjectileSpawnPoint)
-		{
-			CalculateAttackStatus();
-			// Get spawn location and rotation from ProjectileSpawnPoint
-			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-
-			// Spawn the projectile actor
-			AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation);
-			if (SpawnedProjectile)
-			{
-				// Increment current projectile count
-				CurProjectileCnt++;
-				int32 FinalDamage = CalculateFinalDamage();
-				CanCritialAttack(FinalDamage);
-				SpawnedProjectile->SetDamage(FinalDamage);
-				SpawnedProjectile->CanCollision = true;
-				//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
-
-			}
-		}
-		if (CurProjectileCnt >= MaxProjectileCnt)
-		{
-			CurProjectileCnt = 0;
-			return;
-		}
+		CalculateAttackStatus();
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Spawn, this, &AWeaponCuteLauncher::SpawnProjectile, 0.066f, true);
 	}
 }
 
@@ -134,5 +104,47 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 	{
 		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ClosestEnemy->GetActorLocation());
 		SetActorRotation(FRotator(0.0f, TargetRotation.Yaw, 0.0f));
+	}
+}
+
+void AWeaponCuteLauncher::SpawnProjectile()
+{
+	CuteLauncherAutomaticAiming();
+
+
+	if (HasAuthority())
+	{
+
+		UE_LOG(LogTemp, Warning, TEXT("Cute ProCnt : %d"), ProjectileCount);
+		UE_LOG(LogTemp, Warning, TEXT("Cute CoolDown : %f"), CoolDown);
+		if (ProjectileClass && ProjectileSpawnPoint)
+		{
+
+			// Get spawn location and rotation from ProjectileSpawnPoint
+			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+
+			// Spawn the projectile actor
+			AProCuteLauncher* SpawnedProjectile = GetWorld()->SpawnActor<AProCuteLauncher>(ProjectileClass, SpawnLocation, SpawnRotation);
+			if (SpawnedProjectile)
+			{
+				// Increment current projectile count
+				CurProjectileCnt++;
+				int32 FinalDamage = CalculateFinalDamage();
+				CanCritialAttack(FinalDamage);
+				SpawnedProjectile->SetDamage(FinalDamage);
+				SpawnedProjectile->CanCollision = true;
+
+
+			}
+
+		}
+		if (CurProjectileCnt >= MaxProjectileCnt)
+		{
+			CurProjectileCnt = 0;
+			GetWorld()->GetTimerManager().ClearTimer(FTimerHandle_Spawn);
+			return;
+		}
 	}
 }
