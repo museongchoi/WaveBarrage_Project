@@ -52,7 +52,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UFloatingPawnMovement> FloatMovementComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated)
 	int HP;
 
 	UPROPERTY(EditAnywhere)
@@ -69,5 +69,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool IsAttack = false;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

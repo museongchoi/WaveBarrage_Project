@@ -30,6 +30,12 @@ AWBGameState::AWBGameState()
 void AWBGameState::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (HasAuthority())
+    {
+        // 체력 재생 타이머 설정
+        GetWorld()->GetTimerManager().SetTimer(FTimerHandle_HPHill, this, &AWBGameState::UpdateAllPlayerHPHell, 3.0f, true);
+    }
 }
 
 void AWBGameState::S2C_MGSetTargetPlayer_Implementation(AWBMonsterGroup* MG, AActor* TargetPlayer)
@@ -154,5 +160,24 @@ void AWBGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 void AWBGameState::UpdateAllPlayerHPHell()
 {
+    if (!HasAuthority())
+    {
+        return;
+    }
 
+    for (auto& PS : PlayerStates)
+    {
+        if (PS.PlayerID > 0)
+        {
+            int32 RegenAmount = 4;
+
+            int32 NewHP = FMath::Min(PS.HP + RegenAmount, 1000);
+
+            if (NewHP != PS.HP)
+            {
+                PS.HP = NewHP;
+                UE_LOG(LogTemp, Warning, TEXT("Player ID %d heal by %d, New HP %d"), PS.PlayerID, RegenAmount, PS.HP);
+            }
+        }
+    }
 }
