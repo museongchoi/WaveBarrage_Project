@@ -48,10 +48,13 @@ void AWeaponCuteLauncher::BeginPlay()
 
 void AWeaponCuteLauncher::Fire()
 {
+	Super::Fire();
+
 	if (CurProjectileCnt == 0)
 	{
 		CalculateAttackStatus();
 		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_Spawn, this, &AWeaponCuteLauncher::SpawnProjectile, 0.066f, true);
+
 	}
 }
 
@@ -78,8 +81,6 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 		CollisionParams
 	);
 
-	// 디버그용 구체 표시 (한 프레임 동안 표시)
-	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
 
 	if (bHit)
 	{
