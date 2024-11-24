@@ -11,7 +11,6 @@
 AProWhirlwindBlade::AProWhirlwindBlade()
 {
 	bReplicates = true;
-	LifeTime = 8.0f;
 	OrbitSpeed = 180.0f;
 	OrbitRadius = 360.0f;
 	SetReplicateMovement(false);
@@ -20,11 +19,10 @@ AProWhirlwindBlade::AProWhirlwindBlade()
 void AProWhirlwindBlade::BeginPlay()
 {
 	Super::BeginPlay();
-	SetLifeSpan(LifeTime);
 
 	if (HasAuthority())
 	{// 서버에서만 타이머 시작
-		GetWorldTimerManager().SetTimer(OrbitTimerHandle, this, &AProWhirlwindBlade::UpdatePosition, 0.016f, true);
+		GetWorldTimerManager().SetTimer(OrbitTimerHandle, this, &AProWhirlwindBlade::UpdatePosition, 0.016f, true,0.0f);
 	}
 
 }

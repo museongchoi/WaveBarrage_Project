@@ -41,7 +41,7 @@ void AWeaponCuteLauncher::BeginPlay()
 	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
 		CalculateAttackStatus();
-		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true);
+		GetWorld()->GetTimerManager().SetTimer(FTimerHandle_AttackFire, this, &AWeaponCuteLauncher::Fire, CoolDown, true, 0.0f);
 		
 	}
 }
