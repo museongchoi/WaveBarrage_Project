@@ -37,7 +37,7 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+
 
 	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
