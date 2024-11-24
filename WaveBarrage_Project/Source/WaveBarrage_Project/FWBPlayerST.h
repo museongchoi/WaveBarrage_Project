@@ -12,10 +12,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 PlayerID;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 HP;
 
 	FWBPlayerST()
