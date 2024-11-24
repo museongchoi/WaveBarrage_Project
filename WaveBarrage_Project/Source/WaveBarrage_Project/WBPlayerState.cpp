@@ -4,6 +4,12 @@
 #include "WBPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
+AWBPlayerState::AWBPlayerState()
+{
+    Armor = 10;
+}
+
+
 int32 AWBPlayerState::GetDamageMultiplier() const
 {
     // 기본 데미지 배율은 1.0 (즉, 데미지 증가 없음)

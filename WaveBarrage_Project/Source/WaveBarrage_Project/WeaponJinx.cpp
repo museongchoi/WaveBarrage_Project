@@ -107,8 +107,8 @@ void AWeaponJinx::SpawnProjectile()
 			SpawnedProjectile->CanCollision = true;
 
 			// 로그 추가
-			UE_LOG(LogTemp, Warning, TEXT("Weapon Rotation on %s: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"), *GetActorRotation().ToString());
-			UE_LOG(LogTemp, Warning, TEXT("ProjectileSpawnPoint Rotation: %s"), *ProjectileSpawnPoint->GetComponentRotation().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("Weapon Rotation on %s: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client"), *GetActorRotation().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("ProjectileSpawnPoint Rotation: %s"), *ProjectileSpawnPoint->GetComponentRotation().ToString());
 		}
 	}
 
