@@ -195,7 +195,7 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 					MyPlayerState->ProjectileCounts+= 1; // 레벨당 이동 속도 8% 증가, 최대 +40%
 					break;
 				case 9:
-					MyPlayerState->MaxHealth += 4; //레벨당 초당 체력 재생 4 증가, 최대 +20
+					MyPlayerState->StaminaRegeneration += 4; //레벨당 초당 체력 재생 4 증가, 최대 +20
 					break;
 				default:
 					break;

@@ -49,15 +49,15 @@ void AWeaponCuteLauncher::BeginPlay()
 
 void AWeaponCuteLauncher::Fire()
 {
+	Super::Fire();
 
 	CuteLauncherAutomaticAiming();
-
-	
 
 	if (HasAuthority())
 	{
 		if (ProjectileClass && ProjectileSpawnPoint)
 		{
+
 			CalculateAttackStatus();
 			// Get spawn location and rotation from ProjectileSpawnPoint
 			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
@@ -73,7 +73,7 @@ void AWeaponCuteLauncher::Fire()
 				CanCritialAttack(FinalDamage);
 				SpawnedProjectile->SetDamage(FinalDamage);
 				SpawnedProjectile->CanCollision = true;
-				//UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), CurProjectileCnt);
+				UE_LOG(LogTemp, Error, TEXT("%d CuteLauncher"), MaxProjectileCnt);
 
 			}
 		}
@@ -108,8 +108,6 @@ void AWeaponCuteLauncher::CuteLauncherAutomaticAiming()
 		CollisionParams
 	);
 
-	// 디버그용 구체 표시 (한 프레임 동안 표시)
-	DrawDebugSphere(GetWorld(), Start, Radius, 12, FColor::Red, false, -1.f, 0, 1.0f);
 
 	if (bHit)
 	{
