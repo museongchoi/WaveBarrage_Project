@@ -68,7 +68,7 @@ float AWBMonsterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 		if (HP <= 0)
 		{
-			GetWorld()->SpawnActor<AActor>(DropItem, GetActorLocation(), GetActorRotation());
+			GetWorld()->SpawnActor<AActor>(DropItem, GetActorLocation(), FRotator::ZeroRotator);
 			AWBMonsterGroup* OwnerGroup = Cast<AWBMonsterGroup>(GetOwner());
 			if (IsValid(OwnerGroup))
 			{
