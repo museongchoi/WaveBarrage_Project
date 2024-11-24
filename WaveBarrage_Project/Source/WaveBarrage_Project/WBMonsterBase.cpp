@@ -9,6 +9,7 @@
 #include "WBMonsterProjectile.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AWBMonsterBase::AWBMonsterBase()
@@ -117,5 +118,10 @@ void AWBMonsterBase::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 			UGameplayStatics::ApplyDamage(OtherActor, AttackPoint, GetInstigatorController(), this, UDamageType::StaticClass());
 		}
 	}
+}
+
+void AWBMonsterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	DOREPLIFETIME(AWBMonsterBase, HP);
 }
 
