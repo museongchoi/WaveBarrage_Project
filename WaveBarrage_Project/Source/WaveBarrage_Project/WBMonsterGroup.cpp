@@ -62,6 +62,7 @@ void AWBMonsterGroup::SpawnMonster()
 			if (IsValid(Spawned))
 			{
 				Monsters.Emplace(Spawned);
+				Spawned->SetLifeSpan(30.0f);
 			}
 		}
 		SpawnEnd = true;
@@ -107,6 +108,7 @@ void AWBMonsterGroup::SpawnCirclePositionMonster()
 			{
 				Spawned->SetTargetPlayer(TargetPlayer);
 				Monsters.Emplace(Spawned);
+				Spawned->SetLifeSpan(45.0f);
 			}
 		}
 		SpawnEnd = true;
@@ -116,7 +118,15 @@ void AWBMonsterGroup::SpawnCirclePositionMonster()
 void AWBMonsterGroup::RemoveMonster(AWBMonsterBase* Monster)
 {
 	Monsters.Remove(Monster);
-	if (Monsters.Num() <= 0)
+	int AliveCount = Monsters.Num();
+	for (AWBMonsterBase* Monster : Monsters)
+	{
+		if (!IsValid(Monster))
+		{
+			AliveCount--;
+		}
+	}
+	if (AliveCount <= 0)
 	{
 		AWBGameMode* GM = Cast<AWBGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (IsValid(GM))
