@@ -37,7 +37,7 @@ void AWeaponCuteLauncher::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CalculateAttackStatus();
+
 
 	if (!GetWorld()->GetTimerManager().IsTimerActive(FTimerHandle_AttackFire))
 	{
@@ -52,11 +52,13 @@ void AWeaponCuteLauncher::Fire()
 
 	CuteLauncherAutomaticAiming();
 
+	
+
 	if (HasAuthority())
 	{
 		if (ProjectileClass && ProjectileSpawnPoint)
 		{
-
+			CalculateAttackStatus();
 			// Get spawn location and rotation from ProjectileSpawnPoint
 			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
@@ -77,6 +79,7 @@ void AWeaponCuteLauncher::Fire()
 		}
 		if (CurProjectileCnt >= MaxProjectileCnt)
 		{
+			CurProjectileCnt = 0;
 			return;
 		}
 	}

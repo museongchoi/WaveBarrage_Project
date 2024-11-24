@@ -90,7 +90,7 @@ void AWBGameState::UpdatePlayerHP(int32 PlayerID, int32 Damage)
 {
     if (!HasAuthority())
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdatePlayerHP는 서버에서만 호출되어야 합니다."));
+        UE_LOG(LogTemp, Warning, TEXT("UpdatePlayerHP not Server."));
         return;
     }
 
@@ -100,7 +100,7 @@ void AWBGameState::UpdatePlayerHP(int32 PlayerID, int32 Damage)
         {
             PlayerState.HP -= Damage;
             PlayerState.HP = FMath::Max(PlayerState.HP, 0);
-            UE_LOG(LogTemp, Log, TEXT("PlayerID %d took %d damage, HP now %d"), PlayerID, Damage, PlayerState.HP);
+            UE_LOG(LogTemp, Warning, TEXT("PlayerID %d took %d damage, HP now %d"), PlayerID, Damage, PlayerState.HP);
 
             if (PlayerState.HP <= 0)
             {
@@ -118,11 +118,11 @@ void AWBGameState::EndGame()
 {
     if (!HasAuthority())
     {
-        UE_LOG(LogTemp, Warning, TEXT("EndGame은 서버에서만 호출되어야 합니다."));
+        UE_LOG(LogTemp, Warning, TEXT("EndGame Client Call Err."));
         return;
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("게임이 종료되었습니다."));
+    UE_LOG(LogTemp, Warning, TEXT("EndGame."));
 
     // 게임 종료 로직 구현
     // 예: 게임 모드에 종료 신호 보내기, 결과 화면으로 전환 등
@@ -134,7 +134,7 @@ void AWBGameState::EndGame()
         {
             // 클라이언트에게 게임 종료 알림을 보냅니다.
             // Blueprint나 다른 방법으로 클라이언트 UI를 업데이트할 수 있습니다.
-            PC->ClientMessage(TEXT("게임이 종료되었습니다."));
+            PC->ClientMessage(TEXT("Game End!!!."));
         }
     }
 }

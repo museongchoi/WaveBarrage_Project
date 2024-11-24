@@ -34,7 +34,7 @@ public:
 	void CheckAllPlayersReady();
 	
 	// 플레이어 HP 배열
-	UPROPERTY(ReplicatedUsing = OnRep_PlayerStates)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,ReplicatedUsing = OnRep_PlayerStates)
 	TArray<FWBPlayerST> PlayerStates;
 
 	UFUNCTION(BlueprintCallable)

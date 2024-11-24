@@ -6,6 +6,9 @@
 #include "WBProjectileBase.h"
 #include "ProPoisonFootprint.generated.h"
 
+
+class AWBMonsterBase;
+
 /**
  * 
  */
@@ -20,7 +23,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	void OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
 	
@@ -33,4 +36,9 @@ public:
 
 	UFUNCTION()
 	void DamageTick(AActor* OtherActor);
+
+	TArray<AWBMonsterBase*> OverlappedMonsters;
+
+	// 각 몬스터별 타이머 핸들
+	TMap<AActor*, FTimerHandle> TimerHandles;
 };
