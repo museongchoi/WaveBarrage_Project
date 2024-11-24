@@ -7,6 +7,7 @@
 AWBPlayerState::AWBPlayerState()
 {
     Armor = 0;
+    StaminaRegeneration = 4;
 }
 
 

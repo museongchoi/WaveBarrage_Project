@@ -21,9 +21,11 @@ AWBGameState::AWBGameState()
         PlayerStates.SetNum(4);
         for (int32 i = 0; i < PlayerStates.Num(); ++i)
         {
-            PlayerStates[i] = FWBPlayerST(0, 100);
+            PlayerStates[i] = FWBPlayerST(0, 1000);
         }
     }
+
+    //GetWorld()->GetTimerManager().SetTimer(FTimerHandle_HPHill, this, &AWBGameState::UpdateAllPlayerHPHell, 3.0f, true);
 }
 
 void AWBGameState::S2C_MGSetTargetPlayer_Implementation(AWBMonsterGroup* MG, AActor* TargetPlayer)
@@ -69,7 +71,7 @@ int32 AWBGameState::AssignPlayerID()
         if (PlayerStates[i].PlayerID == 0)
         {
             PlayerStates[i].PlayerID = i + 1; // 1부터 시작
-            PlayerStates[i].HP = 100;
+            PlayerStates[i].HP = 1000;
             return PlayerStates[i].PlayerID;
         }
     }
@@ -144,4 +146,9 @@ void AWBGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AWBGameState, PlayerStates);
+}
+
+void AWBGameState::UpdateAllPlayerHPHell()
+{
+
 }

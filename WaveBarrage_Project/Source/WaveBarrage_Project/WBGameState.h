@@ -54,6 +54,11 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	FTimerHandle FTimerHandle_HPHill;
+
+	UFUNCTION()
+	void UpdateAllPlayerHPHell();
+
 	//// 플레이어 HP 변화 델리게이트
 	//UPROPERTY(BlueprintAssignable, Category = "Events")
 	//FOnPlayerHPChanged OnPlayerHPChanged;
