@@ -35,24 +35,24 @@ struct FWeaponData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CriticalChance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite ,meta = (ExposeOnSpawn = "true"))
-	AWBPlayerBase* OwnerCharacter;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite ,meta = (ExposeOnSpawn = "true"))
+	//AWBPlayerBase* OwnerCharacter;
 
-	// 발사체
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> ProjectileClass;
+	//// 발사체
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//TSubclassOf<AActor> ProjectileClass;
 
 	// 발사체 개수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ProjectileCount;
 
-	// 현재 발사체 개수 (Default : 0)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CurProjectileCnt;
+	//// 현재 발사체 개수 (Default : 0)
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//int32 CurProjectileCnt;
 
-	// 최대 발사체 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxProjectileCnt;
+	//// 최대 발사체 개수
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//int32 MaxProjectileCnt;
 
 };
 

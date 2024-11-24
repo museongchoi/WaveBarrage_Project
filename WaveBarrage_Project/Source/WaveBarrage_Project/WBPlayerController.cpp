@@ -127,7 +127,6 @@ void AWBPlayerController::ApplyCardEffect_Implementation(AWBPlayerController* Pl
 							Weapon->CoolDown = WeaponData->CoolDown;
 							Weapon->CriticalChance = WeaponData->CriticalChance;
 							Weapon->ProjectileCount = WeaponData->ProjectileCount;
-							Weapon->ProjectileClass = WeaponData->ProjectileClass;
 
 
 							// 무기 업데이트 후 데미지 출력

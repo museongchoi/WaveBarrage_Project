@@ -119,9 +119,9 @@ void AWBMonsterGroup::RemoveMonster(AWBMonsterBase* Monster)
 {
 	Monsters.Remove(Monster);
 	int AliveCount = Monsters.Num();
-	for (AWBMonsterBase* Monster : Monsters)
+	for (AWBMonsterBase* WBMonster : Monsters)
 	{
-		if (!IsValid(Monster))
+		if (!IsValid(WBMonster))
 		{
 			AliveCount--;
 		}
