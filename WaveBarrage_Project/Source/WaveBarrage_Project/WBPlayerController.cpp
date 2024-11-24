@@ -26,7 +26,11 @@
 
 AWBPlayerController::AWBPlayerController()
 {
-	WeaponDataTable = CreateDefaultSubobject<UDataTable>("WeaponDataTable");
+	//WeaponDataTable = CreateDefaultSubobject<UDataTable>("WeaponDataTable");
+
+	WeaponDataTable = NewObject<UDataTable>();
+	WeaponDataTable->RowStruct = FWeaponData::StaticStruct();
+
 }
 
 void AWBPlayerController::BeginPlay()

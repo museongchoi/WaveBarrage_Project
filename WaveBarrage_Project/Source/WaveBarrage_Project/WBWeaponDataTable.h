@@ -17,23 +17,23 @@ struct FWeaponData : public FTableRowBase
 
 	// 무기 레벨
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int32 WeaponLevel;
+	int32 WeaponLevel=0;
 
 	// 데미지
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Damage;
+	int32 Damage=0;
 
 	// 스킬 가속
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SkillAcceleration;
+	int32 SkillAcceleration=0;
 
 	// 스킬 기본 속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CoolDown;
+	float CoolDown=0;
 
 	// 크리티컬 확율
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CriticalChance;
+	int32 CriticalChance=0;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite ,meta = (ExposeOnSpawn = "true"))
 	//AWBPlayerBase* OwnerCharacter;
@@ -41,10 +41,6 @@ struct FWeaponData : public FTableRowBase
 	//// 발사체
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//TSubclassOf<AActor> ProjectileClass;
-
-	// 발사체 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ProjectileCount;
 
 	//// 현재 발사체 개수 (Default : 0)
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
