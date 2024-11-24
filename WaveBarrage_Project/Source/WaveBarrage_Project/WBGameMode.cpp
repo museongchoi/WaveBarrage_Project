@@ -15,7 +15,7 @@
 AWBGameMode::AWBGameMode()
 {
 	Level = 1;
-	MaxExp = 10;
+	MaxExp = 5;
 }
 
 void AWBGameMode::BeginPlay()
@@ -59,7 +59,15 @@ void AWBGameMode::AddExp(int Value)
 		Exp = 0;
 		LevelUp();
 		Level += 1;
-		if (Level < 10)
+		if (Level < 5)
+		{
+			MaxExp += 5;
+		}
+		else if (Level < 10)
+		{
+			MaxExp += 1;
+		}
+		else if(Level < 15)
 		{
 			MaxExp += 5;
 		}
@@ -67,9 +75,13 @@ void AWBGameMode::AddExp(int Value)
 		{
 			MaxExp += 10;
 		}
+		else if (Level < 25)
+		{
+			MaxExp += 1;
+		}
 		else
 		{
-			MaxExp += 30;
+			MaxExp += 5;
 		}
 
 	}
@@ -377,7 +389,7 @@ void AWBGameMode::UpdateTargetPlayer()
 		AWBGameState* GS = Cast<AWBGameState>(GameState);
 		if (IsValid(GS) && IsValid(MG))
 		{
-			if (MG->IsNotUpdate)
+			if (!MG->IsNotUpdate)
 			{
 				AActor* NearPlayer = GetNearPlayer(MG);
 				MG->TargetPlayer = NearPlayer;

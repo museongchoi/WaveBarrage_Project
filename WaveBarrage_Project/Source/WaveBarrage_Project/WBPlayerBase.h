@@ -143,7 +143,7 @@ public:
 	void OnRep_EquippedWeapons();
 
 	// 고유 플레이어 ID
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	int32 PlayerID;
 
 	// 데미지 적용 함수
