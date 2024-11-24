@@ -105,11 +105,14 @@ void UWBFSMComponent::SkillState()
 	if (!bIsSkillDelay)
 	{
 		bIsSkillDelay = true;
-		Cast<AWBMonsterBase>(GetOwner())->Skill();
+		AWBMonsterBase* Monster = Cast<AWBMonsterBase>(GetOwner());
+		Monster->Skill();
+		Monster->IsAttack = true;
 	}
 
 	if (StateTime > 1.0f)
 	{
+		Cast<AWBMonsterBase>(GetOwner())->IsAttack = false;
 		ChangeState(EMonsterState::Idle);
 	}
 }

@@ -67,4 +67,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AWBMonsterProjectile> MonsterProjectile;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttack = false;
+
 };
