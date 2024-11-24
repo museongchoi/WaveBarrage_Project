@@ -34,8 +34,6 @@ void AProCuteLauncher::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp,
 {
 	Super::OnSphereOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	
-	
-
 	if (OtherActor && OtherActor != this)
 	{
 		if (HasAuthority() && CanCollision == true)

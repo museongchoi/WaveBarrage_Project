@@ -20,6 +20,8 @@
 #include "WBMonsterBase.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
+#include "WBGameState.h"
+#include "WBPlayerState.h"
 
 
 // Sets default values
@@ -80,6 +82,7 @@ AWBPlayerBase::AWBPlayerBase()
 
 	bAutoMode = false;
 	ClosestDistance = FLT_MAX;
+	PlayerID = 0; // 초기 값, 게임 시작 시 할당 필요
 }
 
 // Called when the game starts or when spawned
@@ -87,6 +90,55 @@ void AWBPlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (HasAuthority())
+	{
+		AWBGameState* GS = GetWorld()->GetGameState<AWBGameState>();
+		if (GS)
+		{
+			PlayerID = GS->AssignPlayerID();
+			if (PlayerID != -1)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID %d"), PlayerID);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to assign PlayerID"));
+			}
+		}
+
+		//// 서버에서만 PlayerID를 할당합니다.
+		//// 예를 들어, 플레이어의 Controller ID를 사용할 수 있습니다.
+		//APlayerController* PC = Cast<APlayerController>(GetController());
+		//if (PC)
+		//{
+		//	PlayerID = PC->GetLocalPlayer()->GetControllerId() + 1; // 간단한 예시
+		//	UE_LOG(LogTemp, Log, TEXT("Assigned PlayerID %d"), PlayerID);
+		//}
+
+		//// GameState에 PlayerID 등록 (필요 시)
+		//AWBGameState* GS = GetWorld()->GetGameState<AWBGameState>();
+		//if (GS)
+		//{
+		//	bool bFound = false;
+		//	for (auto& PS : GS->PlayerStates)
+		//	{
+		//		if (PS.PlayerID == 0)
+		//		{
+		//			PS.PlayerID = PlayerID;
+		//			PS.HP = 100;
+		//			bFound = true;
+		//			UE_LOG(LogTemp, Warning, TEXT("PlayerState 등록: PlayerID = %d, HP = %d"), PlayerID, PS.HP);
+		//			break;
+		//		}
+		//	}
+
+		//	if (!bFound)
+		//	{
+		//		// PlayerStates 배열에 빈 슬롯이 없을 경우 처리
+		//		UE_LOG(LogTemp, Warning, TEXT("PlayerStates 배열에 빈 슬롯이 없습니다."));
+		//	}
+		//}
+	}
 	
 	if (IsLocallyControlled())
 	{
@@ -157,6 +209,7 @@ void AWBPlayerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWBPlayerBase,EquippedWeapons);
+	DOREPLIFETIME(AWBPlayerBase, PlayerID);
 }
 
 // Called to bind functionality to input
@@ -396,4 +449,66 @@ void AWBPlayerBase::AttackFire()
 			SpawnedWeapon->Fire();
 		}
 	}
+}
+
+void AWBPlayerBase::ApplyDamageToPlayer(int32 Damage)
+{
+	if (HasAuthority())
+	{
+		// 서버에서 직접 데미지 적용
+		int32 ActualDamage = FMath::Max(Damage, 0);
+		ApplyDamageToGameState(ActualDamage);
+	}
+	else
+	{
+		// 클라이언트에서 서버에 데미지 적용 요청
+		Server_ApplyDamage(Damage);
+	}
+}
+
+void AWBPlayerBase::ApplyDamageToGameState(int32 ActualDamage)
+{
+	AWBGameState* GS = GetWorld()->GetGameState<AWBGameState>();
+	if (GS)
+	{
+		GS->UpdatePlayerHP(PlayerID, ActualDamage);
+	}
+}
+
+
+void AWBPlayerBase::Server_ApplyDamage_Implementation(int32 Damage)
+{
+	ApplyDamageToPlayer(Damage);
+}
+
+float AWBPlayerBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	UE_LOG(LogTemp, Log, TEXT("AWBPlayerBase::TakeDamage : DamageAmount = %f"), DamageAmount);
+
+	// 서버에서만 데미지를 처리
+	if (!HasAuthority())
+	{
+		return 0.0f;
+	}
+
+	// PlayerState에서 Armor 값을 가져옴
+	AWBPlayerState* PS = GetPlayerState<AWBPlayerState>();
+	int32 ArmorValue = 0;
+
+	if (PS)
+	{
+		ArmorValue = PS->Armor;
+	}
+
+	// 실제 데미지 계산
+	int32 ActualDamage = FMath::Max(static_cast<int32>(DamageAmount) - ArmorValue, 0);
+
+	if (ActualDamage > 0)
+	{
+		ApplyDamageToGameState(ActualDamage);
+	}
+
+	return Damage;
 }

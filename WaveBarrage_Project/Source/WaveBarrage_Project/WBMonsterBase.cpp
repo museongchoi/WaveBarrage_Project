@@ -91,7 +91,7 @@ void AWBMonsterBase::Skill()
 
 void AWBMonsterBase::MoveFroward()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MoveFroward Call"));
+	//UE_LOG(LogTemp, Warning, TEXT("MoveFroward Call"));
 	FloatMovementComp->AddInputVector(GetActorForwardVector());
 }
 

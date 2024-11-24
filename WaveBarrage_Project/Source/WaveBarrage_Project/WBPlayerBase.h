@@ -141,4 +141,23 @@ public:
 
 	UFUNCTION()
 	void OnRep_EquippedWeapons();
+
+	// 고유 플레이어 ID
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	int32 PlayerID;
+
+	// 데미지 적용 함수
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ApplyDamageToPlayer(int32 Damage);
+
+	// 데미지 적용 함수
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ApplyDamageToGameState(int32 ActualDamage);
+
+	// 서버 RPC: 데미지 적용 요청
+	UFUNCTION(Server, Reliable)
+	void Server_ApplyDamage(int32 Damage);
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 };

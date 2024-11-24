@@ -22,6 +22,8 @@ class WAVEBARRAGE_PROJECT_API AWBPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
+	AWBPlayerState();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Damage;
 
