@@ -507,6 +507,7 @@ float AWBPlayerBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	if (ActualDamage > 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("ApplyDamageToGameState Call"));
 		ApplyDamageToGameState(ActualDamage);
 	}
 

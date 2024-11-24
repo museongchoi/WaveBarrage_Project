@@ -6,7 +6,7 @@
 
 AWBPlayerState::AWBPlayerState()
 {
-    Armor = 10;
+    Armor = 0;
 }
 
 
