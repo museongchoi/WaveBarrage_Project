@@ -35,6 +35,9 @@ struct FWeaponData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CriticalChance=0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ProjectileCount = 0;
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite ,meta = (ExposeOnSpawn = "true"))
 	//AWBPlayerBase* OwnerCharacter;
 

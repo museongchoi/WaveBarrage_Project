@@ -24,6 +24,7 @@ AWeaponJinx::AWeaponJinx()
 	//ProjectileSpawnPoint->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f)); // 캐릭터 앞쪽으로 100 단위 이동
 	//ProjectileSpawnPoint->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f)); // 필요에 따라 회전 조정
 
+	bReplicates = true;
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
