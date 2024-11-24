@@ -46,10 +46,10 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UWBFSMComponent> FSMComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UFloatingPawnMovement> FloatMovementComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated)

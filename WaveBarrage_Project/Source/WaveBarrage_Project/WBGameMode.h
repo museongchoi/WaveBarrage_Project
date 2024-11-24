@@ -29,7 +29,7 @@ public:
 
 	void LevelUp();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SpawnMonster(ESpawnType SpawnType, TSubclassOf<AWBMonsterBase> MonsterClass,  int SpawnCount, float x, float y);
 	AActor* GetNearPlayer(AActor* Monster);
 
@@ -54,7 +54,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Exp;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<AWBPlayerBase*> Players;
 
 	UPROPERTY(EditAnywhere)
