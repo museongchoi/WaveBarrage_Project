@@ -33,5 +33,8 @@ protected:
 
 	FTimerHandle FTimerHandle_AutomaticAiming;
 	FTimerHandle FTimerHandle_AttackFire;
+	FTimerHandle FTimerHandle_Spawn;
+
+	virtual void SpawnProjectile() override;
 
 };
