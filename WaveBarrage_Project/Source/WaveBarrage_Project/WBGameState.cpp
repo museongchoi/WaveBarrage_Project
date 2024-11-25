@@ -157,6 +157,9 @@ void AWBGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AWBGameState, PlayerStates);
+    DOREPLIFETIME(AWBGameState, Level);
+    DOREPLIFETIME(AWBGameState, Exp);
+    DOREPLIFETIME(AWBGameState, MaxExp);
 }
 
 void AWBGameState::UpdateAllPlayerHPHell()

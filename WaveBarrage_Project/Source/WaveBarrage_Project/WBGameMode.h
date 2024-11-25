@@ -66,6 +66,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* WeaponDataTable;
 
+	UFUNCTION()
+	void UpdateGameState();
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	//TSubclassOf<class UWBULobbyWidget> LobbyWidgetClass;
 };

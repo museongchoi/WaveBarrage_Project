@@ -61,6 +61,15 @@ public:
 	UFUNCTION()
 	void UpdateAllPlayerHPHell();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated)
+	int Level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	int MaxExp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	int Exp;
+
 	//// 플레이어 HP 변화 델리게이트
 	//UPROPERTY(BlueprintAssignable, Category = "Events")
 	//FOnPlayerHPChanged OnPlayerHPChanged;
