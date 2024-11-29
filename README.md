@@ -2,7 +2,11 @@
 
 LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
+<br>
+
 ---
+
+<br>
 
 ## 🗂️ **프로젝트 개요**
 
@@ -12,7 +16,11 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 | **팀 규모**   | 팀 프로젝트 총 3명 / 개발자: 최무성, 서지호, 박교녕 |
 | **개발 환경** | UnrealEngine 5.4 ver, C++, GitHub, Notion |
 
+<br>
+
 ---
+
+<br>
 
 ## 📂 **개발 내용**
 
@@ -125,7 +133,7 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 ### 📂 PPT 링크
 [프로젝트 발표자료 보러가기](https://www.miricanvas.com/v/13wpdm3)
 
----
+<br>
 
 ### 🎥 YouTube 데모 영상
 <div align="center">
