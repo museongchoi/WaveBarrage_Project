@@ -17,12 +17,12 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 ## 📂 **개발 내용**
 
 ### **WBPrototype Ver01**
-![WBPrototypeVer.gif](https://prod-files-secure.s3.us-west-2.amazonaws.com/f53db45b-20a2-47f7-8bd7-2981e8889c0a/a191ae57-59c7-46c4-a87e-8441911df11b/WBPrototypeVer.gif)
+![WBPrototypeVer](https://github.com/user-attachments/assets/779813b3-89fc-48fc-8fbf-2ca8bf804910)
 
 ---
 
 ### **WBAlpha Ver02**
-![WBAlphaVer.gif](https://prod-files-secure.s3.us-west-2.amazonaws.com/f53db45b-20a2-47f7-8bd7-2981e8889c0a/32f93abe-cf5d-4a0b-b788-be66e362a779/WBAlphaVer.gif)
+
 
 ---
 
