@@ -16,13 +16,26 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
 ## 📂 **개발 내용**
 
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="text-align: center; margin-right: 10px;">
+        <h3>WBPrototype Ver01</h3>
+        <img src="https://github.com/user-attachments/assets/779813b3-89fc-48fc-8fbf-2ca8bf804910" alt="WBPrototype Ver01" width="300">
+    </div>
+    <div style="text-align: center; margin-left: 10px;">
+        <h3>WBAlpha Ver02</h3>
+        <img src="https://github.com/user-attachments/assets/32b6d79b-b728-4055-80e7-a2a74291c6aa" alt="WBAlpha Ver02" width="300">
+    </div>
+</div>
+
+
+
 ### **WBPrototype Ver01**
 ![WBPrototypeVer](https://github.com/user-attachments/assets/779813b3-89fc-48fc-8fbf-2ca8bf804910)
 
 ---
 
 ### **WBAlpha Ver02**
-
+![WBAlphaVer](https://github.com/user-attachments/assets/32b6d79b-b728-4055-80e7-a2a74291c6aa)
 
 ---
 
