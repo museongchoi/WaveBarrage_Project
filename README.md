@@ -84,4 +84,11 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
 ---
 
+<div align="center">
+    <a href="https://youtu.be/R9QI2_x66TI">
+        <img src="https://github.com/user-attachments/assets/59944cda-748b-414f-8a8e-c5c72c07a366" alt="Video Label" width="400">
+    </a>
+</div>
+
+
 [![Video Label](https://github.com/user-attachments/assets/59944cda-748b-414f-8a8e-c5c72c07a366)](https://youtu.be/R9QI2_x66TI)
