@@ -84,4 +84,4 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
 ---
 
-> 추가적인 설명이나 개선 사항은 프로젝트 [깃허브 링크](https://github.com/museongchoi/WaveBarrage_Project.git)에서 확인할 수 있습니다.
+[![Video Label]](https://youtu.be/R9QI2_x66TI)
