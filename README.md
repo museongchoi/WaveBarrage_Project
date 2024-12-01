@@ -12,7 +12,7 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
 | **진행 기간** | 2024.11.04 ~ 2024.11.25 / 22일 |
 |---------------|---------------------------------|
-| **핵심 기술** | 리슨 서버, RPC, Variable Replication |
+| **핵심 기술** | RPC, Variable Replication |
 | **팀 규모**   | 팀 프로젝트 총 3명 / 개발자: 최무성, 서지호, 박교녕 |
 | **개발 환경** | UnrealEngine 5.4 ver, C++, GitHub, Notion |
 | **PPT 링크** | https://www.miricanvas.com/v/13wpdm3 |
