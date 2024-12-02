@@ -69,13 +69,13 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 WB Project
 ├ WBGameMode            ├ WBWeaponBase        ├ WBMonsterBase
 ├ WBGameState           │└ Weapon             ├ WBMonsterGroup
-├ WBPlayerState         │├ 전용 무기           ├ WBMonsterProjectile
-├ WBPlayerController    │└ 일반 무기           ├ WBMonsterSpawnerComponent
+├ WBPlayerState         │├ Exclusive Weapon   ├ WBMonsterProjectile
+├ WBPlayerController    │└ Standard Weapon    ├ WBMonsterSpawnerComponent
 ├ WBPlayerBase          ├ WBProjectileBase    ├ WBFSMComponent
-│└ Jinx                 │└ Projectile         ├ FWBPlayerST
-                        │└ 각 무기 투사체      │├ 플레이어 ID
-                        ├ WBItemBase          │└ HP
-                        │└ Exp                ├ WBSpawnDataTable
+│└ Jinx                 │└ Projectile Classes ├ FWBPlayerST
+                        ├ WBItemBase          │├ Player ID
+                        │└ Exp                │└ HP
+                                              ├ WBSpawnDataTable
                                               │└ 몬스터 타입별 스폰 정보
                                               └ WBWeaponDataTable
                                                  └ 각 무기의 레벨별 스탯 정보
