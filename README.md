@@ -62,9 +62,21 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 <br>
 
 ### **02. Blueprint 프로토타입 및 C++ 로 변환**
-- 초기에는 **블루프린트**를 사용해 게임의 프로토타입을 빠르게 개발하였으며,
-이후 **C++로 리팩토링**하여 코드의 성능과 최적화를 향상시켰습니다.
 - **객체 지향적 접근**을 통해 재사용 가능한 기능을 클래스로 나누어 유지 보수성을 높였습니다.
+WB Project
+├ WBGameMode            ├ WBWeaponBase        ├ WBMonsterBase
+├ WBGameState           │└ Weapon             ├ WBMonsterGroup
+├ WBPlayerState         │├ 전용 무기           ├ WBMonsterProjectile
+├ WBPlayerController    │└ 일반 무기           ├ WBMonsterSpawnerComponent
+├ WBPlayerBase          ├ WBProjectileBase    ├ WBFSMComponent
+│└ Jinx                 │└ Projectile         ├ FWBPlayerST
+                        │└ 각 무기 투사체      │├ 플레이어 ID
+                        ├ WBItemBase          │└ HP
+                        │└ Exp                ├ WBSpawnDataTable
+                                              │└ 몬스터 타입별 스폰 정보
+                                              └ WBWeaponDataTable
+                                                 └ 각 무기의 레벨별 스탯 정보
+
 
 <br>
 
