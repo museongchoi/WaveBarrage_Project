@@ -63,6 +63,7 @@ LOL PVE / 벰서라이크 집중포화 모작 프로젝트
 
 ### **02. Blueprint 프로토타입 및 C++ 로 변환**
 - **객체 지향적 접근**을 통해 재사용 가능한 기능을 클래스로 나누어 유지 보수성을 높였습니다.
+<br>
 WB Project
 ├ WBGameMode            ├ WBWeaponBase        ├ WBMonsterBase
 ├ WBGameState           │└ Weapon             ├ WBMonsterGroup
